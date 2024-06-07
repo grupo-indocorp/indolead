@@ -1,0 +1,1 @@
+<h6 class="mb-0">{{ $title }}</h6>
