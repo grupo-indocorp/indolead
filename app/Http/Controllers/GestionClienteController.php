@@ -17,6 +17,7 @@ use App\Models\Sede;
 use App\Models\User;
 use App\Models\Venta;
 use App\Services\ClienteService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
@@ -155,6 +156,15 @@ class GestionClienteController extends Controller
         $count_total = $this->clienteService->etapasConConteo()['count_total'];
 
         $config = Helpers::configuracionExcelJsonGet();
+
+        $countClienteNuevo = 0;
+        $countClienteGestionado = 0;
+        if ($user->hasRole('ejecutivo')) {
+            // Conteo de Clientes Nuevos por Ejecutivo
+            $countClienteNuevo = Cliente::where('user_id', $user->id)->whereDate('created_at', Carbon::today())->count();
+            // Conteo de Clientes Gestionados por Ejecutivo
+            $countClienteGestionado = Cliente::where('user_id', $user->id)->whereDate('fecha_gestion', Carbon::today())->count();
+        }
         
         return view('sistema.gestion_cliente.index', compact(
             'clientes',
@@ -164,7 +174,9 @@ class GestionClienteController extends Controller
             'sedes',
             'equipos',
             'users',
-            'config'
+            'config',
+            'countClienteNuevo',
+            'countClienteGestionado'
         ));
     }
 
