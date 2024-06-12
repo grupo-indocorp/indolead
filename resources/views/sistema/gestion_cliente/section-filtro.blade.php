@@ -75,23 +75,23 @@
                     </div>
                 </div>
             </div>
-            <div>
+            <div class="flex gap-2 items-center">
+                @role (['ejecutivo'])
+                    <div class="flex gap-2">
+                        <x-ui.count-rectangle>
+                            <x-slot:toggle>Clientes Nuevos</x-slot>
+                            {{ $countClienteNuevo }}
+                        </x-ui.count-rectangle>
+                        <x-ui.count-rectangle>
+                            <x-slot:toggle>Clientes Gestionados</x-slot>
+                            {{ $countClienteGestionado }}
+                        </x-ui.count-rectangle>
+                    </div>
+                @endrole
                 <div class="form-group">
                     <label for="filtro_ruc" class="form-control-label">Ruc:</label>
                     <input class="form-control" type="search" value="{{ request('filtro_ruc') }}" id="filtro_ruc" name="filtro_ruc" placeholder="Buscar por RUC">
                 </div>
-                @role (['ejecutivo'])
-                    <div class="flex gap-2">
-                        <x-ui.circle-count>
-                            <x-slot:toggle>Clientes Nuevos</x-slot>
-                            {{ $countClienteNuevo }}
-                        </x-ui.circle-count>
-                        <x-ui.circle-count>
-                            <x-slot:toggle>Clientes Gestionados</x-slot>
-                            {{ $countClienteGestionado }}
-                        </x-ui.circle-count>
-                    </div>
-                @endrole
             </div>
         </div>
         {{-- <button type="submit" class="btn bg-gradient-info m-0">Aplicar Filtros</button> --}}
