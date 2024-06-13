@@ -19,8 +19,8 @@ Pero si no quiere seguir ninguna de nuestras opciones, asegúrate de tener insta
 **Clonar el Repositorio:**
 
 ```bash
-git clone https://github.com/abrahamalanya/indotech.git
-cd indotech
+git clone git@github.com:grupo-indocorp/indolead.git
+cd indolead
 ```
 
 *Si el proyecto se levanta usando XAMP:*
@@ -86,7 +86,7 @@ Puedes usar la ruta de [indotech.test](indotech.test) y para que carguen los ass
 ```js
 export default defineConfig({
   server: {
-    host: 'testindo.test',
+    host: 'indolead.test',
   },
   ...
 });
