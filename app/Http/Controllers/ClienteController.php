@@ -3,46 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cliente;
-use App\Models\Comentario;
-use App\Models\User;
-use App\Services\ClienteService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
 class ClienteController extends Controller
 {
-    protected $clienteService;
-
-    public function __construct(ClienteService $clienteService)
-    {
-        $this->clienteService = $clienteService;
-    }
-
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $busqueda = request('query');
-        $cliente = null;
-        if (isset($busqueda)) {
-            if (Str::length($busqueda) == 11) {
-                $cliente = $this->clienteService->consultorCliente($busqueda);
-                if (is_null($cliente)) {
-                    $mensaje = [
-                        'mensaje' => 'El "RUC" no existe',
-                        'color' => 'danger',
-                    ];
-                }
-            } else {
-                $mensaje = [
-                    'mensaje' => 'El "RUC" debe tener 11 dígitos',
-                    'color' => 'danger',
-                ];
-            }
-        }
-        $mensaje = $mensaje ?? false;
-        return view('sistema.cliente.index', compact('mensaje', 'cliente'));
+        //
     }
 
     /**
@@ -64,18 +34,15 @@ class ClienteController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show(string $id)
     {
-        if (request('view') == 'show-cliente') {
-            $cliente = Cliente::find($id);
-            return view('sistema.cliente.solicitar', compact('cliente'));
-        }
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Cliente $cliente)
+    public function edit(string $id)
     {
         //
     }
@@ -83,41 +50,15 @@ class ClienteController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, string $id)
     {
-        if (request('view') == 'update-solicitar') {
-            $request->validate([
-                'etapa_id' => 'required|bail',
-                'comentario' => 'required|bail',
-            ],
-            [
-                'etapa_id.required' => 'La "Etapa" es obligatorio.',
-                'comentario.required' => 'El "Comentario" es obligatorio.',
-            ]);
-            $cliente = Cliente::find($id);
-            $ejecutivo = auth()->user();
-            $cliente->user_id = $ejecutivo->id;
-            $cliente->usersHistorial()->attach($ejecutivo->id);
-            $cliente->etapas()->attach(request('etapa_id'));
-            $cliente->fecha_gestion = now();
-            $cliente->sede_id = $ejecutivo->sede_id;
-            $cliente->equipo_id = $ejecutivo->equipos->last()->id;
-            $cliente->etapa_id = request('etapa_id');
-            $cliente->save();
-            // comentario
-            $comentario = new Comentario();
-            $comentario->comentario = request('comentario');
-            $comentario->cliente_id = $cliente->id;
-            $comentario->user_id = $ejecutivo->id;
-            $comentario->save();
-            $this->clienteService->exportclienteStore($cliente->id);
-        }
+        //
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Cliente $cliente)
+    public function destroy(string $id)
     {
         //
     }

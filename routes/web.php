@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ClienteConsultorController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ConfiguracionCategoriaController;
 use App\Http\Controllers\ConfiguracionController;
@@ -36,7 +37,6 @@ Route::middleware([
 ])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resources([
-        'cliente' => ClienteController::class,
         'gestion_cliente' => GestionClienteController::class,
         'lista_usuario' => ListaUsuarioController::class,
         'equipo' => EquipoController::class,
@@ -47,6 +47,9 @@ Route::middleware([
         'reporte_cliente' => ReporteClienteController::class,
         'reporte_cliente_nuevo' => ReporteClienteNuevoController::class,
         'producto' => ProductoController::class,
+        // Cliente
+        'cliente' => ClienteController::class,
+        'cliente-consultor' => ClienteConsultorController::class,
         // Configuraciones
         'configuracion' => ConfiguracionController::class,
         'configuracion-sistema' => ConfiguracionSistemaController::class,
