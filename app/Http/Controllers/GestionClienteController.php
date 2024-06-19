@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Exports\ClientesExport;
-use App\Exports\ClientesNuevosExport;
 use App\Helpers\Helpers;
 use App\Http\Requests\ClienteRequest;
 use App\Imports\ClientesImport;
@@ -35,11 +34,6 @@ class GestionClienteController extends Controller
     public function export()
     {
         return Excel::download(new ClientesExport, 'Clientes '.date('d-m-Y').'.xlsx');
-    }
-
-    public function exportClienteNuevo()
-    {
-        return Excel::download(new ClientesNuevosExport, 'Clientes ' . date('d-m-Y') . '.xlsx');
     }
 
     public function import()
@@ -160,10 +154,22 @@ class GestionClienteController extends Controller
         $countClienteNuevo = 0;
         $countClienteGestionado = 0;
         if ($user->hasRole('ejecutivo')) {
-            // Conteo de Clientes Nuevos por Ejecutivo
-            $countClienteNuevo = Cliente::where('user_id', $user->id)->whereDate('created_at', Carbon::today())->count();
-            // Conteo de Clientes Gestionados por Ejecutivo
-            $countClienteGestionado = Cliente::where('user_id', $user->id)->whereDate('fecha_gestion', Carbon::today())->count();
+
+            $cltGestionados = Cliente::where('user_id', $user->id)->whereDate('fecha_gestion', Carbon::today())->get();
+            foreach ($cltGestionados as $value) {
+                if (isset($value->etiqueta)) {
+                    foreach (json_decode($value->etiqueta) as $item) {
+                        // Conteo de Clientes Nuevos por Ejecutivo
+                        if ($item->nombre === 'nuevo' || $item->nombre === 'asignado' || $item->nombre === 'solicitado') {
+                            $countClienteNuevo++;
+                        }
+                        // Conteo de Clientes Gestionados por Ejecutivo
+                        if ($item->nombre === 'gestionado') {
+                            $countClienteGestionado++;
+                        }
+                    }
+                }
+            }
         }
         
         return view('sistema.gestion_cliente.index', compact(
@@ -432,7 +438,13 @@ class GestionClienteController extends Controller
                     'fecha' => $value->created_at->format('d-m-Y h:i:s A'),
                 ];
             }
+            // etiqueta
+            $etiqueta = [
+                ["id" => 4, "nombre" => "gestionado"],
+            ];
+            // cliente
             $cliente->fecha_gestion = now();
+            $cliente->etiqueta = json_encode($etiqueta);
             $cliente->save();
             $this->clienteService->exportclienteStore($cliente->id);
             return response()->json($comentarios);
@@ -479,8 +491,14 @@ class GestionClienteController extends Controller
                 'etapa_id.required' => 'La "Etapa" es obligatorio.',
                 'comentario.required' => 'El "Comentario" es obligatorio.',
             ]);
+            // etiqueta
+            $etiqueta = [
+                ["id" => 4, "nombre" => "gestionado"],
+            ];
+            // cliente
             $cliente->etapas()->attach(request('etapa_id'));
             $cliente->fecha_gestion = now();
+            $cliente->etiqueta = json_encode($etiqueta);
             $cliente->etapa_id = request('etapa_id');
             $cliente->save();
 
@@ -541,11 +559,17 @@ class GestionClienteController extends Controller
                     'etapa_id.required' => 'La "Etapa" es obligatorio.',
                 ]
             );
+            // etiqueta
+            $etiqueta = [
+                ["id" => 2, "nombre" => "asignado"],
+            ];
+            // cliente
             $executive = User::find(request('user_id'));
             $clients = request('clients');
             foreach ($clients as $value) {
                 $client = Cliente::find($value);
                 $client->fecha_gestion = now();
+                $client->etiqueta = json_encode($etiqueta);
                 $client->user_id = $executive->id;
                 $client->equipo_id = $executive->equipos->last()->id;
                 $client->sede_id = $executive->sede_id;

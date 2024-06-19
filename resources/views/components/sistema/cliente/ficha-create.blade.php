@@ -43,7 +43,7 @@
             }
         });
         $.ajax({
-            url: `{{ url('gestion_cliente') }}`,
+            url: `{{ url('cliente') }}`,
             method: "POST",
             data: {
                 // cliente

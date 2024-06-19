@@ -47,7 +47,7 @@
             [
                 'icon' => 'fa-user-magnifying-glass',
                 'nombre' => 'Consultor Clientes',
-                'url' => 'cliente',
+                'url' => 'cliente-consultor',
                 'can' => 'sistema.cliente',
             ],
             [
