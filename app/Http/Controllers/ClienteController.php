@@ -3,10 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cliente;
+use App\Services\ClienteService;
 use Illuminate\Http\Request;
 
 class ClienteController extends Controller
 {
+    protected $clienteService;
+
+    public function __construct(ClienteService $clienteService)
+    {
+        $this->clienteService = $clienteService;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -28,7 +36,28 @@ class ClienteController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $view = request('view');
+        if ($view === 'store') {
+            if (request('dni') != '') {
+                $request->validate(
+                    [
+                        'nombre' => 'required|bail',
+                        'dni' => 'required|numeric|digits:8|bail',
+                        'celular' => 'required|bail',
+                        'cargo' => 'required|bail',
+                    ],
+                    [
+                        'nombre.required' => 'El "Nombre" es obligatorio.',
+                        'dni.required' => 'El "DNI" es obligatorio.',
+                        'dni.numeric' => 'El "DNI" debe ser numérico.',
+                        'dni.digits' => 'El "DNI" debe tener exactamente 8 dígitos.',
+                        'celular.required' => 'El "Celular" es obligatorio.',
+                        'cargo.required' => 'El "Cargo" es obligatorio.',
+                    ]
+                );
+            }
+            $this->clienteService->clienteStore($request);
+        }
     }
 
     /**

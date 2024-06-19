@@ -21,6 +21,7 @@
                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Comentario</th>
                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Fecha de última Gestión</th>
                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Días sin Gestión</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Etiqueta</th>
             </tr>
         </thead>
         <tbody>
@@ -74,6 +75,15 @@
                     @else
                         <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-green-100">{{ $dias }}</span>
                     @endif
+                </td>
+                <td class="align-middle text-center">
+                    @isset($value->etiqueta)
+                        @foreach (json_decode($value->etiqueta) as $item)
+                            <span class="bg-slate-300 text-slate-700 text-xs font-semibold font-se mb-0 mx-1 px-3 py-1 rounded-lg">
+                                {{ $item->nombre }}
+                            </span>
+                        @endforeach
+                    @endisset
                 </td>
             </tr>
             @endforeach

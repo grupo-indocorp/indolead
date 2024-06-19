@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ClienteConsultorController;
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\ClienteGestionController;
 use App\Http\Controllers\ConfiguracionCategoriaController;
 use App\Http\Controllers\ConfiguracionController;
 use App\Http\Controllers\ConfiguracionEtapaController;
@@ -50,6 +51,7 @@ Route::middleware([
         // Cliente
         'cliente' => ClienteController::class,
         'cliente-consultor' => ClienteConsultorController::class,
+        'cliente-gestion' => ClienteGestionController::class,
         // Configuraciones
         'configuracion' => ConfiguracionController::class,
         'configuracion-sistema' => ConfiguracionSistemaController::class,
@@ -61,7 +63,6 @@ Route::middleware([
     ]);
     Route::get('clientes/export/', [GestionClienteController::class, 'export']);
     Route::post('clientes/import/', [GestionClienteController::class, 'import']);
-    Route::get('clientes/export/nuevos', [GestionClienteController::class, 'exportClienteNuevo']);
 
     // Actualizar datos de clientes a la nueva tabla export_cliente
     Route::get('update_export_cliente', [ConfiguracionController::class, 'updateExportCliente']);
