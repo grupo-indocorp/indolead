@@ -17,4 +17,8 @@ class Comentario extends Model
     public function cliente() {
         return $this->belongsTo(Cliente::class);
     }
+
+    public function etiqueta() {
+        return $this->belongsTo(Etiqueta::class);
+    }
 }

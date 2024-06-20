@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Etiqueta extends Model
 {
     use HasFactory;
+
+    // Relación uno a uno
+    public function comentarios() {
+        return $this->hasMany(Comentario::class);
+    }
 }

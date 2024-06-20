@@ -123,7 +123,7 @@
                 let filtro_fecha_desde = $('#filtro_fecha_desde').val();
                 let filtro_fecha_hasta = $('#filtro_fecha_hasta').val();
                 let filtro_ruc = $('#filtro_ruc').val();
-                window.location.href = `/gestion_cliente?filtro_etapa_id=${filtro_etapa_id}&filtro_sede_id=${filtro_sede_id}&filtro_equipo_id=${filtro_equipo_id}&filtro_user_id=${filtro_user_id}&filtro_fecha_desde=${filtro_fecha_desde}&filtro_fecha_hasta=${filtro_fecha_hasta}&filtro_ruc=${filtro_ruc}`;
+                window.location.href = `/cliente-gestion?filtro_etapa_id=${filtro_etapa_id}&filtro_sede_id=${filtro_sede_id}&filtro_equipo_id=${filtro_equipo_id}&filtro_user_id=${filtro_user_id}&filtro_fecha_desde=${filtro_fecha_desde}&filtro_fecha_hasta=${filtro_fecha_hasta}&filtro_ruc=${filtro_ruc}`;
             }
             function detalleCliente(cliente_id) {
                 $.ajax({

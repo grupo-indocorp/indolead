@@ -376,6 +376,7 @@ class ClienteGestionController extends Controller
             $comentario->comentario = request('comentario');
             $comentario->user_id = auth()->user()->id;
             $comentario->cliente_id = $cliente->id;
+            $comentario->etiqueta_id = 4; // etiqueta_id, 4=gestionado;
             $comentario->save();
 
             $data_comentarios = $cliente->comentarios()->orderBy('comentarios.id', 'desc')->limit(5)->get();
@@ -386,6 +387,7 @@ class ClienteGestionController extends Controller
                     'comentario' => $value->comentario,
                     'usuario' => $value->user->name,
                     'fecha' => $value->created_at->format('d-m-Y h:i:s A'),
+                    'etiqueta' => $value->etiqueta->nombre,
                 ];
             }
             // etiqueta
@@ -536,6 +538,7 @@ class ClienteGestionController extends Controller
                 $comentario->comentario = 'Cliente asignado.';
                 $comentario->cliente_id = $client->id;
                 $comentario->user_id = auth()->user()->id;
+                $comentario->etiqueta_id = 2; // etiqueta_id, 2=asignado;
                 $comentario->save();
                 $this->clienteService->exportclienteStore($client->id);
             }

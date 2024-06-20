@@ -169,6 +169,7 @@ class ClienteService
                 'comentario' => $value->comentario,
                 'usuario' => $value->user->name,
                 'fecha' => $value->created_at->format('d-m-Y h:i:s A'),
+                'etiqueta' => $value->etiqueta->nombre,
             ];
         }
         $data_notificacions = $cliente->notificacions()->orderBy('notificacions.id', 'desc')->limit(2)->get();
@@ -287,6 +288,7 @@ class ClienteService
         $comentario->comentario = request('comentario');
         $comentario->user_id = $user->id;
         $comentario->cliente_id = $cliente->id;
+        $comentario->etiqueta_id = 1; // etiqueta_id, 1=nuevo;
         $comentario->save();
         // Movistar
         $movistar = new Movistar();
