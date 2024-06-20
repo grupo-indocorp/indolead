@@ -35,7 +35,7 @@
             element.classList.contains('is-invalid') ? element.classList.remove('is-invalid') : element.remove();
         });
         $.ajax({
-            url: `{{ url('gestion_cliente/0') }}`,
+            url: `{{ url('cliente-gestion/0') }}`,
             method: "GET",
             data: {
                 view: 'show-validar-ruc',

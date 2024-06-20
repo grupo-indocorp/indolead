@@ -38,7 +38,7 @@ Route::middleware([
 ])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resources([
-        'gestion_cliente' => GestionClienteController::class,
+        // 'gestion_cliente' => GestionClienteController::class,
         'lista_usuario' => ListaUsuarioController::class,
         'equipo' => EquipoController::class,
         'funnel' => FunnelController::class,

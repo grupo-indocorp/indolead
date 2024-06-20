@@ -59,7 +59,7 @@
             [
                 'icon' => 'fa-users-medical',
                 'nombre' => 'Gestión Clientes',
-                'url' => 'gestion_cliente',
+                'url' => 'cliente-gestion',
                 'can' => 'sistema.gestion_cliente',
             ],
             [

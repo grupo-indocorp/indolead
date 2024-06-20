@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cliente;
+use App\Models\Etapa;
 use App\Services\ClienteService;
 use Illuminate\Http\Request;
 
@@ -28,7 +29,11 @@ class ClienteController extends Controller
      */
     public function create()
     {
-        //
+        $view = request('view');
+        if ($view === 'create') {
+            $etapas = Etapa::all();
+            return view('sistema.cliente.create', compact('etapas'));
+        }
     }
 
     /**
