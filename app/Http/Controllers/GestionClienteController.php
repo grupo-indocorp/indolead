@@ -172,7 +172,7 @@ class GestionClienteController extends Controller
             }
         }
         
-        return view('sistema.gestion_cliente.index', compact(
+        return view('sistema.cliente.gestion.index', compact(
             'clientes',
             'data_etapas',
             'count_total',
@@ -191,10 +191,7 @@ class GestionClienteController extends Controller
      */
     public function create()
     {
-        if (request('view') == 'create') {
-            $etapas = Etapa::all();
-            return view('sistema.gestion_cliente.create', compact('etapas'));
-        }
+        //
     }
 
     /**
@@ -202,28 +199,7 @@ class GestionClienteController extends Controller
      */
     public function store(ClienteRequest $request)
     {
-        // $user = auth()->user();
-        if (request('view') == 'store') {
-            if (request('dni') != '') {
-                $request->validate(
-                    [
-                        'nombre' => 'required|bail',
-                        'dni' => 'required|numeric|digits:8|bail',
-                        'celular' => 'required|bail',
-                        'cargo' => 'required|bail',
-                    ],
-                    [
-                        'nombre.required' => 'El "Nombre" es obligatorio.',
-                        'dni.required' => 'El "DNI" es obligatorio.',
-                        'dni.numeric' => 'El "DNI" debe ser numérico.',
-                        'dni.digits' => 'El "DNI" debe tener exactamente 8 dígitos.',
-                        'celular.required' => 'El "Celular" es obligatorio.',
-                        'cargo.required' => 'El "Cargo" es obligatorio.',
-                    ]
-                );
-            }
-            $this->clienteService->clienteStore($request);
-        }
+        //
     }
 
     /**
@@ -231,90 +207,7 @@ class GestionClienteController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $view = request('view');
-        /*if ($view == 'filtro') {
-            if ($id == 0) {
-                $clientes = $this->clienteService->listarClientes($user);
-            } else {
-                $etapa_id = $id;
-                $clientes = $this->clienteService->listarClientesPorEtapa($user, $etapa_id);
-            }
-            return view('sistema.gestion_cliente.filtro', compact('clientes'));
-        }*/
-        if ($view == 'show-validar-ruc') {
-            $request->validate(
-                [
-                    'ruc' => 'numeric|digits:11|starts_with:20|unique:clientes,ruc|bail',
-                ],
-                [
-                    'ruc.numeric' => 'El "Ruc" debe ser numérico.',
-                    'ruc.digits' => 'El "Ruc" debe tener exactamente 11 dígitos.',
-                    'ruc.starts_with' => 'El "Ruc" debe iniciar con 20.',
-                    'ruc.unique' => 'El "Ruc" ya se encuentra registrado.',
-                ]
-            );
-        } elseif ($view == 'show-validar-ruc-secodi') {
-            $request->validate(
-                [
-                    'ruc' => 'numeric|digits:11|starts_with:20,10|unique:clientes,ruc|bail',
-                ],
-                [
-                    'ruc.numeric' => 'El "Ruc" debe ser numérico.',
-                    'ruc.digits' => 'El "Ruc" debe tener exactamente 11 dígitos.',
-                    'ruc.starts_with' => 'El "Ruc" debe iniciar con 20 o 10.',
-                    'ruc.unique' => 'El "Ruc" ya se encuentra registrado.',
-                ]
-            );
-        } elseif ($view === 'show-editar-venta') {
-            $venta = Venta::find($id);
-            $productos = $venta->productos;
-            return $productos;
-        } elseif ($view === 'show-ultima-venta') {
-            $cliente = Cliente::find($id);
-            $productos = false;
-            if (isset($cliente)) {
-                $productos = isset($cliente->ventas->last()->productos) ? $cliente->ventas->last()->productos : false;
-            }
-            return $productos;
-        } elseif ($view === 'show-select-sede') {
-            $sede = Sede::find($id);
-            if ($sede) {
-                $equipos = Equipo::where('sede_id', $sede->id)->get();
-                $users = User::role('ejecutivo')->where('sede_id', $sede->id)->get();
-            } else {
-                $equipos = Equipo::all();
-                $users = User::role('ejecutivo')->get();
-            }
-            return response()->json([
-                'equipos' => $equipos,
-                'users' => $users,
-            ]);
-        } elseif ($view === 'show-select-equipo') {
-            $equipo = Equipo::find($id);
-            $users = $equipo->users;
-            return response()->json([
-                'users' => $users,
-            ]);
-        } elseif ($view === 'show-select-user') {
-            $sede_id = request('sede_id');
-            if ($sede_id) {
-                $users = User::role('ejecutivo')->where('sede_id', $sede_id)->get();
-            } else {
-                $users = User::role('ejecutivo')->get();
-            }
-            return response()->json([
-                'users' => $users,
-            ]);
-        } elseif ($view === 'show-data-select') {
-            $sedes = Sede::all();
-            $equipos = Equipo::all();
-            $users = User::role('ejecutivo')->get();
-            return response()->json([
-                'sedes' => $sedes,
-                'equipos' => $equipos,
-                'users' => $users,
-            ]);
-        }
+        //
     }
 
     /**
@@ -322,29 +215,7 @@ class GestionClienteController extends Controller
      */
     public function edit(string $id)
     {
-        $view = request('view');
-        if ($view === 'edit-assign-clients') {
-            $equipos = Equipo::all();
-            if (auth()->user()->hasRole('supervisor')) {
-                $equipo = Equipo::find(auth()->user()->equipo->id);
-                $ejecutivos = $equipo->users;
-            } else {
-                $ejecutivos = User::role('ejecutivo')->get();
-            }
-            $clients = request('clients');
-            $etapas = Etapa::all();
-            return view('sistema.gestion_cliente.assign', compact(
-                'equipos',
-                'ejecutivos',
-                'clients',
-                'etapas',
-            ));
-        } elseif ($view === 'edit-detail-client') {
-            $cliente_id = $id;
-            $user = auth()->user();
-            $data = $this->clienteService->obtenerClienteDetalle($user, $cliente_id);
-            return view('sistema.gestion_cliente.detalle', compact('data'));
-        }
+        //
     }
 
     /**
@@ -352,240 +223,7 @@ class GestionClienteController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $view = request('view');
-        $cliente = Cliente::find($id);
-        if ($view === 'update-cliente') {
-            $request->validate([
-                'ruc' => 'required|numeric|digits:11|starts_with:20,10|unique:clientes,ruc,'.$id.'|bail',
-                'razon_social' => 'required|bail',
-                'ciudad' => 'required|bail',
-            ],
-            [
-                'ruc.required' => 'El "Ruc" es obligatorio.',
-                'ruc.numeric' => 'El "Ruc" debe ser numérico.',
-                'ruc.digits' => 'El "Ruc" debe tener exactamente 11 dígitos.',
-                'ruc.starts_with' => 'El "Ruc" debe iniciar con 20 o 10.',
-                'ruc.unique' => 'El "Ruc" ya se encuentra registrado.',
-                'razon_social.required' => 'La "Razón Social" es obligatorio.',
-                'ciudad.required' => 'La "Ciudad" es obligatorio.',
-            ]);
-            $cliente->ruc = request('ruc');
-            $cliente->razon_social = request('razon_social');
-            $cliente->ciudad = request('ciudad');
-            $cliente->save();
-            $this->clienteService->exportclienteStore($cliente->id);
-            return response()->json($cliente);
-        } elseif ($view === 'update-contacto') {
-            $request->validate([
-                'nombre' => 'required|bail',
-                'dni' => 'required|numeric|digits:8|bail',
-                'celular' => 'required|bail',
-                'cargo' => 'required|bail',
-            ],
-            [
-                'nombre.required' => 'El "Nombre" es obligatorio.',
-                'dni.required' => 'El "DNI" es obligatorio.',
-                'dni.numeric' => 'El "DNI" debe ser numérico.',
-                'dni.digits' => 'El "DNI" debe tener exactamente 8 dígitos.',
-                'celular.required' => 'El "Celular" es obligatorio.',
-                'cargo.required' => 'El "Cargo" es obligatorio.',
-            ]);
-            $contacto = new Contacto();
-            $contacto->dni = request('dni');
-            $contacto->nombre = request('nombre');
-            $contacto->celular = request('celular');
-            $contacto->cargo = request('cargo');
-            $contacto->correo = request('correo') ?? '';
-            $contacto->fecha_ultimo = now();
-            $contacto->fecha_proximo = now();
-            $contacto->cliente_id = $cliente->id;
-            $contacto->save();
-
-            $data_contactos = $cliente->contactos()->orderBy('contactos.id', 'desc')->limit(8)->get();
-            $contactos = [];
-            foreach ($data_contactos as $value) {
-                $contactos[] = [
-                    'id' => $value->id,
-                    'dni' => $value->dni,
-                    'nombre' => $value->nombre,
-                    'celular' => $value->celular,
-                    'cargo' => $value->cargo,
-                    'correo' => $value->correo,
-                ];
-            }
-            $this->clienteService->exportclienteStore($cliente->id);
-            return response()->json($contactos);
-        } elseif ($view === 'update-comentario') {
-            $request->validate([
-                'comentario' => 'required|bail',
-            ],
-            [
-                'comentario.required' => 'El "Comentario" es obligatorio.',
-            ]);
-            $comentario = new Comentario();
-            $comentario->comentario = request('comentario');
-            $comentario->user_id = auth()->user()->id;
-            $comentario->cliente_id = $cliente->id;
-            $comentario->save();
-
-            $data_comentarios = $cliente->comentarios()->orderBy('comentarios.id', 'desc')->limit(5)->get();
-            $comentarios = [];
-            foreach ($data_comentarios as $value) {
-                $comentarios[] = [
-                    'id' => $value->id,
-                    'comentario' => $value->comentario,
-                    'usuario' => $value->user->name,
-                    'fecha' => $value->created_at->format('d-m-Y h:i:s A'),
-                ];
-            }
-            // etiqueta
-            $etiqueta = [
-                ["id" => 4, "nombre" => "gestionado"],
-            ];
-            // cliente
-            $cliente->fecha_gestion = now();
-            $cliente->etiqueta = json_encode($etiqueta);
-            $cliente->save();
-            $this->clienteService->exportclienteStore($cliente->id);
-            return response()->json($comentarios);
-        } elseif ($view === 'update-movistar') {
-            $request->validate([
-                'estadowick_id' => 'required|bail',
-                'estadodito_id' => 'required|bail',
-                'linea_claro' => 'required|bail',
-                'linea_entel' => 'required|bail',
-                'linea_bitel' => 'required|bail',
-                'linea_movistar' => 'required|bail',
-                'clientetipo_id' => 'required|bail',
-                'agencia_id' => 'required|bail',
-            ],
-            [
-                'estadowick_id.required' => 'El "Estado Wick" es obligatorio.',
-                'estadodito_id.required' => 'El "Estado Dito" es obligatorio.',
-                'linea_claro.required' => 'La "Línea Claro" es obligatorio.',
-                'linea_entel.required' => 'La "Línea Entel" es obligatorio.',
-                'linea_bitel.required' => 'La "Línea Bitel" es obligatorio.',
-                'linea_movistar.required' => 'La "Línea Movistar" es obligatorio.',
-                'clientetipo_id.required' => 'El "Tipo de Cliente" es obligatorio.',
-                'agencia_id.required' => 'La "Agencia" es obligatorio.',
-            ]);
-            $movistar = new Movistar();
-            $movistar->linea_claro = request('linea_claro');
-            $movistar->linea_entel = request('linea_entel');
-            $movistar->linea_bitel = request('linea_bitel');
-            $movistar->linea_movistar = request('linea_movistar');
-            $movistar->estadowick_id = request('estadowick_id');
-            $movistar->estadodito_id = request('estadodito_id');
-            $movistar->clientetipo_id = request('clientetipo_id');
-            $movistar->ejecutivo_salesforce = request('ejecutivo_salesforce') ?? '';
-            $movistar->agencia_id = request('agencia_id');
-            $movistar->cliente_id = $cliente->id;
-            $movistar->save();
-            $this->clienteService->exportclienteStore($cliente->id);
-        } elseif ($view === 'update-etapa') {
-            $request->validate([
-                'etapa_id' => 'required|bail',
-                'comentario' => 'required|bail',
-            ],
-            [
-                'etapa_id.required' => 'La "Etapa" es obligatorio.',
-                'comentario.required' => 'El "Comentario" es obligatorio.',
-            ]);
-            // etiqueta
-            $etiqueta = [
-                ["id" => 4, "nombre" => "gestionado"],
-            ];
-            // cliente
-            $cliente->etapas()->attach(request('etapa_id'));
-            $cliente->fecha_gestion = now();
-            $cliente->etiqueta = json_encode($etiqueta);
-            $cliente->etapa_id = request('etapa_id');
-            $cliente->save();
-
-            $comentario = new Comentario();
-            $comentario->comentario = request('comentario');
-            $comentario->user_id = auth()->user()->id;
-            $comentario->cliente_id = $cliente->id;
-            $comentario->save();
-
-            $data_comentarios = $cliente->comentarios()->orderBy('comentarios.id', 'desc')->limit(5)->get();
-            $comentarios = [];
-            foreach ($data_comentarios as $value) {
-                $comentarios[] = [
-                    'id' => $value->id,
-                    'comentario' => $value->comentario,
-                    'usuario' => $value->user->name,
-                    'fecha' => $value->created_at->format('d-m-Y h:i:s A'),
-                ];
-            }
-            $this->clienteService->exportclienteStore($cliente->id);
-            return response()->json($comentarios);
-        } elseif ($view === 'update-cargo') {
-            $ventas = Venta::find(request('venta_id'));
-            if (isset($ventas)) {
-                foreach ($ventas->productos as $value) {
-                    DB::table('producto_venta')->where('venta_id', $value->pivot->venta_id)->delete();
-                }
-            }
-            if (!is_null(request('dataCargo'))) {
-                $venta_total = 0;
-                $venta = new Venta();
-                $venta->cliente_id = $cliente->id;
-                $venta->user_id = auth()->user()->id;
-                $venta->save();
-                foreach (request('dataCargo') as $row) {
-                    $venta->productos()->attach($row['producto_id'], [
-                        'producto_nombre' => $row['producto_nombre'],
-                        'detalle' => $row['detalle'] ?? '',
-                        'cantidad' => $row['cantidad'],
-                        'precio' => $row['precio'],
-                        'total' => $row['total'],
-                    ]);
-                    $venta_total += $row['total'];
-                }
-                $venta->total = $venta_total;
-                $venta->save();
-            }
-            $this->clienteService->exportclienteStore($cliente->id);
-            return $venta->productos;
-        } elseif ($view === 'update-asignar-cliente') {
-            $request->validate(
-                [
-                    'user_id' => 'required|bail',
-                    'etapa_id' => 'required|bail',
-                ],
-                [
-                    'user_id.required' => 'El "Ejecutivo" es obligatorio.',
-                    'etapa_id.required' => 'La "Etapa" es obligatorio.',
-                ]
-            );
-            // etiqueta
-            $etiqueta = [
-                ["id" => 2, "nombre" => "asignado"],
-            ];
-            // cliente
-            $executive = User::find(request('user_id'));
-            $clients = request('clients');
-            foreach ($clients as $value) {
-                $client = Cliente::find($value);
-                $client->fecha_gestion = now();
-                $client->etiqueta = json_encode($etiqueta);
-                $client->user_id = $executive->id;
-                $client->equipo_id = $executive->equipos->last()->id;
-                $client->sede_id = $executive->sede_id;
-                $client->etapa_id = request('etapa_id');
-                $client->save();
-                $client->usersHistorial()->attach($executive->id);
-                $client->etapas()->attach(1);
-                // comentario
-                $comentario = new Comentario();
-                $comentario->comentario = 'Cliente asignado.';
-                $comentario->cliente_id = $client->id;
-                $comentario->user_id = auth()->user()->id;
-                $comentario->save();
-                $this->clienteService->exportclienteStore($client->id);
-            }
-        }
+        //
     }
 
     /**

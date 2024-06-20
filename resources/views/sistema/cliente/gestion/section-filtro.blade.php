@@ -17,7 +17,7 @@
                 onclick="selectFiltroEtapa({{ $item['id'] }})" id="etapa_{{ $item['id'] }}" />
         @endforeach
     </div>
-    <form action="{{ route('gestion_cliente.index') }}" method="GET" class="m-0">
+    <form action="{{ route('cliente-gestion.index') }}" method="GET" class="m-0">
         <div class="w-full flex justify-between">
             <div class="flex flex-col">
                 <div class="flex gap-1">

@@ -133,7 +133,7 @@
         tfootRef.html('');
         headerRef.html('');
         $.ajax({
-            url: `{{ url('gestion_cliente/${cliente_id}') }}`,
+            url: `{{ url('cliente-gestion/${cliente_id}') }}`,
             method: "GET",
             data: {
                 view: 'show-ultima-venta',
@@ -183,7 +183,7 @@
         tfootRef.html('');
         headerRef.html('');
         $.ajax({
-            url: `{{ url('gestion_cliente/${venta_id}') }}`,
+            url: `{{ url('cliente-gestion/${venta_id}') }}`,
             method: "GET",
             data: {
                 view: 'show-editar-venta',
@@ -285,7 +285,7 @@
             }
         });
         $.ajax({
-            url: `gestion_cliente/${cliente_id}`,
+            url: `cliente-gestion/${cliente_id}`,
             method: "PUT",
             data: {
                 view: 'update-cargo',

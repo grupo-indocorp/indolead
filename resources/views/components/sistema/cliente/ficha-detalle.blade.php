@@ -86,7 +86,7 @@
             }
         });
         $.ajax({
-            url: `gestion_cliente/${cliente_id}`,
+            url: `cliente-gestion/${cliente_id}`,
             method: "PUT",
             data: {
                 view: 'update-cliente',
@@ -114,7 +114,7 @@
             }
         });
         $.ajax({
-            url: `gestion_cliente/${cliente_id}`,
+            url: `cliente-gestion/${cliente_id}`,
             method: "PUT",
             data: {
                 view: 'update-contacto',
@@ -172,7 +172,7 @@
             }
         });
         $.ajax({
-            url: `gestion_cliente/${cliente_id}`,
+            url: `cliente-gestion/${cliente_id}`,
             method: "PUT",
             data: {
                 view: 'update-comentario',
@@ -280,7 +280,7 @@
             }
         });
         $.ajax({
-            url: `gestion_cliente/${cliente_id}`,
+            url: `cliente-gestion/${cliente_id}`,
             method: "PUT",
             data: {
                 view: 'update-movistar',
@@ -323,7 +323,7 @@
             }
         });
         $.ajax({
-            url: `gestion_cliente/${cliente_id}`,
+            url: `cliente-gestion/${cliente_id}`,
             method: "PUT",
             data: {
                 view: 'update-etapa',
@@ -365,7 +365,7 @@
             }
         });
         $.ajax({
-            url: `gestion_cliente/${cliente_id}`,
+            url: `cliente-gestion/${cliente_id}`,
             method: "PUT",
             data: {
                 view: 'update-cargo',

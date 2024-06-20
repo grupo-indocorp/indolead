@@ -42,10 +42,10 @@
         });
         let clients = @json($clients);
         $.ajax({
-            url: `{{ url('gestion_cliente/0') }}`,
+            url: `{{ url('cliente-gestion/0') }}`,
             method: "PUT",
             data: {
-                view: 'update-asignar-cliente',
+                view: 'update-asignar',
                 user_id: $('#user_id').val(),
                 etapa_id: $('#etapa_id').val(),
                 clients: clients,
