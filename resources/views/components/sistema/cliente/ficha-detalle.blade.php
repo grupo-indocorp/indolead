@@ -199,6 +199,9 @@
                             <span class="text-slate-500 text-sm">
                                 <i class="text-blue-400 fa-solid fa-calendar-days"></i> ${comentario.fecha}
                             </span>
+                            <span class="bg-slate-300 text-slate-700 text-xs font-semibold font-se mb-0 mx-1 px-3 py-1 rounded-lg">
+                                ${comentario.etiqueta}
+                            </span>
                         </div>
                     </div>`;
         })
