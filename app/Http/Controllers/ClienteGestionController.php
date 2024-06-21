@@ -131,20 +131,13 @@ class ClienteGestionController extends Controller
         $countClienteNuevo = 0;
         $countClienteGestionado = 0;
         if ($user->hasRole('ejecutivo')) {
-
+            // Conteo de Clientes Nuevos por Ejecutivo
+            $countClienteNuevo = Cliente::where('user_id', $user->id)->whereDate('fecha_nuevo', Carbon::today())->count();
+            // Conteo de Clientes Gestionados por Ejecutivo
             $cltGestionados = Cliente::where('user_id', $user->id)->whereDate('fecha_gestion', Carbon::today())->get();
             foreach ($cltGestionados as $value) {
-                if (isset($value->etiqueta)) {
-                    foreach (json_decode($value->etiqueta) as $item) {
-                        // Conteo de Clientes Nuevos por Ejecutivo
-                        if ($item->nombre === 'nuevo' || $item->nombre === 'asignado' || $item->nombre === 'solicitado') {
-                            $countClienteNuevo++;
-                        }
-                        // Conteo de Clientes Gestionados por Ejecutivo
-                        if ($item->nombre === 'gestionado') {
-                            $countClienteGestionado++;
-                        }
-                    }
+                if ($value->etiqueta_id != 2) { //asignado
+                    $countClienteGestionado++;
                 }
             }
         }
@@ -379,7 +372,7 @@ class ClienteGestionController extends Controller
             $comentario->etiqueta_id = 4; // etiqueta_id, 4=gestionado;
             $comentario->save();
 
-            $data_comentarios = $cliente->comentarios()->orderBy('comentarios.id', 'desc')->limit(5)->get();
+            $data_comentarios = $cliente->comentarios()->where('user_id', auth()->user()->id)->orderBy('comentarios.id', 'desc')->limit(5)->get();
             $comentarios = [];
             foreach ($data_comentarios as $value) {
                 $comentarios[] = [
@@ -390,13 +383,9 @@ class ClienteGestionController extends Controller
                     'etiqueta' => $value->etiqueta->nombre,
                 ];
             }
-            // etiqueta
-            $etiqueta = [
-                ["id" => 4, "nombre" => "gestionado"],
-            ];
             // cliente
             $cliente->fecha_gestion = now();
-            $cliente->etiqueta = json_encode($etiqueta);
+            $cliente->etiqueta_id = 4; // gestionado
             $cliente->save();
             $this->clienteService->exportclienteStore($cliente->id);
             return response()->json($comentarios);
@@ -447,14 +436,10 @@ class ClienteGestionController extends Controller
                     'comentario.required' => 'El "Comentario" es obligatorio.',
                 ]
             );
-            // etiqueta
-            $etiqueta = [
-                ["id" => 4, "nombre" => "gestionado"],
-            ];
             // cliente
             $cliente->etapas()->attach(request('etapa_id'));
             $cliente->fecha_gestion = now();
-            $cliente->etiqueta = json_encode($etiqueta);
+            $cliente->etiqueta_id = 4; // gestionado
             $cliente->etapa_id = request('etapa_id');
             $cliente->save();
 
@@ -464,7 +449,7 @@ class ClienteGestionController extends Controller
             $comentario->cliente_id = $cliente->id;
             $comentario->save();
 
-            $data_comentarios = $cliente->comentarios()->orderBy('comentarios.id', 'desc')->limit(5)->get();
+            $data_comentarios = $cliente->comentarios()->where('user_id', auth()->user()->id)->orderBy('comentarios.id', 'desc')->limit(5)->get();
             $comentarios = [];
             foreach ($data_comentarios as $value) {
                 $comentarios[] = [
@@ -472,6 +457,7 @@ class ClienteGestionController extends Controller
                     'comentario' => $value->comentario,
                     'usuario' => $value->user->name,
                     'fecha' => $value->created_at->format('d-m-Y h:i:s A'),
+                    'etiqueta' => $value->etiqueta->nombre,
                 ];
             }
             $this->clienteService->exportclienteStore($cliente->id);
@@ -515,17 +501,14 @@ class ClienteGestionController extends Controller
                     'etapa_id.required' => 'La "Etapa" es obligatorio.',
                 ]
             );
-            // etiqueta
-            $etiqueta = [
-                ["id" => 2, "nombre" => "asignado"],
-            ];
             // cliente
             $executive = User::find(request('user_id'));
             $clients = request('clients');
             foreach ($clients as $value) {
                 $client = Cliente::find($value);
                 $client->fecha_gestion = now();
-                $client->etiqueta = json_encode($etiqueta);
+                $client->fecha_nuevo = now();
+                $client->etiqueta_id = 2; // asignado
                 $client->user_id = $executive->id;
                 $client->equipo_id = $executive->equipos->last()->id;
                 $client->sede_id = $executive->sede_id;

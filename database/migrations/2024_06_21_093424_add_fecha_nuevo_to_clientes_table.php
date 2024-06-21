@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('clientes', function (Blueprint $table) {
-            $table->foreignId('etiqueta_id')->after('fecha_gestion')->default(4)->constrained();
+            $table->dateTime('fecha_nuevo')->after('fecha_gestion')->default(now());
         });
     }
 

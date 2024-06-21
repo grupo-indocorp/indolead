@@ -77,13 +77,23 @@
                     @endif
                 </td>
                 <td class="align-middle text-center">
-                    @isset($value->etiqueta)
-                        @foreach (json_decode($value->etiqueta) as $item)
+                    @php
+                        $fechaGestion = Carbon\Carbon::parse($value->fecha_gestion)->toDateString();
+                        $fechaNuevo = Carbon\Carbon::parse($value->fecha_nuevo)->toDateString();
+                        $fechaHoy = Carbon\Carbon::today()->toDateString();
+                    @endphp
+                    @if ($fechaGestion == $fechaHoy)
+                        @if ($value->etiqueta_id != 2)
                             <span class="bg-slate-300 text-slate-700 text-xs font-semibold font-se mb-0 mx-1 px-3 py-1 rounded-lg">
-                                {{ $item->nombre }}
+                                gestionado
                             </span>
-                        @endforeach
-                    @endisset
+                        @endif
+                    @endif
+                    @if ($fechaNuevo == $fechaHoy)
+                        <span class="bg-slate-300 text-slate-700 text-xs font-semibold font-se mb-0 mx-1 px-3 py-1 rounded-lg">
+                            nuevo
+                        </span>
+                    @endif
                 </td>
             </tr>
             @endforeach

@@ -95,11 +95,6 @@ class ClienteConsultorController extends Controller
                     'comentario.required' => 'El "Comentario" es obligatorio.',
                 ]
             );
-            // etiqueta
-            $etiqueta = [
-                ["id" => 3, "nombre" => "solicitado"],
-                ["id" => 4, "nombre" => "gestionado"]
-            ];
             // cliente
             $cliente = Cliente::find($id);
             $ejecutivo = auth()->user();
@@ -107,7 +102,8 @@ class ClienteConsultorController extends Controller
             $cliente->usersHistorial()->attach($ejecutivo->id);
             $cliente->etapas()->attach(request('etapa_id'));
             $cliente->fecha_gestion = now();
-            $cliente->etiqueta = json_encode($etiqueta);
+            $cliente->fecha_nuevo = now();
+            $cliente->etiqueta_id = 3; // solicitado
             $cliente->sede_id = $ejecutivo->sede_id;
             $cliente->equipo_id = $ejecutivo->equipos->last()->id;
             $cliente->etapa_id = request('etapa_id');
