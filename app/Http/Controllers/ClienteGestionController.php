@@ -365,8 +365,10 @@ class ClienteGestionController extends Controller
                     'comentario.required' => 'El "Comentario" es obligatorio.',
                 ]
             );
+            $etapa = Etapa::find($cliente->etapa_id);
             $comentario = new Comentario();
             $comentario->comentario = request('comentario');
+            $comentario->detalle = $etapa->nombre;
             $comentario->user_id = auth()->user()->id;
             $comentario->cliente_id = $cliente->id;
             $comentario->etiqueta_id = 4; // etiqueta_id, 4=gestionado;
@@ -381,6 +383,7 @@ class ClienteGestionController extends Controller
                     'usuario' => $value->user->name,
                     'fecha' => $value->created_at->format('d-m-Y h:i:s A'),
                     'etiqueta' => $value->etiqueta->nombre,
+                    'detalle' => $value->detalle,
                 ];
             }
             // cliente
@@ -443,8 +446,10 @@ class ClienteGestionController extends Controller
             $cliente->etapa_id = request('etapa_id');
             $cliente->save();
 
+            $etapa = Etapa::find(request('etapa_id'));
             $comentario = new Comentario();
             $comentario->comentario = request('comentario');
+            $comentario->detalle = 'Cambio de etapa a '.$etapa->nombre;
             $comentario->user_id = auth()->user()->id;
             $comentario->cliente_id = $cliente->id;
             $comentario->save();
@@ -458,6 +463,7 @@ class ClienteGestionController extends Controller
                     'usuario' => $value->user->name,
                     'fecha' => $value->created_at->format('d-m-Y h:i:s A'),
                     'etiqueta' => $value->etiqueta->nombre,
+                    'detalle' => $value->detalle,
                 ];
             }
             $this->clienteService->exportclienteStore($cliente->id);
@@ -517,8 +523,10 @@ class ClienteGestionController extends Controller
                 $client->usersHistorial()->attach($executive->id);
                 $client->etapas()->attach(1);
                 // comentario
+                $etapa = Etapa::find(request('etapa_id'));
                 $comentario = new Comentario();
                 $comentario->comentario = 'Cliente asignado.';
+                $comentario->detalle = 'Cambio de etapa a ' . $etapa->nombre;
                 $comentario->cliente_id = $client->id;
                 $comentario->user_id = auth()->user()->id;
                 $comentario->etiqueta_id = 2; // etiqueta_id, 2=asignado;
