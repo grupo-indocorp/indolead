@@ -170,6 +170,7 @@ class ClienteService
                 'usuario' => $value->user->name,
                 'fecha' => $value->created_at->format('d-m-Y h:i:s A'),
                 'etiqueta' => $value->etiqueta->nombre,
+                'detalle' => $value->detalle,
             ];
         }
         $data_notificacions = $cliente->notificacions()->orderBy('notificacions.id', 'desc')->limit(2)->get();
@@ -280,8 +281,10 @@ class ClienteService
             $contacto->save();
         }
         // Comentario
+        $etapa = Etapa::find(request('etapa_id'));
         $comentario = new Comentario();
         $comentario->comentario = request('comentario');
+        $comentario->detalle = 'Cambio de etapa a '.$etapa->nombre;
         $comentario->user_id = $user->id;
         $comentario->cliente_id = $cliente->id;
         $comentario->etiqueta_id = 1; // etiqueta_id, 1=nuevo;

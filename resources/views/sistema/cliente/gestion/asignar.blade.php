@@ -68,7 +68,7 @@
     $('#equipo_id').on("change", function() {
         if ($(this).val()) {
             $.ajax({
-                url: `{{ url('gestion_cliente/${$(this).val()}') }}`,
+                url: `{{ url('cliente-gestion/${$(this).val()}') }}`,
                 method: "GET",
                 data: {
                     view: 'show-select-equipo',

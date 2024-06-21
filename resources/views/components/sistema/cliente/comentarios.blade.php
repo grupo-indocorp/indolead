@@ -31,6 +31,9 @@
                         <span class="bg-slate-300 text-slate-700 text-xs font-semibold font-se mb-0 mx-1 px-3 py-1 rounded-lg">
                             {{ $comentario['etiqueta'] }}
                         </span>
+                        <span class="bg-slate-300 text-slate-700 text-xs font-semibold font-se mb-0 mx-1 px-3 py-1 rounded-lg">
+                            {{ $comentario['detalle'] }}
+                        </span>
                     </div>
                 </div>
             @endforeach

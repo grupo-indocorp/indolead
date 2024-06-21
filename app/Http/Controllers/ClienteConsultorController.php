@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cliente;
 use App\Models\Comentario;
+use App\Models\Etapa;
 use App\Services\ClienteService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -109,8 +110,10 @@ class ClienteConsultorController extends Controller
             $cliente->etapa_id = request('etapa_id');
             $cliente->save();
             // comentario
+            $etapa = Etapa::find(request('etapa_id'));
             $comentario = new Comentario();
             $comentario->comentario = request('comentario');
+            $comentario->detalle = 'Cambio de etapa a ' . $etapa->nombre;
             $comentario->cliente_id = $cliente->id;
             $comentario->user_id = $ejecutivo->id;
             $comentario->etiqueta_id = 3; // etiqueta_id, 3=solicitado;
