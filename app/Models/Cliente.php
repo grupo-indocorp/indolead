@@ -54,6 +54,11 @@ class Cliente extends Model
         return $this->belongsTo(Etapa::class);
     }
 
+    public function etiqueta()
+    {
+        return $this->belongsTo(Etiqueta::class);
+    }
+
     // Relación muchos a muchos
     public function usersHistorial() {
         return $this->belongsToMany(User::class)->withTimestamps();

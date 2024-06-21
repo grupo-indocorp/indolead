@@ -251,18 +251,14 @@ class ClienteService
     public function clienteStore()
     {
         $user = auth()->user();
-        // etiqueta
-        $etiqueta = [
-            ["id"=>1, "nombre"=>"nuevo"],
-            ["id"=>4, "nombre"=>"gestionado"]
-        ];
         // Ciente
         $cliente = new Cliente();
         $cliente->ruc = request('ruc');
         $cliente->razon_social = request('razon_social');
         $cliente->ciudad = request('ciudad');
         $cliente->fecha_gestion = now();
-        $cliente->etiqueta = json_encode($etiqueta);
+        $cliente->fecha_nuevo = now();
+        $cliente->etiqueta_id = 1; // nuevo
         $cliente->user_id = $user->id;
         $cliente->equipo_id = $user->equipos->last()->id ?? 1;
         $cliente->sede_id = $user->equipos->last()->sede->id ?? 1;
