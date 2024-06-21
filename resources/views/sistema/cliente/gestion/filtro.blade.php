@@ -21,7 +21,9 @@
                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Comentario</th>
                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Fecha de última Gestión</th>
                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Días sin Gestión</th>
+                @role(['administrador', 'sistema', 'supervisor'])
                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Etiqueta</th>
+                @endrole
             </tr>
         </thead>
         <tbody>
@@ -64,7 +66,7 @@
                     </td>
                 @endrole
                 <td class="align-middle text-center">
-                    <span class="text-secondary text-xs font-weight-normal">{{ substr($comentario->comentario ?? '', 0, 20) }}</span>
+                    <span class="text-secondary text-xs font-weight-normal">{{ substr($comentario->comentario ?? '', 0, 40) }}</span>
                 </td>
                 <td class="align-middle text-center">
                     <span class="text-secondary text-xs font-weight-normal">{{ date('d/m/Y H:i:s A', strtotime($value->fecha_gestion)) }}</span>
@@ -76,6 +78,7 @@
                         <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-green-100">{{ $dias }}</span>
                     @endif
                 </td>
+                @role(['administrador', 'sistema', 'supervisor'])
                 <td class="align-middle text-center">
                     @php
                         $fechaGestion = Carbon\Carbon::parse($value->fecha_gestion)->toDateString();
@@ -95,6 +98,7 @@
                         </span>
                     @endif
                 </td>
+                @endrole
             </tr>
             @endforeach
         </tbody>

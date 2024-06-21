@@ -15,7 +15,7 @@
         @if ($cliente != '')
             <input class="form-control" type="text" id="ruc" name="ruc" value="{{ $cliente->ruc ?? '' }}" disabled>
         @else
-            <input class="form-control" type="text" id="ruc" name="ruc" value="" onkeyup="validarRuc()">
+            <input class="form-control" type="text" id="ruc" name="ruc" value="" onchange="validarRuc(this)">
         @endif
     </div>
     <div class="form-group">
@@ -29,23 +29,29 @@
     {{ $botonFooter }}
 </x-sistema.card>
 <script>
-    function validarRuc() {
+    function validarRuc(element) {
         const dialog = document.querySelector("#dialog");
         dialog.querySelectorAll('.is-invalid, .invalid-feedback').forEach(element => {
             element.classList.contains('is-invalid') ? element.classList.remove('is-invalid') : element.remove();
         });
-        $.ajax({
-            url: `{{ url('cliente-gestion/0') }}`,
-            method: "GET",
-            data: {
-                view: 'show-validar-ruc',
-                ruc: $('#ruc').val(),
-            },
-            success: function( result ) {
-            },
-            error: function( response ) {
-                mostrarError(response)
-            }
-        });
+        let ruc = element.value;
+        if (ruc.length >= 11) {
+            $.ajax({
+                url: `{{ url('cliente-gestion/0') }}`,
+                method: "GET",
+                data: {
+                    view: 'show-validar-ruc',
+                    ruc: $('#ruc').val(),
+                },
+                success: function( result ) {
+                },
+                error: function( response ) {
+                    mostrarError(response)
+                }
+            });
+        } else {
+            $('#dialog #ruc').addClass('is-invalid');
+            $('#dialog #ruc').after('<span class="invalid-feedback" role="alert"><strong>El "Ruc" debe tener exactamente 11 dígitos</strong></span>');
+        }
     }
 </script>
