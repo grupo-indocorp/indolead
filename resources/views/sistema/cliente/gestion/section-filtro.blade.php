@@ -77,15 +77,21 @@
             </div>
             <div class="flex gap-2 items-center">
                 @role (['ejecutivo'])
-                    <div class="flex gap-2">
-                        <x-ui.count-rectangle>
-                            <x-slot:toggle>Clientes Nuevos</x-slot>
-                            {{ $countClienteNuevo }}
-                        </x-ui.count-rectangle>
-                        <x-ui.count-rectangle>
-                            <x-slot:toggle>Clientes Gestionados</x-slot>
-                            {{ $countClienteGestionado }}
-                        </x-ui.count-rectangle>
+                    <div class="flex gap-4">
+                        <div class="flex flex-col items-center">
+                            <span class="text-blue-600 text-base font-bold">Nuevos</span>
+                            <x-ui.count-rectangle>
+                                <x-slot:toggle>Clientes Nuevos</x-slot>
+                                {{ $countClienteNuevo }}
+                            </x-ui.count-rectangle>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <span class="text-blue-600 text-base font-bold">Gestionados</span>
+                            <x-ui.count-rectangle>
+                                <x-slot:toggle>Clientes Gestionados</x-slot>
+                                {{ $countClienteGestionado }}
+                            </x-ui.count-rectangle>
+                        </div>
                     </div>
                 @endrole
                 <div class="form-group">
