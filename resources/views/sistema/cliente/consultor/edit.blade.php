@@ -19,7 +19,7 @@
                 }
             });
             $.ajax({
-                url: `cliente/${cliente_id}`,
+                url: `cliente-consultor/${cliente_id}`,
                 method: "PUT",
                 data: {
                     view: 'update-solicitar',

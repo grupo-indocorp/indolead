@@ -97,7 +97,7 @@
     }
     function solicitarCliente(cliente_id) {
         $.ajax({
-            url: `{{ url('cliente/${cliente_id}') }}`,
+            url: `{{ url('cliente-consultor/${cliente_id}') }}`,
             method: "GET",
             data: {
                 view: 'show-cliente',

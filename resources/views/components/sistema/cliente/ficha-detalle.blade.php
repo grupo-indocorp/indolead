@@ -86,7 +86,7 @@
             }
         });
         $.ajax({
-            url: `gestion_cliente/${cliente_id}`,
+            url: `cliente-gestion/${cliente_id}`,
             method: "PUT",
             data: {
                 view: 'update-cliente',
@@ -114,7 +114,7 @@
             }
         });
         $.ajax({
-            url: `gestion_cliente/${cliente_id}`,
+            url: `cliente-gestion/${cliente_id}`,
             method: "PUT",
             data: {
                 view: 'update-contacto',
@@ -172,7 +172,7 @@
             }
         });
         $.ajax({
-            url: `gestion_cliente/${cliente_id}`,
+            url: `cliente-gestion/${cliente_id}`,
             method: "PUT",
             data: {
                 view: 'update-comentario',
@@ -198,6 +198,12 @@
                             </span>
                             <span class="text-slate-500 text-sm">
                                 <i class="text-blue-400 fa-solid fa-calendar-days"></i> ${comentario.fecha}
+                            </span>
+                            <span class="bg-slate-300 text-slate-700 text-xs font-semibold font-se mb-0 mx-1 px-3 py-1 rounded-lg">
+                                ${comentario.etiqueta}
+                            </span>
+                            <span class="bg-slate-300 text-slate-700 text-xs font-semibold font-se mb-0 mx-1 px-3 py-1 rounded-lg">
+                                ${comentario.detalle}
                             </span>
                         </div>
                     </div>`;
@@ -280,7 +286,7 @@
             }
         });
         $.ajax({
-            url: `gestion_cliente/${cliente_id}`,
+            url: `cliente-gestion/${cliente_id}`,
             method: "PUT",
             data: {
                 view: 'update-movistar',
@@ -323,7 +329,7 @@
             }
         });
         $.ajax({
-            url: `gestion_cliente/${cliente_id}`,
+            url: `cliente-gestion/${cliente_id}`,
             method: "PUT",
             data: {
                 view: 'update-etapa',
@@ -365,7 +371,7 @@
             }
         });
         $.ajax({
-            url: `gestion_cliente/${cliente_id}`,
+            url: `cliente-gestion/${cliente_id}`,
             method: "PUT",
             data: {
                 view: 'update-cargo',

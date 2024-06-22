@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\ClienteConsultorController;
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\ClienteGestionController;
 use App\Http\Controllers\ConfiguracionCategoriaController;
 use App\Http\Controllers\ConfiguracionController;
 use App\Http\Controllers\ConfiguracionEtapaController;
@@ -36,8 +38,7 @@ Route::middleware([
 ])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resources([
-        'cliente' => ClienteController::class,
-        'gestion_cliente' => GestionClienteController::class,
+        // 'gestion_cliente' => GestionClienteController::class,
         'lista_usuario' => ListaUsuarioController::class,
         'equipo' => EquipoController::class,
         'funnel' => FunnelController::class,
@@ -47,6 +48,10 @@ Route::middleware([
         'reporte_cliente' => ReporteClienteController::class,
         'reporte_cliente_nuevo' => ReporteClienteNuevoController::class,
         'producto' => ProductoController::class,
+        // Cliente
+        'cliente' => ClienteController::class,
+        'cliente-consultor' => ClienteConsultorController::class,
+        'cliente-gestion' => ClienteGestionController::class,
         // Configuraciones
         'configuracion' => ConfiguracionController::class,
         'configuracion-sistema' => ConfiguracionSistemaController::class,
@@ -58,7 +63,6 @@ Route::middleware([
     ]);
     Route::get('clientes/export/', [GestionClienteController::class, 'export']);
     Route::post('clientes/import/', [GestionClienteController::class, 'import']);
-    Route::get('clientes/export/nuevos', [GestionClienteController::class, 'exportClienteNuevo']);
 
     // Actualizar datos de clientes a la nueva tabla export_cliente
     Route::get('update_export_cliente', [ConfiguracionController::class, 'updateExportCliente']);

@@ -169,6 +169,8 @@ class ClienteService
                 'comentario' => $value->comentario,
                 'usuario' => $value->user->name,
                 'fecha' => $value->created_at->format('d-m-Y h:i:s A'),
+                'etiqueta' => $value->etiqueta->nombre,
+                'detalle' => $value->detalle,
             ];
         }
         $data_notificacions = $cliente->notificacions()->orderBy('notificacions.id', 'desc')->limit(2)->get();
@@ -256,6 +258,8 @@ class ClienteService
         $cliente->razon_social = request('razon_social');
         $cliente->ciudad = request('ciudad');
         $cliente->fecha_gestion = now();
+        $cliente->fecha_nuevo = now();
+        $cliente->etiqueta_id = 1; // nuevo
         $cliente->user_id = $user->id;
         $cliente->equipo_id = $user->equipos->last()->id ?? 1;
         $cliente->sede_id = $user->equipos->last()->sede->id ?? 1;
@@ -277,10 +281,13 @@ class ClienteService
             $contacto->save();
         }
         // Comentario
+        $etapa = Etapa::find(request('etapa_id'));
         $comentario = new Comentario();
         $comentario->comentario = request('comentario');
+        $comentario->detalle = 'Cambio de etapa a '.$etapa->nombre;
         $comentario->user_id = $user->id;
         $comentario->cliente_id = $cliente->id;
+        $comentario->etiqueta_id = 1; // etiqueta_id, 1=nuevo;
         $comentario->save();
         // Movistar
         $movistar = new Movistar();

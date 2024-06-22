@@ -14,10 +14,10 @@
                         @endcan
                     </div>
                 </div>
-                @include('sistema.gestion_cliente.section-filtro')
+                @include('sistema.cliente.gestion.section-filtro')
             </div>
             <div class="p-4" id="cont-tabla-cliente">
-                @include('sistema.gestion_cliente.filtro')
+                @include('sistema.cliente.gestion.filtro')
             </div>
         </x-sistema.card-contenedor>
         @php
@@ -46,7 +46,7 @@
             $('#filtro_sede_id').on("change", function() {
                 if ($(this).val()) {
                     $.ajax({
-                        url: `{{ url('gestion_cliente/${$(this).val()}') }}`,
+                        url: `{{ url('cliente-gestion/${$(this).val()}') }}`,
                         method: "GET",
                         data: {
                             view: 'show-select-sede'
@@ -75,7 +75,7 @@
             $('#filtro_equipo_id').on("change", function() {
                 if ($(this).val()) {
                     $.ajax({
-                        url: `{{ url('gestion_cliente/${$(this).val()}') }}`,
+                        url: `{{ url('cliente-gestion/${$(this).val()}') }}`,
                         method: "GET",
                         data: {
                             view: 'show-select-equipo',
@@ -95,7 +95,7 @@
                     });
                 } else {
                     $.ajax({
-                        url: `{{ url('gestion_cliente/0') }}`,
+                        url: `{{ url('cliente-gestion/0') }}`,
                         method: "GET",
                         data: {
                             view: 'show-select-user',
@@ -123,14 +123,14 @@
                 let filtro_fecha_desde = $('#filtro_fecha_desde').val();
                 let filtro_fecha_hasta = $('#filtro_fecha_hasta').val();
                 let filtro_ruc = $('#filtro_ruc').val();
-                window.location.href = `/gestion_cliente?filtro_etapa_id=${filtro_etapa_id}&filtro_sede_id=${filtro_sede_id}&filtro_equipo_id=${filtro_equipo_id}&filtro_user_id=${filtro_user_id}&filtro_fecha_desde=${filtro_fecha_desde}&filtro_fecha_hasta=${filtro_fecha_hasta}&filtro_ruc=${filtro_ruc}`;
+                window.location.href = `/cliente-gestion?filtro_etapa_id=${filtro_etapa_id}&filtro_sede_id=${filtro_sede_id}&filtro_equipo_id=${filtro_equipo_id}&filtro_user_id=${filtro_user_id}&filtro_fecha_desde=${filtro_fecha_desde}&filtro_fecha_hasta=${filtro_fecha_hasta}&filtro_ruc=${filtro_ruc}`;
             }
             function detalleCliente(cliente_id) {
                 $.ajax({
-                    url: `{{ url('gestion_cliente/${cliente_id}/edit') }}`,
+                    url: `{{ url('cliente-gestion/${cliente_id}/edit') }}`,
                     method: "GET",
                     data: {
-                        view: 'edit-detail-client'
+                        view: 'edit-detalle'
                     },
                     success: function( result ) {
                         $('#contModal').html(result);
@@ -158,7 +158,7 @@
             $('#etapa_'+filtro_etapa_id).css({'color':'#fff', 'zoom':'1.1', 'font-size':'1.2rem'});
             function agregarCliente() {
                 $.ajax({
-                    url: `{{ url('gestion_cliente/create') }}`,
+                    url: `{{ url('cliente/create') }}`,
                     method: "GET",
                     data: {
                         view: 'create'
@@ -194,10 +194,10 @@
                     alert('Seleccione un cliente, ¡Por favor!');
                 } else {
                     $.ajax({
-                        url: `{{ url('gestion_cliente/0/edit') }}`,
+                        url: `{{ url('cliente-gestion/0/edit') }}`,
                         method: "GET",
                         data: {
-                            view: 'edit-assign-clients',
+                            view: 'edit-asignar',
                             clients: selectedClients,
                         },
                         success: function(result) {
