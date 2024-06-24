@@ -81,10 +81,10 @@
 <script>
     function detalleCliente(cliente_id) {
         $.ajax({
-            url: `{{ url('gestion_cliente/${cliente_id}/edit') }}`,
+            url: `{{ url('cliente-gestion/${cliente_id}/edit') }}`,
             method: "GET",
             data: {
-                view: 'edit-detail-client'
+                view: 'edit-detalle'
             },
             success: function( result ) {
                 $('#contModal').html(result);
