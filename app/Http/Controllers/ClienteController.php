@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ClienteRequest;
 use App\Models\Cliente;
 use App\Models\Etapa;
 use App\Services\ClienteService;
@@ -39,7 +40,7 @@ class ClienteController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ClienteRequest $request)
     {
         $view = request('view');
         if ($view === 'store') {
@@ -62,6 +63,10 @@ class ClienteController extends Controller
                 );
             }
             $this->clienteService->clienteStore($request);
+
+            // Establecer el mensaje de éxito en la sesión
+            session()->flash('success', 'Cliente creado correctamente');
+            return response()->json(['redirect' => true]);
         }
     }
 

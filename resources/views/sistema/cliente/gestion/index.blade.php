@@ -10,7 +10,7 @@
                     </div>
                     <div>
                         @can('sistema.gestion_cliente.agregar')
-                            <a href="javascript:;" class="btn bg-gradient-primary m-0" onclick="agregarCliente()" type="button">Agregar</a>
+                            <x-ui.button type="button" onclick="agregarCliente()">Agregar</x-ui.button>
                         @endcan
                     </div>
                 </div>

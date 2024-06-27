@@ -14,18 +14,15 @@
             <x-sistema.cliente.etapas></x-sistema.cliente.etapas>
         </div>
     </div>
-    <div class="flex justify-end mt-2">
-        <button type="button" class="btn bg-gradient-secondary m-0" onclick="{{ $onclickCloseModal }}">Cancelar</button>
-        <button type="button" class="btn bg-gradient-primary m-0" id="btn_submit_cliente" onclick="submitCliente()">Agregar</button>
+    <div class="flex justify-end mt-2 gap-2">
+        <x-ui.button class="bg-slate-700" type="button" onclick="{{ $onclickCloseModal }}">Cancelar</x-ui.button>
+        <x-ui.button type="button" onclick="submitCliente(this)">Agregar</x-ui.button>
     </div>
 </x-sistema.modal>
 <script>
-    function submitCliente() {
-        $('#btn_submit_cliente').prop('disabled', true);
-        const dialog = document.querySelector("#dialog");
-        dialog.querySelectorAll('.is-invalid, .invalid-feedback').forEach(element => {
-            element.classList.contains('is-invalid') ? element.classList.remove('is-invalid') : element.remove();
-        });
+    function submitCliente(button) {
+        limpiarError();
+        capturarToken();
         let dataCargo = [];
         $.each($('#producto_table tbody tr'), function (index, tr) {
             dataCargo.push({
@@ -36,11 +33,6 @@
                 precio: $('#precio'+tr.id).val(),
                 total: $('#cargofijo'+tr.id).val(),
             });
-        });
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
         });
         $.ajax({
             url: `{{ url('cliente') }}`,
@@ -74,29 +66,21 @@
                 // cargo
                 dataCargo: dataCargo,
             },
-            success: function( result ) {
-                {{ $onclickCloseModal }}
+            beforeSend: function() {
+                button.disabled = true;
             },
-            error: function( response ) {
+            success: function (response) {
+                if (response.redirect) {
+                    location.reload();
+                } else {
+                    alert('Posiblemente ya ha registrado el cliente, actualizar la página');
+                }
+            },
+            error: function (response) {
                 mostrarError(response)
-                $('#btn_submit_cliente').prop('disabled', false);
+                button.disabled = false;
             }
         });
-    }
-    function mostrarError(response) {
-        let errors = response.responseJSON;
-        if(errors) {
-            let firstErrorKey = null;
-            $.each(errors.errors, function(key, value){
-                $('#dialog #'+key).addClass('is-invalid');
-                $('#dialog #'+key).after('<span class="invalid-feedback" role="alert"><strong>'+ value +'</strong></span>');
-                if (!firstErrorKey) {
-                    firstErrorKey = key;
-                }
-            });
-            if (firstErrorKey) {
-                $('#dialog #' + firstErrorKey).focus();
-            }
-        }
+        
     }
 </script>
