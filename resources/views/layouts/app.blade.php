@@ -148,6 +148,7 @@
     <script src="{{ asset('assets/js/soft-ui-dashboard.min.js?v=1.0.3') }}"></script>
     {{-- Funciones globales --}}
     <script src="{{ asset('js/indotech.js') }}" defer></script>
+    <script src="{{ asset('js/main.js') }}" defer></script>
 
     @yield('script')
 </body>
