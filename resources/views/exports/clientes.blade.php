@@ -97,7 +97,7 @@
                     
                     <td>{{ $cliente->etapa->nombre ?? '' }}</td>
                     
-                    <td>{{ $cliente->created_at->format('d/m/Y') }}</td>
+                    <td>{{ date('d/m/Y', strtotime($cliente->fecha_nuevo)) }}</td>
                     <td>{{ date('d/m/Y', strtotime($cliente->fecha_gestion)) }}</td>
                     {{-- <td></td> --}}
                     <td>{{ $m_cant }}</td>
