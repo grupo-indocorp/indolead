@@ -101,8 +101,11 @@
         ];
         $user = auth()->user()->name;
     @endphp
-    <!-- New Content -->
+
+    {{-- Sidebar --}}
     @livewire('sidebar', ['links' => $links])
+
+    {{-- Contenido --}}
     <div class="flex flex-col h-screen w-full p-2">
         @livewire('nav', ['user' => $user])
         <main class="flex-initial h-full w-full overflow-y-auto">
@@ -111,7 +114,9 @@
         </main>
         @livewire('footer')
     </div>
-    <!-- End New Content -->
+
+    {{-- Contenerdor nuevo de modal --}}
+    <div id="contenedorModal"></div>
 
     @if(session()->has('success'))
     <div x-data="{ show: true}" x-init="setTimeout(() => show = false, 4000)" x-show="show" class="position-fixed bg-success rounded right-3 text-sm py-2 px-4">
