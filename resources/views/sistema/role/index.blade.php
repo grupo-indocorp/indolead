@@ -28,14 +28,14 @@
                                     <i class="fa-solid fa-eyes"></i>
                                 </x-ui.link>
                                 @role('sistema')
-                                <x-ui.link class="me-2" onclick="editarRol({{ $role->id }})" data-bs-toggle="tooltip" data-bs-original-title="Editar">
+                                {{-- <x-ui.link class="me-2" onclick="editarRol({{ $role->id }})" data-bs-toggle="tooltip" data-bs-original-title="Editar">
                                     <x-slot:url>javascript:;</x-slot>
                                     <i class="fa-solid fa-edit"></i>
                                 </x-ui.link>
                                 <x-ui.link class="me-2" onclick="eliminarRol({{ $role->id }})" data-bs-toggle="tooltip" data-bs-original-title="Eliminar">
                                     <x-slot:url>javascript:;</x-slot>
                                     <i class="fa-solid fa-trash"></i>
-                                </x-ui.link>
+                                </x-ui.link> --}}
                                 @endrole
                             </td>
                         </tr>
