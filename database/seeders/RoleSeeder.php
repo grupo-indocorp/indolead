@@ -15,11 +15,15 @@ class RoleSeeder extends Seeder
     public function run(): void
     {
         $sistema = Role::create(['name' => 'sistema']);
-        $administrador = Role::create(['name' => 'administrador']);
-        $gerente = Role::create(['name' => 'gerente comercial']);
+        $gerente_general = Role::create(['name' => 'gerente-general']);
+        $gerente_comercial = Role::create(['name' => 'gerente-comercial']);
+        $asistente_comercial = Role::create(['name' => 'asistente-comercial']);
+        $jefe_comercial = Role::create(['name' => 'jefe-comercial']);
+        $backoffice = Role::create(['name' => 'backoffice']);
+        $calidad_comercial = Role::create(['name' => 'calidad-comercial']);
         $supervisor = Role::create(['name' => 'supervisor']);
         $ejecutivo = Role::create(['name' => 'ejecutivo']);
-        $invitado = Role::create(['name' => 'invitado']);
+
         Permission::create(['name' => 'sistema.dashboard']);
         Permission::create(['name' => 'sistema.cliente']);
         Permission::create(['name' => 'sistema.funnel']);
@@ -34,29 +38,10 @@ class RoleSeeder extends Seeder
         Permission::create(['name' => 'sistema.role']);
         Permission::create(['name' => 'sistema.configuracion']);
         Permission::create(['name' => 'sistema.notificacion']);
-
         Permission::create(['name' => 'sistema.buscar']);
-
         Permission::create(['name' => 'sistema.reporte']);
         Permission::create(['name' => 'sistema.reporte.cliente']);
 
         $sistema->syncPermissions(Permission::all());
-        $administrador->syncPermissions(Permission::all());
-        $gerente->syncPermissions([
-            'sistema.cliente',
-            'sistema.gestion_cliente',
-        ]);
-        $supervisor->syncPermissions([
-            'sistema.cliente',
-            'sistema.gestion_cliente'
-        ]);
-        $ejecutivo->syncPermissions([
-            'sistema.cliente',
-            'sistema.gestion_cliente',
-            'sistema.gestion_cliente.buscar',
-            'sistema.gestion_cliente.agregar',
-            'sistema.gestion_cliente.agregar',
-            'sistema.notificacion',
-        ]);
     }
 }
