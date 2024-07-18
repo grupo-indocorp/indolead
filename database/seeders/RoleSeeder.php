@@ -14,15 +14,30 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
+        // área de sistemas
         $sistema = Role::create(['name' => 'sistema']);
-        $gerente_general = Role::create(['name' => 'gerente-general']);
-        $gerente_comercial = Role::create(['name' => 'gerente-comercial']);
-        $asistente_comercial = Role::create(['name' => 'asistente-comercial']);
-        $jefe_comercial = Role::create(['name' => 'jefe-comercial']);
+
+        // área comercial
+        $gerente_general = Role::create(['name' => 'gerente general']);
+        $gerente_comercial = Role::create(['name' => 'gerente comercial']);
+        $asistente_comercial = Role::create(['name' => 'asistente comercial']);
+        $jefe_comercial = Role::create(['name' => 'jefe comercial']);
         $backoffice = Role::create(['name' => 'backoffice']);
-        $calidad_comercial = Role::create(['name' => 'calidad-comercial']);
+        $calidad_comercial = Role::create(['name' => 'calidad comercial']);
         $supervisor = Role::create(['name' => 'supervisor']);
         $ejecutivo = Role::create(['name' => 'ejecutivo']);
+
+        // área administrativa
+        $administrador = Role::create(['name' => 'administrador']);
+        $asistente_administrador = Role::create(['name' => 'asistente administrador']);
+        $recursos_humanos = Role::create(['name' => 'recursos humanos']);
+        $asistente_recursos_humanos = Role::create(['name' => 'asistente recursos humanos']);
+        $capacitador = Role::create(['name' => 'capacitador']);
+        $planificacion = Role::create(['name' => 'planificacion']);
+        $soporte_comercial = Role::create(['name' => 'soporte comercial']);
+        $soporte_sistemas = Role::create(['name' => 'soporte sistemas']);
+        $delivery = Role::create(['name' => 'delivery']);
+        $finanzas = Role::create(['name' => 'finanzas']);
 
         Permission::create(['name' => 'sistema.dashboard']);
         Permission::create(['name' => 'sistema.cliente']);
@@ -43,5 +58,42 @@ class RoleSeeder extends Seeder
         Permission::create(['name' => 'sistema.reporte.cliente']);
 
         $sistema->syncPermissions(Permission::all());
+        $gerente_general->syncPermissions([
+            'sistema.cliente',
+        ]);
+        $gerente_comercial->syncPermissions([
+            'sistema.dashboard',
+            'sistema.cliente',
+            'sistema.gestion_cliente',
+            'sistema.gestion_cliente.exportar',
+            'sistema.notificacion',
+            'sistema.reporte',
+            'sistema.reporte.cliente',
+        ]);
+        $asistente_comercial->syncPermissions([
+            'sistema.cliente',
+        ]);
+        $jefe_comercial->syncPermissions([
+            'sistema.cliente',
+        ]);
+        $backoffice->syncPermissions([
+            'sistema.cliente',
+        ]);
+        $calidad_comercial->syncPermissions([
+            'sistema.cliente',
+        ]);
+        $supervisor->syncPermissions([
+            'sistema.cliente',
+            'sistema.gestion_cliente',
+            'sistema.gestion_cliente.exportar',
+            'sistema.notificacion',
+            'sistema.gestion_cliente.asignar',
+        ]);
+        $ejecutivo->syncPermissions([
+            'sistema.cliente',
+            'sistema.gestion_cliente',
+            'sistema.gestion_cliente.agregar',
+            'sistema.notificacion',
+        ]);
     }
 }
