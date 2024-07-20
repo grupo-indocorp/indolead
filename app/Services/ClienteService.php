@@ -194,6 +194,8 @@ class ClienteService
             $where[] = ['user_id', $user->id];
         } elseif ($user->hasRole('supervisor')) {
             $where[] = ['equipo_id', $user->equipo->id];
+        } elseif ($user->hasRole('jefe comercial')) {
+            $where[] = ['sede_id', $user->sede_id];
         }
 
         $clientes_data = Cliente::with(['user', 'equipo', 'sede', 'etapa', 'comentarios'])->where($where)->get();
