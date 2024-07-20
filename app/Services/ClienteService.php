@@ -153,9 +153,10 @@ class ClienteService
             ];
         }
         $administrador = $user->hasRole('administrador');
+        $jefe_comercial = $user->hasRole('jefe comercial');
         $supervisor = $user->hasRole('supervisor');
         $sistema = $user->hasRole('sistema');
-        if ($administrador || $sistema) {
+        if ($sistema || $administrador || $jefe_comercial) {
             $data_comentarios = $cliente->comentarios()->orderBy('comentarios.id', 'desc')->get();
         } elseif ($supervisor) {
             $data_comentarios = $cliente->comentarios()->orderBy('comentarios.id', 'desc')->limit(5)->get();
