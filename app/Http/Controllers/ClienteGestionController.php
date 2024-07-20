@@ -64,7 +64,7 @@ class ClienteGestionController extends Controller
                 $users = User::role('ejecutivo')->where('sede_id', $sede_id)->get();
             }
         } else {
-            if ($user->hasRole('gerente comercial') || $user->hasRole('supervisor')) {
+            if ($user->hasRole('gerente comercial') || $user->hasRole('supervisor') || $user->hasRole('jefe comercial')) {
                 $equipos = Equipo::where('sede_id', $user->sede_id)->get();
                 if ($user->hasRole('supervisor')) {
                     $users = Equipo::find($user->equipo->id)->users;
@@ -112,7 +112,7 @@ class ClienteGestionController extends Controller
         if (isset($filtro_fecha_hasta)) {
             $where[] = ['fecha_gestion', '<=', $filtro_fecha_hasta . ' 23:59:59'];
         }
-        if ($user->hasRole('gerente comercial') || $user->hasRole('supervisor') || $user->hasRole('ejecutivo')) {
+        if ($user->hasRole('gerente comercial') || $user->hasRole('supervisor') || $user->hasRole('ejecutivo') || $user->hasRole('jefe comercial')) {
             $where[] = ['sede_id', $user->sede_id];
         } else { // administrador, sistema
             if ($filtro_sede_id != 0) {
