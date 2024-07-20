@@ -15,7 +15,7 @@
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">EECC</th>
                 @endrole
                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Etapa</th>
-                @role(['administrador', 'sistema', 'gerente comercial'])
+                @role(['administrador', 'sistema', 'gerente comercial', 'jefe comercial'])
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Sede</th>
                 @endrole
                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Comentario</th>
@@ -60,7 +60,7 @@
                         {{ $value->etapa->nombre }}
                     </span>
                 </td>
-                @role(['administrador', 'sistema', 'gerente comercial'])
+                @role(['administrador', 'sistema', 'gerente comercial', 'jefe comercial'])
                     <td class="align-middle text-center">
                         <span class="text-xs font-weight-bold mb-0 uppercase">{{ $value->sede->nombre }}</span>
                     </td>
