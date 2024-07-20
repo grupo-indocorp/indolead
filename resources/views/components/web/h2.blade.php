@@ -1,3 +1,5 @@
-<div>
-    <!-- Act only according to that maxim whereby you can, at the same time, will that it should become a universal law. - Immanuel Kant -->
-</div>
+@props(['value'])
+
+<h2 {{ $attributes->merge(['class' => 'text-6xl text-slate-950 uppercase font-ligth tracking-wider']) }}>
+    {{ $value ?? $slot }}
+</h2>
