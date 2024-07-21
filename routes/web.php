@@ -27,9 +27,7 @@ use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
 
 Route::get('/', [HomeController::class, 'home']);
-Route::get('/home', function () {
-    return view('home');
-});
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
