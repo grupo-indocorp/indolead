@@ -26,11 +26,10 @@ use App\Http\Controllers\RoleController;
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
 
-Route::get('/', function () {
-    Route::get('/', [HomeController::class, 'home']);
-    return view('/welcome');
+Route::get('/', [HomeController::class, 'home']);
+Route::get('/home', function () {
+    return view('home');
 });
-
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
