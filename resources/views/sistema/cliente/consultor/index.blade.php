@@ -30,7 +30,7 @@
                                 @endphp
                             <tr id="{{ $cliente->id }}">
                                 <td class="align-middle text-center">
-                                    @role(['sistema', 'gerente general', 'gerente comercial', 'asistente comercial', 'capacitador'])
+                                    @role(['sistema', 'gerente general', 'gerente comercial', 'asistente comercial', 'capacitador', 'planificacion'])
                                         <h6 class="mb-0 text-xs hover:cursor-pointer" onclick="detalleCliente({{ $cliente->id }})">{{ $cliente->ruc }}</h6>
                                     @else
                                         <h6 class="mb-0 text-xs">{{ $cliente->ruc }}</h6>
