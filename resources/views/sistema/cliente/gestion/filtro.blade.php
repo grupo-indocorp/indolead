@@ -11,17 +11,22 @@
                 @endcan
                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">RUC</th>
                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Razón Social</th>
-                @role(['administrador', 'sistema', 'gerente comercial',  'jefe comercial', 'supervisor'])
-                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">EECC</th>
+
+                @role(['sistema', 'gerente general', 'gerente comercial', 'asistente comercial', 'jefe comercial', 'supervisor', 'capacitador', 'planificacion'])
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">EECC</th>
                 @endrole
+
                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Etapa</th>
-                @role(['administrador', 'sistema', 'gerente comercial'])
-                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Sede</th>
+
+                @role(['sistema', 'gerente general', 'gerente comercial', 'asistente comercial', 'capacitador', 'planificacion'])
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Sede</th>
                 @endrole
+
                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Comentario</th>
                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Fecha de última Gestión</th>
                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Días sin Gestión</th>
-                @role(['administrador', 'sistema', 'supervisor'])
+
+                @role(['sistema', 'gerente general', 'gerente comercial', 'asistente comercial', 'supervisor', 'capacitador', 'planificacion'])
                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Etiqueta</th>
                 @endrole
             </tr>
@@ -49,22 +54,26 @@
                 <td class="align-middle text-center">
                     <p class="text-xs font-weight-bold mb-0 uppercase">{{ substr($value->razon_social, 0, 30) }}</p>
                 </td>
-                @role(['administrador', 'sistema', 'gerente comercial',  'jefe comercial', 'supervisor'])
-                    <td class="align-middle text-center">
-                        <p class="text-xs font-weight-bold mb-0">{{ $value->equipo->nombre }}</p>
-                        <p class="text-xs text-secondary mb-0">{{ $value->user->name }}</p>
-                    </td>
+
+                @role(['sistema', 'gerente general', 'gerente comercial', 'asistente comercial', 'jefe comercial', 'supervisor', 'capacitador', 'planificacion'])
+                <td class="align-middle text-center">
+                    <p class="text-xs font-weight-bold mb-0">{{ $value->equipo->nombre }}</p>
+                    <p class="text-xs text-secondary mb-0">{{ $value->user->name }}</p>
+                </td>
                 @endrole
+
                 <td class="align-middle text-center">
                     <span class="text-xs font-semibold font-se mb-0 px-3 py-1 rounded-lg" style="background-color: {{ $value->etapa->opacity }};">
                         {{ $value->etapa->nombre }}
                     </span>
                 </td>
-                @role(['administrador', 'sistema', 'gerente comercial'])
-                    <td class="align-middle text-center">
-                        <span class="text-xs font-weight-bold mb-0 uppercase">{{ $value->sede->nombre }}</span>
-                    </td>
+
+                @role(['sistema', 'gerente general', 'gerente comercial', 'asistente comercial', 'capacitador', 'planificacion'])
+                <td class="align-middle text-center">
+                    <span class="text-xs font-weight-bold mb-0 uppercase">{{ $value->sede->nombre }}</span>
+                </td>
                 @endrole
+
                 <td class="align-middle text-center">
                     <span class="text-secondary text-xs font-weight-normal">{{ substr($comentario->comentario ?? '', 0, 40) }}</span>
                 </td>
@@ -78,7 +87,8 @@
                         <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-green-100">{{ $dias }}</span>
                     @endif
                 </td>
-                @role(['administrador', 'sistema', 'supervisor'])
+
+                @role(['sistema', 'gerente general', 'gerente comercial', 'asistente comercial', 'supervisor', 'capacitador', 'planificacion'])
                 <td class="align-middle text-center">
                     @php
                         $fechaGestion = Carbon\Carbon::parse($value->fecha_gestion)->toDateString();
