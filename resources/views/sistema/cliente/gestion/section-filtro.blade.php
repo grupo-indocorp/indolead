@@ -37,7 +37,7 @@
                                 @endforeach
                             </select>
                         </div>
-                    @role(['administrador', 'sistema', 'gerente comercial'])
+                    @role(['administrador', 'sistema', 'gerente comercial', 'jefe comercial'])
                         <div class="form-group flex flex-col">
                     @else
                         <div class="form-group flex flex-col" style="display: none;">
@@ -50,7 +50,7 @@
                                 @endforeach
                             </select>
                         </div>
-                    @role(['administrador', 'sistema', 'gerente comercial', 'supervisor'])
+                    @role(['administrador', 'sistema', 'gerente comercial', 'jefe comercial', 'supervisor'])
                         <div class="form-group flex flex-col">
                     @else
                         <div class="form-group flex flex-col" style="display: none;">

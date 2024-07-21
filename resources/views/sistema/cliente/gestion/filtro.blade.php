@@ -11,7 +11,7 @@
                 @endcan
                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">RUC</th>
                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Razón Social</th>
-                @role(['administrador', 'sistema', 'gerente comercial', 'supervisor'])
+                @role(['administrador', 'sistema', 'gerente comercial',  'jefe comercial', 'supervisor'])
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">EECC</th>
                 @endrole
                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Etapa</th>
@@ -49,7 +49,7 @@
                 <td class="align-middle text-center">
                     <p class="text-xs font-weight-bold mb-0 uppercase">{{ substr($value->razon_social, 0, 30) }}</p>
                 </td>
-                @role(['administrador', 'sistema', 'gerente comercial', 'supervisor'])
+                @role(['administrador', 'sistema', 'gerente comercial',  'jefe comercial', 'supervisor'])
                     <td class="align-middle text-center">
                         <p class="text-xs font-weight-bold mb-0">{{ $value->equipo->nombre }}</p>
                         <p class="text-xs text-secondary mb-0">{{ $value->user->name }}</p>

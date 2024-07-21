@@ -1,62 +1,99 @@
 @extends('layouts.app')
+
+@can('sistema.role')
 @section('content')
     <x-sistema.card-contenedor>
         <x-sistema.card-contenedor-header title="Roles y Permisos">
-            <a href="{{ route('role.create') }}" class="btn bg-gradient-primary btn-sm mb-0" type="button">Agregar</a>
+            <x-ui.button type="button" onclick="agregarRol()">{{ __('Agregar') }}</x-ui.button>
         </x-sistema.card-contenedor-header>
+
+        {{-- Tabla --}}
         <div class="p-4">
-            <x-sistema.tabla-contenedor>
-                <table class="table align-items-center mb-0">
-                    <thead>
-                        <tr>
-                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Rol</th>
-                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Fecha de Creación</th>
-                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Permisos</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($roles as $role)
+            <x-ui.table id="asd">
+                <x-slot:thead>
+                    <tr>
+                        <th>Rol</th>
+                        <th>Fecha de Creación</th>
+                        <th>Permisos</th>
+                    </tr>
+                </x-slot>
+                <x-slot:tbody>
+                    @foreach ($roles as $role)
                         <tr id="{{ $role->id }}">
-                            <td class="align-middle text-center">
-                                <h6 class="mb-0 text-xs text-uppercase">{{ $role->name }}</h6>
-                                <p class="text-xs text-secondary mb-0"></p>
-                            </td>
-                            <td class="align-middle text-center">
-                                <span class="text-secondary text-xs font-weight-normal">{{ $role->created_at }}</span>
-                            </td>
-                            <td class="align-middle text-center">
-                                <a href="javascript:;" class="cursor-pointer" onclick="permisos({{ $role->id }})">
+                            <td>{{ $role->name }}</td>
+                            <td>{{ $role->created_at }}</td>
+                            <td>
+                                <x-ui.link class="me-2" onclick="permisos({{ $role->id }})" data-bs-toggle="tooltip" data-bs-original-title="Permisos">
+                                    <x-slot:url>javascript:;</x-slot>
                                     <i class="fa-solid fa-eyes"></i>
-                                </a>
+                                </x-ui.link>
+                                @role('sistema')
+                                {{-- <x-ui.link class="me-2" onclick="editarRol({{ $role->id }})" data-bs-toggle="tooltip" data-bs-original-title="Editar">
+                                    <x-slot:url>javascript:;</x-slot>
+                                    <i class="fa-solid fa-edit"></i>
+                                </x-ui.link>
+                                <x-ui.link class="me-2" onclick="eliminarRol({{ $role->id }})" data-bs-toggle="tooltip" data-bs-original-title="Eliminar">
+                                    <x-slot:url>javascript:;</x-slot>
+                                    <i class="fa-solid fa-trash"></i>
+                                </x-ui.link> --}}
+                                @endrole
                             </td>
                         </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </x-sistema.tabla-contenedor>
+                    @endforeach
+                </x-slot>
+                <x-slot:tfoot></x-slot>
+            </x-ui.table>
         </div>
     </x-sistema.card-contenedor>
 @endsection
-
-@section('modal')
-<div id="contModal"></div>
+@section('script')
+    <script>
+        function agregarRol() {
+            $.ajax({
+                url: `{{ url('role/create') }}`,
+                method: "GET",
+                data: {},
+                success: function(result) {
+                    $('#contenedorModal').html(result);
+                    openModal();
+                },
+                error: function(response) {
+                    console.log('error');
+                }
+            });
+        }
+        function permisos(role_id) {
+            $.ajax({
+                url: `{{ url('role/show-permiso') }}`,
+                method: "GET",
+                data: {
+                    role_id: role_id
+                },
+                success: function(result) {
+                    $('#contenedorModal').html(result);
+                    openModal();
+                },
+                error: function(response) {
+                    console.log('error');
+                }
+            });
+        }
+        function editarRol(role_id) {
+            $.ajax({
+                url: `{{ url('role/${role_id}/edit') }}`,
+                method: "GET",
+                data: {},
+                success: function(result) {
+                    $('#contenedorModal').html(result);
+                    openModal();
+                },
+                error: function(response) {
+                    console.log('error');
+                }
+            });
+        }
+        function eliminarRol(role_id) {
+        }
+    </script>
 @endsection
-
-<script>
-    function permisos(role_id) {
-        $.ajax({
-            url: `{{ url('role/show-permiso') }}`,
-            method: "GET",
-            data: {
-                role_id: role_id
-            },
-            success: function( result ) {
-                $('#contModal').html(result);
-                openModal();
-            },
-            error: function( response ) {
-                console.log('error');
-            }
-        });
-    }
-</script>
+@endcan

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RoleRequest;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
@@ -22,15 +23,19 @@ class RoleController extends Controller
      */
     public function create()
     {
-        //
+        return view('sistema.role.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(RoleRequest $request)
     {
-        //
+        Role::create(['name' => request('name')]);
+
+        // Establecer el mensaje de éxito en la sesión
+        session()->flash('success', 'Rol creado correctamente');
+        return response()->json(['redirect' => true]);
     }
 
     /**
@@ -64,7 +69,8 @@ class RoleController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $role = Role::find($id);
+        return view('sistema.role.edit', compact('role'));
     }
 
     /**
