@@ -24,7 +24,7 @@
                     <div class="form-group">
                         <input type="hidden" name="filtro_etapa_id" id="filtro_etapa_id" value="{{ request('filtro_etapa_id') ?? 0 }}">
                     </div>
-                    @role(['administrador', 'sistema'])
+                    @role(['sistema', 'gerente comercial'])
                         <div class="form-group flex flex-col">
                     @else
                         <div class="form-group flex flex-col" style="display: none;">
@@ -37,7 +37,7 @@
                                 @endforeach
                             </select>
                         </div>
-                    @role(['administrador', 'sistema', 'gerente comercial', 'jefe comercial'])
+                    @role(['sistema', 'gerente comercial', 'jefe comercial'])
                         <div class="form-group flex flex-col">
                     @else
                         <div class="form-group flex flex-col" style="display: none;">
@@ -50,7 +50,7 @@
                                 @endforeach
                             </select>
                         </div>
-                    @role(['administrador', 'sistema', 'gerente comercial', 'jefe comercial', 'supervisor'])
+                    @role(['sistema', 'gerente comercial', 'jefe comercial', 'supervisor'])
                         <div class="form-group flex flex-col">
                     @else
                         <div class="form-group flex flex-col" style="display: none;">
