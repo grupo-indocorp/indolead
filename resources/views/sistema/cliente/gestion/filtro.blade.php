@@ -12,13 +12,13 @@
                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">RUC</th>
                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Razón Social</th>
 
-                @role(['sistema', 'gerente comercial', 'jefe comercial', 'supervisor'])
+                @role(['sistema', 'gerente comercial', 'asistente comercial', 'jefe comercial', 'supervisor'])
                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">EECC</th>
                 @endrole
 
                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Etapa</th>
 
-                @role(['sistema', 'gerente comercial'])
+                @role(['sistema', 'gerente comercial', 'asistente comercial'])
                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Sede</th>
                 @endrole
 
@@ -26,7 +26,7 @@
                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Fecha de última Gestión</th>
                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Días sin Gestión</th>
 
-                @role(['sistema', 'gerente comercial', 'supervisor'])
+                @role(['sistema', 'gerente comercial', 'asistente comercial', 'supervisor'])
                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Etiqueta</th>
                 @endrole
             </tr>
@@ -55,7 +55,7 @@
                     <p class="text-xs font-weight-bold mb-0 uppercase">{{ substr($value->razon_social, 0, 30) }}</p>
                 </td>
 
-                @role(['sistema', 'gerente comercial', 'jefe comercial', 'supervisor'])
+                @role(['sistema', 'gerente comercial', 'asistente comercial', 'jefe comercial', 'supervisor'])
                 <td class="align-middle text-center">
                     <p class="text-xs font-weight-bold mb-0">{{ $value->equipo->nombre }}</p>
                     <p class="text-xs text-secondary mb-0">{{ $value->user->name }}</p>
@@ -68,7 +68,7 @@
                     </span>
                 </td>
 
-                @role(['sistema', 'gerente comercial'])
+                @role(['sistema', 'gerente comercial', 'asistente comercial'])
                 <td class="align-middle text-center">
                     <span class="text-xs font-weight-bold mb-0 uppercase">{{ $value->sede->nombre }}</span>
                 </td>
@@ -88,7 +88,7 @@
                     @endif
                 </td>
 
-                @role(['sistema', 'gerente comercial', 'supervisor'])
+                @role(['sistema', 'gerente comercial', 'asistente comercial', 'supervisor'])
                 <td class="align-middle text-center">
                     @php
                         $fechaGestion = Carbon\Carbon::parse($value->fecha_gestion)->toDateString();
