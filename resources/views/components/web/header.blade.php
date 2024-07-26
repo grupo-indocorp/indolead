@@ -1,7 +1,8 @@
 <header class="bg-cover bg-no-repeat bg-center bg-opacity-10" style="background-image: url('{{ asset('img/background.png') }}')">
     <div class="w-full h-[100vh] bg-gradient-to-t from-transparent to-slate-900 absolute opacity-90"></div>
     <div class="w-full h-[200px] bg-gradient-to-t from-white to-transparent absolute left-0 bottom-0"></div>
-    <x-web.container class="absolute inset-x-px z-20 py-4 flex flex-row justify-between">
+    <div class="w-full h-[85px] fixed bg-slate-900 opacity-90 blur-sm"></div>
+    <x-web.container class="fixed inset-x-px z-20 py-4 flex flex-row justify-between">
         <a href="{{ url('/') }}" class="flex gap-2 items-center text-white hover:text-blue-300">
             <x-web.logo class="w-[30px]" />
             <x-web.logo-text class="font-normal" :value="__('indotech')" />
