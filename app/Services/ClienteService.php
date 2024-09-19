@@ -204,8 +204,8 @@ class ClienteService
             $where[] = ['sede_id', $user->sede_id];
         }
 
-        $clientes_data = Cliente::with(['user', 'equipo', 'sede', 'etapa', 'comentarios'])->where($where)->get();
         $countData = [];
+        /* $clientes_data = Cliente::with(['user', 'equipo', 'sede', 'etapa', 'comentarios'])->where($where)->get();
         foreach ($clientes_data as $cliente) {
             $etapaId = $cliente->etapa_id;
             if (!isset($countData[$etapaId])) {
@@ -213,7 +213,8 @@ class ClienteService
             } else {
                 $countData[$etapaId]++;
             }
-        }
+        } */
+
         $count_total = 0;
         $data_etapas = [];
         $etapas = Etapa::all();
