@@ -50,7 +50,6 @@ class ClienteGestionController extends Controller
             'filtro_fecha_desde' => $filtro_fecha_desde,
             'filtro_fecha_hasta' => $filtro_fecha_hasta,
         ];
-
         // Listando data en los selects
         $sede_id = request('filtro_sede_id');
         $equipo_id = request('filtro_equipo_id');
