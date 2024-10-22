@@ -3,7 +3,7 @@
 @endphp
 <section
     wire:poll.120000ms="actualizarFrase"
-    x-data="{ visible: true }" 
+    x-data="{ visible: false }" 
     x-init="
         setInterval(() => {
             visible = true;
