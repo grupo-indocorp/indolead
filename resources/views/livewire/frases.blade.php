@@ -1,6 +1,9 @@
+@php
+    $number = mt_rand(1, 7);
+@endphp
 <section
     wire:poll.120000ms="actualizarFrase"
-    x-data="{ visible: false }" 
+    x-data="{ visible: true }" 
     x-init="
         setInterval(() => {
             visible = true;
@@ -12,11 +15,13 @@
         <audio x-ref="audio" hidden>
             <source src="{{ asset('img/halloween/halloween.mp3') }}" type="audio/mpeg">
         </audio>
-        <div class="w-[100px]">
-            <img src="{{ asset('img/halloween/calabaza_h.png') }}" alt="">
+        <div class="w-[300px]">
+            <span style="transition: all 0.5s;" class="text-2xl font-bold inline-block  text-slate-700 rounded-xl p-1 tracking-wide leading-snug">
+                {{ $frase }}
+            </span>
         </div>
-        <p
-            style="transition: all 0.5s;"
-            class="text-2xl font-bold">{{ $frase }}</p>
+        <div class="w-[200px]">
+            <img src="{{ asset('img/halloween/'.$number.'.gif') }}" alt="">
+        </div>
     </div>
 </section>
