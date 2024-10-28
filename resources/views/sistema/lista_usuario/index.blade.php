@@ -19,6 +19,7 @@
                         <thead>
                             <tr>
                                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Nombre</th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">DNI</th>
                                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Correo</th>
                                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Equipo</th>
                                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Rol</th>
@@ -31,6 +32,9 @@
                                 <tr>
                                     <td class="align-middle text-center">
                                         <h6 class="mb-0 text-xs uppercase">{{ $user->name }}</h6>
+                                    </td>
+                                    <td class="align-middle text-center">
+                                        <h6 class="mb-0 text-xs uppercase">{{ $user->identity_document }}</h6>
                                     </td>
                                     <td class="align-middle text-center">
                                         <p class="text-xs font-weight-bold mb-0">{{ $user->email }}</p>

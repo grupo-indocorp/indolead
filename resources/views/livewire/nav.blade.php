@@ -2,7 +2,7 @@
     <nav class="flex w-full justify-between">
         <div>
             <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
-                <li class="breadcrumb-item text-sm opacity-5 text-dark">{{ $user }}</li>
+                <li class="breadcrumb-item text-sm opacity-5 text-dark">{{ auth()->user()->name }}</li>
                 <li class="breadcrumb-item text-sm text-dark active text-capitalize" aria-current="page">{{ str_replace('-', ' ', Request::path()) }}</li>
             </ol>
             <h6 class="font-weight-bolder mb-0 text-capitalize">{{ str_replace('-', ' ', Request::path()) }}</h6>
@@ -10,12 +10,6 @@
         <div class="">
             <div class="hidden md:block">
                 <div class="ml-4 flex items-center md:ml-6">
-                    {{-- <button type="button" class="btn bg-gradient-primary m-0 py-2 px-3 text-xs" onclick="agregarNotificacion()">
-                        <i class="fa-solid fa-calendar-days"></i>
-                    </button>
-                    <button type="button" class="ms-2 btn bg-gradient-primary m-0 py-2 px-3 text-xs" onclick="historialNotificacion()">
-                        <i class="fa-solid fa-list-timeline"></i>
-                    </button> --}}
                     <button type="button" class="ms-2 btn bg-gradient-primary m-0 py-2 px-3 text-xs" onclick="pendienteNotificacion()">
                         {{ count(Helpers::NotificacionRecordatorio()) }} <i class="fa-solid fa-bell"></i>
                     </button>
