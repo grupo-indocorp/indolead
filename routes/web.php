@@ -49,7 +49,6 @@ Route::middleware([
         'reporte_cliente_nuevo' => ReporteClienteNuevoController::class,
         'producto' => ProductoController::class,
         'evaporacion' => EvaporacionController::class,
-        'postventa' => PostventaController::class,
         // Cliente
         'cliente' => ClienteController::class,
         'cliente-consultor' => ClienteConsultorController::class,

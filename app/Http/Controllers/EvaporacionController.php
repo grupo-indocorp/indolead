@@ -3,16 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Models\Evaporacion;
+use App\Services\EvaporacionService;
 use Illuminate\Http\Request;
 
 class EvaporacionController extends Controller
 {
+    protected $evaporacionService;
+
+    public function __construct(EvaporacionService $evaporacionService)
+    {
+        $this->evaporacionService = $evaporacionService;
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $evaporacion = Evaporacion::paginate(20);
+        $user = auth()->user();
+        $evaporacion = $this->evaporacionService->evaporacionGet($user);
         return view('sistema.evaporacion.index', compact('evaporacion'));
     }
 
