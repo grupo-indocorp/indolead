@@ -12,12 +12,15 @@ use App\Http\Controllers\ConfiguracionProductoController;
 use App\Http\Controllers\ConfiguracionSistemaController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EquipoController;
+use App\Http\Controllers\EvaporacionController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\FunnelController;
 use App\Http\Controllers\GestionClienteController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ImportController;
 use App\Http\Controllers\ListaUsuarioController;
 use App\Http\Controllers\NotificacionController;
+use App\Http\Controllers\PostventaController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\ReporteClienteController;
 use App\Http\Controllers\ReporteClienteNuevoController;
@@ -45,6 +48,8 @@ Route::middleware([
         'reporte_cliente' => ReporteClienteController::class,
         'reporte_cliente_nuevo' => ReporteClienteNuevoController::class,
         'producto' => ProductoController::class,
+        'evaporacion' => EvaporacionController::class,
+        'postventa' => PostventaController::class,
         // Cliente
         'cliente' => ClienteController::class,
         'cliente-consultor' => ClienteConsultorController::class,
@@ -73,6 +78,9 @@ Route::middleware([
     // Export
     Route::get('export/secodi/funnel', [ExportController::class, 'secodiFunnel']);
     Route::get('export/indotech/funnel', [ExportController::class, 'indotechFunnel']);
+
+    // Import
+    Route::post('import/evaporacion', [ImportController::class, 'evaporacion'])->name('import.evaporacion');
 });
 
 Livewire::setScriptRoute(function ($handle) {

@@ -69,6 +69,18 @@ class Sidebar extends Component
                 'url' => 'reporte',
                 'can' => 'sistema.reporte',
             ],
+            [
+                'icon' => 'fa-mug-hot',
+                'nombre' => 'Evaporacion',
+                'url' => 'evaporacion',
+                'can' => 'sistema.evaporacion',
+            ],
+            [
+                'icon' => 'fa-mug-hot',
+                'nombre' => 'Postvemta',
+                'url' => 'postventa',
+                'can' => 'sistema.postventa',
+            ],
         ];
         return view('livewire.sidebar', compact('links'));
     }

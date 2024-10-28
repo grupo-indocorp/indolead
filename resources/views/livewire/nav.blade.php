@@ -2,7 +2,7 @@
     <nav class="flex w-full justify-between">
         <div>
             <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
-                <li class="breadcrumb-item text-sm opacity-5 text-dark">{{ $user->name }}</li>
+                <li class="breadcrumb-item text-sm opacity-5 text-dark">{{ auth()->user()->name }}</li>
                 <li class="breadcrumb-item text-sm text-dark active text-capitalize" aria-current="page">{{ str_replace('-', ' ', Request::path()) }}</li>
             </ol>
             <h6 class="font-weight-bolder mb-0 text-capitalize">{{ str_replace('-', ' ', Request::path()) }}</h6>

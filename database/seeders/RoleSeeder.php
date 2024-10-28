@@ -56,6 +56,7 @@ class RoleSeeder extends Seeder
         Permission::create(['name' => 'sistema.buscar']);
         Permission::create(['name' => 'sistema.reporte']);
         Permission::create(['name' => 'sistema.reporte.cliente']);
+        Permission::create(['name' => 'sistema.evaporacion']);
 
         $sistema->syncPermissions(Permission::all());
         $gerente_general->syncPermissions([
