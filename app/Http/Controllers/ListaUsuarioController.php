@@ -78,6 +78,7 @@ class ListaUsuarioController extends Controller
             $user = new User;
             $user->name = request('name');
             $user->email = request('email');
+            $user->identity_document = request('identity_document');
             $user->password = bcrypt(request('password'));
             $user->sede_id = request('sede_id');
             $user->assignRole($role->name);
@@ -143,6 +144,7 @@ class ListaUsuarioController extends Controller
             }
             $user = User::find($id);
             $user->name = request('name');
+            $user->identity_document = request('identity_document');
             $user->email = request('email');
             $user->sede_id = request('sede_id');
             if (request('password') != '') {
