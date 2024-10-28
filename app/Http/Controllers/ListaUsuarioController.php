@@ -78,7 +78,7 @@ class ListaUsuarioController extends Controller
             $user = new User;
             $user->name = request('name');
             $user->email = request('email');
-            $user->identity_document = request('identity_document');
+            $user->identity_document = request('identity_document') ?? '';
             $user->password = bcrypt(request('password'));
             $user->sede_id = request('sede_id');
             $user->assignRole($role->name);
