@@ -27,14 +27,12 @@
                 <x-ui.table id="evaporacion">
                     <x-slot:thead>
                         <tr>
-                            <th>RucNumero</th>
-                            <th>RucRazonSocial</th>
-                            <th>EjecutivoNombre</th>
-                            <th>EjecutivoEquipo</th>
-                            <th>FechaSolicitud</th>
-                            <th>FechaActivacion1</th>
-                            <th>EvaluacionEstado</th>
-                            <th>EvaluacionEstadoFecha</th>
+                            <th>{{ __('RUC') }}</th>
+                            <th>{{ __('RAZÓN SOCIAL') }}</th>
+                            <th>{{ __('EECC') }}</th>
+                            <th>{{ __('FECHA EVALUACIÓN') }}</th>
+                            <th>{{ __('ESTADO') }}</th>
+                            <th>{{ __('OBSERVACIÓN') }}</th>
                         </tr>
                     </x-slot>
                     <x-slot:tbody>
@@ -42,12 +40,16 @@
                             <tr>
                                 <td>{{ $item->RucNumero }}</td>
                                 <td>{{ $item->RucRazonSocial }}</td>
-                                <td>{{ $item->EjecutivoNombre }}</td>
-                                <td>{{ $item->EjecutivoEquipo }}</td>
-                                <td>{{ $item->FechaSolicitud }}</td>
-                                <td>{{ $item->FechaActivacion1 }}</td>
-                                <td>{{ $item->EvaluacionEstado }}</td>
-                                <td>{{ $item->EvaluacionEstadoFecha }}</td>
+                                <td class="flex flex-col">
+                                    <b>{{ $item->EjecutivoEquipo }}</b>
+                                    <span>{{ $item->EjecutivoNombre }}</span>
+                                </td>
+                                <td>{{ $item->FechaEvaluacion }}</td>
+                                <td class="flex flex-col">
+                                    <span>{{ $item->EvaluacionEstadoFecha }}</span>
+                                    <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-rose-50 text-rose-500 border border-red-500">{{ $item->EvaluacionEstado }}</span>
+                                </td>
+                                <td>{{ $item->Observacion }}</td>
                             </tr>
                         @endforeach
                     </x-slot>
