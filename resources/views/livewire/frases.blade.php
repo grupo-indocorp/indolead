@@ -2,14 +2,14 @@
     $number = mt_rand(1, 7);
 @endphp
 <section
-    wire:poll.120000ms="actualizarFrase"
+    wire:poll.3600000ms="actualizarFrase"
     x-data="{ visible: false }" 
     x-init="
         setInterval(() => {
             visible = true;
             $refs.audio.play();
-            setTimeout(() => visible = false, 12000);
-        }, 130000);"
+            setTimeout(() => visible = false, 15000);
+        }, 3615000);"
     class="absolute bottom-0 right-4">
     <div x-show="visible">
         <audio x-ref="audio" hidden>
