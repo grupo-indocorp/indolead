@@ -82,7 +82,7 @@
                         @foreach ($evaporacion as $item)
                             <tr>
                                 <td>{{ $item->RucNumero }}</td>
-                                <td>{{ $item->RucRazonSocial }}</td>
+                                <td>{{ substr($item->RucRazonSocial, 0, 30) }}</td>
                                 <td class="flex flex-col">
                                     <b>{{ $item->EjecutivoEquipo }}</b>
                                     <span>{{ $item->EjecutivoNombre }}</span>
@@ -120,7 +120,7 @@
                                             
                                     @endswitch
                                 </td>
-                                <td>{{ $item->Observacion }}</td>
+                                <td>{{ substr($item->Observacion, 0, 45) }}</td>
                             </tr>
                         @endforeach
                     </x-slot>
