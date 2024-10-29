@@ -21,7 +21,12 @@ class EvaporacionController extends Controller
     public function index()
     {
         $user = auth()->user();
-        $evaporacion = $this->evaporacionService->evaporacionGet($user);
+        $filter = [
+            'estado' => request('filtro_estado') ?? null,
+            'fechainicio' => request('filtro_fechainicio') ?? null,
+            'fechafin' => request('filtro_fechafin') ?? null,
+        ];
+        $evaporacion = $this->evaporacionService->evaporacionGet($user, $filter);
         return view('sistema.evaporacion.index', compact('evaporacion'));
     }
 

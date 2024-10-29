@@ -48,7 +48,7 @@ class EvaporacionImport implements ToModel, WithStartRow
         $FechaEmision3 = $excelDate8 ? Carbon::createFromDate(1900, 1, 1)->addDays($excelDate8 - 2) : null;
         $excelDate9 = isset($row[38]) ? (int) $row[38] : null;
         $FechaVencimiento3 = $excelDate9 ? Carbon::createFromDate(1900, 1, 1)->addDays($excelDate9 - 2) : null;
-        $excelDate21 = isset($row[21]) ? (int) $row[19] : null;
+        $excelDate21 = isset($row[21]) ? (int) $row[21] : null;
         $EvaluacionEstadoFecha = $excelDate21 ? Carbon::createFromDate(1900, 1, 1)->addDays($excelDate21 - 2) : null;
 
         if (!is_null($evaporaciones)) {
