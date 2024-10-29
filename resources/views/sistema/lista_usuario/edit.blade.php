@@ -4,6 +4,10 @@
         <input class="form-control" type="text" value="{{ $user->name }}" id="name" name="name">
     </div>
     <div class="form-group">
+        <label for="name" class="form-control-label">DNI:</label>
+        <input class="form-control" type="text" value="{{ $user->identity_document }}" id="identity_document" name="identity_document">
+    </div>
+    <div class="form-group">
         <label for="email" class="form-control-label">Correo:</label>
         <input class="form-control" type="email" value="{{ $user->email }}" id="email" name="email">
     </div>
@@ -40,6 +44,7 @@
             data: {
                 view: 'update',
                 name: $('#name').val(),
+                identity_document: $('#identity_document').val(),
                 email: $('#email').val(),
                 password: $('#password').val(),
                 sede_id: $('#sede_id').val(),
