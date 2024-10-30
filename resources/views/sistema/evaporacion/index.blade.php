@@ -65,13 +65,15 @@
                 </section>
             </section>
             {{-- Tabla --}}
-            <section class="p-4">
+            <section class="p-4 w-full overflow-x-auto">
                 <x-ui.table id="evaporacion">
                     <x-slot:thead>
                         <tr>
                             <th>{{ __('RUC') }}</th>
                             <th>{{ __('RAZÓN SOCIAL') }}</th>
-                            <th>{{ __('EECC') }}</th>
+                            @role(['sistema'])
+                                <th>{{ __('EECC') }}</th>
+                            @endrole
                             <th>{{ __('FECHA ACTIVACIÓN') }}</th>
                             <th>{{ __('FECHA EVALUACIÓN') }}</th>
                             <th>{{ __('ESTADO') }}</th>
@@ -81,46 +83,48 @@
                     <x-slot:tbody>
                         @foreach ($evaporacion as $item)
                             <tr>
-                                <td>{{ $item->RucNumero }}</td>
-                                <td>{{ substr($item->RucRazonSocial, 0, 30) }}</td>
+                                <td>{{ $item->ruc }}</td>
+                                <td>{{ substr($item->razon_social, 0, 30) }}</td>
+                                @role(['sistema'])
+                                    <td class="flex flex-col">
+                                        <b>{{ $item->equipo }}</b>
+                                        <span>{{ $item->ejecutivo }}</span>
+                                    </td>
+                                @endrole
+                                <td>{{ $item->fecha_activacion }}</td>
+                                <td>{{ $item->fecha_evaluacion }}</td>
                                 <td class="flex flex-col">
-                                    <b>{{ $item->EjecutivoEquipo }}</b>
-                                    <span>{{ $item->EjecutivoNombre }}</span>
-                                </td>
-                                <td>{{ $item->FechaActivacion1 }}</td>
-                                <td>{{ $item->FechaEvaluacion }}</td>
-                                <td class="flex flex-col">
-                                    <span>{{ $item->EvaluacionEstadoFecha }}</span>
-                                    @switch($item->EvaluacionEstado)
+                                    <span>{{ $item->fecha_estado_linea }}</span>
+                                    @switch($item->estado_linea)
                                         @case('Activo')
-                                            <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-green-50 text-green-500 border border-green-500">{{ $item->EvaluacionEstado }}</span>
+                                            <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-green-50 text-green-500 border border-green-500">{{ $item->estado_linea }}</span>
                                             @break
                                         @case('BajaAPC')
-                                            <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-red-50 text-red-500 border border-red-500">{{ $item->EvaluacionEstado }}</span>
+                                            <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-red-50 text-red-500 border border-red-500">{{ $item->estado_linea }}</span>
                                             @break
                                         @case('Baja portabilidad')
-                                            <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-red-50 text-red-500 border border-red-500">{{ $item->EvaluacionEstado }}</span>
+                                            <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-red-50 text-red-500 border border-red-500">{{ $item->estado_linea }}</span>
                                             @break
                                         @case('Corte Deuda Parcial')
-                                            <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-yellow-50 text-yellow-500 border border-yellow-500">{{ $item->EvaluacionEstado }}</span>
+                                            <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-yellow-50 text-yellow-500 border border-yellow-500">{{ $item->estado_linea }}</span>
                                             @break
                                         @case('Corte Deuda Total')
-                                            <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-red-50 text-red-500 border border-red-500">{{ $item->EvaluacionEstado }}</span>
+                                            <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-red-50 text-red-500 border border-red-500">{{ $item->estado_linea }}</span>
                                             @break
                                         @case('Fraude')
-                                            <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-red-50 text-red-500 border border-red-500">{{ $item->EvaluacionEstado }}</span>
+                                            <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-red-50 text-red-500 border border-red-500">{{ $item->estado_linea }}</span>
                                             @break
                                         @case('Suspendido APC')
-                                            <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-red-50 text-red-500 border border-red-500">{{ $item->EvaluacionEstado }}</span>
+                                            <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-red-50 text-red-500 border border-red-500">{{ $item->estado_linea }}</span>
                                             @break
                                         @case('Prepago')
-                                            <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-red-50 text-red-500 border border-red-500">{{ $item->EvaluacionEstado }}</span>
+                                            <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-red-50 text-red-500 border border-red-500">{{ $item->estado_linea }}</span>
                                             @break
                                         @default
                                             
                                     @endswitch
                                 </td>
-                                <td>{{ substr($item->Observacion, 0, 45) }}</td>
+                                <td>{{ substr($item->observacion, 0, 45) }}</td>
                             </tr>
                         @endforeach
                     </x-slot>
