@@ -20,7 +20,6 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ImportController;
 use App\Http\Controllers\ListaUsuarioController;
 use App\Http\Controllers\NotificacionController;
-use App\Http\Controllers\PostventaController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\ReporteClienteController;
 use App\Http\Controllers\ReporteClienteNuevoController;
@@ -30,6 +29,10 @@ use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
 
 Route::get('/', [HomeController::class, 'home']);
+
+Route::get('/register', function () {
+    return redirect('/');
+});
 
 Route::middleware([
     'auth:sanctum',

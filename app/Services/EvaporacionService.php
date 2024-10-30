@@ -21,21 +21,21 @@ class EvaporacionService
         if (!is_null($filter)) {
             if (!is_null($filter['estado'])) {
                 if ($filter['estado'] === 'Sin Estado') {
-                    $where[] = ['EvaluacionEstado', ''];
+                    $where[] = ['estado_linea', ''];
                 } else {
-                    $where[] = ['EvaluacionEstado', $filter['estado']];
+                    $where[] = ['estado_linea', $filter['estado']];
                 }
             }
             if (!is_null($filter['fechainicio'])) {
-                $where[] = ['FechaEvaluacion', '>=', $filter['fechainicio']];
+                $where[] = ['fecha_evaluacion', '>=', $filter['fechainicio']];
             }
             if (!is_null($filter['fechafin'])) {
-                $where[] = ['FechaEvaluacion', '<=', $filter['fechafin']];
+                $where[] = ['fecha_evaluacion', '<=', $filter['fechafin']];
             }
         }
 
         if ($user->hasrole('ejecutivo')) {
-            $evaporacion = Evaporacion::where('EjecutivoCodigo', $user->identity_document)
+            $evaporacion = Evaporacion::where('identificacion_ejecutivo', $user->identity_document)
                 ->where($where)
                 ->paginate(20);
         } else {
