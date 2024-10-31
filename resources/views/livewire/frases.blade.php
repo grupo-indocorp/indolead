@@ -3,14 +3,14 @@
     $audio = mt_rand(1, 8);
 @endphp
 <section
-    wire:poll.1800000ms="actualizarFrase"
+    wire:poll.300000ms="actualizarFrase"
     x-data="{ visible: false }" 
     x-init="
         setInterval(() => {
             visible = true;
             $refs.audio.play();
             setTimeout(() => visible = false, 15000);
-        }, 1815000);"
+        }, 320000);"
     class="absolute bottom-0 right-4">
     <div x-show="visible">
         <audio x-ref="audio" hidden>
