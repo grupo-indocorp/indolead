@@ -51,7 +51,11 @@ class EvaporacionController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $view = request('view');
+        if ($view === 'show-evaporacion') {
+            $evaporacion = Evaporacion::find($id);
+            return view('sistema.evaporacion.detalle', compact('evaporacion'));
+        }
     }
 
     /**
