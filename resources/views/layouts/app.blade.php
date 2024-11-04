@@ -59,7 +59,7 @@
     @endif
 
     {{-- Contenedor de Frases --}}
-    @livewire('frases')
+    {{-- @livewire('frases') --}}
 
     <!--   Core JS Files   -->
     <script src="{{ asset('assets/js/core/popper.min.js') }}"></script>
