@@ -27,10 +27,10 @@
                             @php
                                 $fecha_gestion = Carbon\Carbon::parse($cliente->fecha_gestion)->startOfDay();
                                 $dias = $fecha_gestion->diffInDays(now()->startOfDay());
-                                @endphp
+                            @endphp
                             <tr id="{{ $cliente->id }}">
                                 <td class="align-middle text-center">
-                                    @role(['sistema', 'gerente general', 'gerente comercial', 'asistente comercial', 'capacitador', 'planificacion'])
+                                    @role(['sistema', 'gerente general', 'gerente comercial', 'asistente comercial', 'jefe comercial', 'capacitador', 'planificacion'])
                                         <h6 class="mb-0 text-xs hover:cursor-pointer" onclick="detalleCliente({{ $cliente->id }})">{{ $cliente->ruc }}</h6>
                                     @else
                                         <h6 class="mb-0 text-xs">{{ $cliente->ruc }}</h6>

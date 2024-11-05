@@ -1,51 +1,107 @@
 <x-sistema.modal title="Detalle" dialog_id="dialog">
-    <p>SERVICIOS GENERALES LUJULY S.A.C.</p>
-    <p>20600899709</p>
-    <p>Yosip Ibrahim Vizarreta Sandoval</p>
+    <section class="flex flex-col">
+        <span>{{ $evaporacion->razon_social }}</span>
+        <span>{{ $evaporacion->ruc }}</span>
+        <span>{{ $evaporacion->ejecutivo }}</span>
+    </section>
 
-    <section>
-        <p>CUENTA FINANCIERA: 748579976</p>
+    <section class="p-3 rounded-lg bg-slate-300">
+        <span>CUENTA FINANCIERA: {{ $evaporacion->cuenta_financiera }}</span>
         <table>
             <tr>
                 <td>F. de Evaluación:</td>
-                <td colspan="3"></td>
+                <td colspan="3">{{ $evaporacion->fecha_evaluacion }}</td>
             </tr>
             <tr>
                 <td>Descuento:</td>
-                <td>%50</td>
-                <td>6 Meses</td>
-                <td>11/09/24</td>
+                <td>{{ $evaporacion->evaluacion_descuento }}</td>
+                <td>{{ $evaporacion->evaluacion_descuento_vigencia }}</td>
+                <td>{{ $evaporacion->fecha_evaluacion_descuento_vigencia }}</td>
             </tr>
             <tr>
                 <td>Estado:</td>
-                <td>Pendiente</td>
+                <td>
+                    @if ($evaporacion->estado_facturacion1 != 'pagado')
+                        {{ $evaporacion->estado_facturacion1 }}
+                    @elseif($evaporacion->estado_facturacion2 != 'pagado')
+                        {{ $evaporacion->estado_facturacion2 }}
+                    @else
+                        {{ $evaporacion->estado_facturacion3 }}
+                    @endif
+                </td>
                 <td>Ciclo:</td>
-                <td>15</td>
+                <td>{{ $evaporacion->ciclo_factuacion }}</td>
             </tr>
         </table>
     </section>
 
-    <section>
-        <p>Factura 1</p>
-        <table>
-            <tr>
-                <td>F. Emisión:</td>
-                <td>15/08/24</td>
-                <td>F. Venc.:</td>
-                <td>01/09/24</td>
-            </tr>
-            <tr>
-                <td>Monto:</td>
-                <td>S/ 41.71</td>
-                <td>Deuda:</td>
-                <td>S/ 27.04</td>
-            </tr>
-            <tr>
-                <td>Estado:</td>
-                <td>Pendiente</td>
-            </tr>
-        </table>
-    </section>
+    @if ($evaporacion->estado_facturacion1 != 'pagado')
+        <section class="p-3 rounded-lg bg-slate-300">
+            <p>Factura 1</p>
+            <table>
+                <tr>
+                    <td>F. Emisión:</td>
+                    <td>{{ $evaporacion->fecha_emision1 }}</td>
+                    <td>F. Venc.:</td>
+                    <td>{{ $evaporacion->fecha_vencimiento1 }}</td>
+                </tr>
+                <tr>
+                    <td>Monto:</td>
+                    <td>{{ $evaporacion->monto_facturado1 }}</td>
+                    <td>Deuda:</td>
+                    <td>{{ $evaporacion->deuda1 }}</td>
+                </tr>
+                <tr>
+                    <td>Estado:</td>
+                    <td>{{ $evaporacion->estado_facturacion1 }}</td>
+                </tr>
+            </table>
+        </section>
+    @elseif($evaporacion->estado_facturacion2 != 'pagado')
+        <section class="p-3 rounded-lg bg-slate-300">
+            <p>Factura 2</p>
+            <table>
+                <tr>
+                    <td>F. Emisión:</td>
+                    <td>{{ $evaporacion->fecha_emision2 }}</td>
+                    <td>F. Venc.:</td>
+                    <td>{{ $evaporacion->fecha_vencimiento2 }}</td>
+                </tr>
+                <tr>
+                    <td>Monto:</td>
+                    <td>{{ $evaporacion->monto_facturado2 }}</td>
+                    <td>Deuda:</td>
+                    <td>{{ $evaporacion->deuda2 }}</td>
+                </tr>
+                <tr>
+                    <td>Estado:</td>
+                    <td>{{ $evaporacion->estado_facturacion2 }}</td>
+                </tr>
+            </table>
+        </section>
+    @else
+        <section class="p-3 rounded-lg bg-slate-300">
+            <p>Factura 3</p>
+            <table>
+                <tr>
+                    <td>F. Emisión:</td>
+                    <td>{{ $evaporacion->fecha_emision3 }}</td>
+                    <td>F. Venc.:</td>
+                    <td>{{ $evaporacion->fecha_vencimiento3 }}</td>
+                </tr>
+                <tr>
+                    <td>Monto:</td>
+                    <td>{{ $evaporacion->monto_facturado3 }}</td>
+                    <td>Deuda:</td>
+                    <td>{{ $evaporacion->deuda3 }}</td>
+                </tr>
+                <tr>
+                    <td>Estado:</td>
+                    <td>{{ $evaporacion->estado_facturacion3 }}</td>
+                </tr>
+            </table>
+        </section>
+    @endif
 
     <section>
         <x-ui.table id="evaporacion">
