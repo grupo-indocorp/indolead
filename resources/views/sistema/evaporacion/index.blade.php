@@ -74,10 +74,13 @@
                             @role(['sistema'])
                                 <th>{{ __('EECC') }}</th>
                             @endrole
+                            <th>{{ __('NÚMERO') }}</th>
                             <th>{{ __('FECHA ACTIVACIÓN') }}</th>
+                            <th>{{ __('CARGO FIJO') }}</th>
                             <th>{{ __('FECHA EVALUACIÓN') }}</th>
                             <th>{{ __('ESTADO') }}</th>
                             <th>{{ __('OBSERVACIÓN') }}</th>
+                            <th></th>
                         </tr>
                     </x-slot>
                     <x-slot:tbody>
@@ -91,10 +94,12 @@
                                         <span>{{ $item->ejecutivo }}</span>
                                     </td>
                                 @endrole
-                                <td>{{ $item->fecha_activacion }}</td>
-                                <td>{{ $item->fecha_evaluacion }}</td>
+                                <td>{{ $item->numero_servicio }}</td>
+                                <td>{{ \Carbon\Carbon::parse($item->fecha_activacion)->format('d-m-Y') }}</td>
+                                <td>{{ $item->cargo_fijo }}</td>
+                                <td>{{ \Carbon\Carbon::parse($item->fecha_evaluacion)->format('d-m-Y') }}</td>
                                 <td class="flex flex-col">
-                                    <span>{{ $item->fecha_estado_linea }}</span>
+                                    <span>{{ \Carbon\Carbon::parse($item->fecha_estado_linea)->format('d-m-Y') }}</span>
                                     @switch($item->estado_linea)
                                         @case('Activo')
                                             <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-green-50 text-green-500 border border-green-500">{{ $item->estado_linea }}</span>
@@ -125,6 +130,13 @@
                                     @endswitch
                                 </td>
                                 <td>{{ substr($item->observacion, 0, 45) }}</td>
+                                <td>
+                                    <span class="mx-3" data-bs-toggle="tooltip" data-bs-original-title="Detalle">
+                                        <a href="javascript:;" class="cursor-pointer" onclick="detalleEvaporacion({{ $item->id }})">
+                                            <i class="fa-solid fa-eyes"></i>
+                                        </a>
+                                    </span>
+                                </td>
                             </tr>
                         @endforeach
                     </x-slot>
@@ -144,6 +156,22 @@
                 placeholder: 'Seleccionar',
                 allowClear: true,
             });
+            function detalleEvaporacion(evaporacion_id) {
+                $.ajax({
+                    url: `{{ url('evaporacion/${evaporacion_id}') }}`,
+                    method: "GET",
+                    data: {
+                        view: 'show-evaporacion',
+                    },
+                    success: function( result ) {
+                        $('#contModal').html(result);
+                        openModal();
+                    },
+                    error: function( response ) {
+                        console.log('error');
+                    }
+                });
+            }
         </script>
     @endsection
 @endcan
