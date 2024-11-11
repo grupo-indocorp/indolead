@@ -28,6 +28,11 @@ use App\Http\Controllers\RoleController;
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
 
+// Ruta para la página de componentes
+Route::get('/components', function () {
+    return view('components');
+});
+
 Route::get('/', [HomeController::class, 'home']);
 
 Route::get('/register', function () {

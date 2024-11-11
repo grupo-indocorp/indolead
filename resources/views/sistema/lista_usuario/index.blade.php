@@ -3,83 +3,58 @@
 @can('sistema.lista_usuario')
     @section('content')
         <x-sistema.card-contenedor>
-            <div class="p-4 pb-0">
-                <div class="d-flex flex-row justify-content-between">
-                    <div>
-                        <x-sistema.titulo title="Lista de Usuarios" />
-                    </div>
-                    <div>
-                        <a href="javascript:;" class="btn bg-gradient-primary m-0" onclick="agregarUsuario()" type="button">Agregar</a>
-                    </div>
-                </div>
-            </div>
+            <x-sistema.card-contenedor-header title="Lista de Usuarios">
+                <x-ui.button type="button" onclick="agregarUsuario()">{{ __('Agregar') }}</x-ui.button>
+            </x-sistema.card-contenedor-header>
             <div class="p-4">
-                <x-sistema.tabla-contenedor>
-                    <table class="table align-items-center mb-0" id="table_lista_usuario">
-                        <thead>
+                <x-ui.table id="table_lista_usuario">
+                    <x-slot:thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>DNI</th>
+                            <th>Correo</th>
+                            <th>Equipo</th>
+                            <th>Rol</th>
+                            <th>Sede</th>
+                            <th></th>
+                        </tr>
+                    </x-slot>
+                    <x-slot:tbody>
+                        @foreach ($users as $user)
                             <tr>
-                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Nombre</th>
-                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">DNI</th>
-                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Correo</th>
-                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Equipo</th>
-                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Rol</th>
-                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Sede</th>
-                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"></th>
+                                <td>{{ $user->name }}</td>
+                                <td>{{ $user->identity_document }}</td>
+                                <td>{{ $user->email }}</td>
+                                <td>{{ $user->equipos->last()->nombre ?? '' }}</td>
+                                <td>{{ $user->getRoleNames()->last() }}</td>
+                                <td>{{ $user->sede->nombre }}</td>
+                                <td>
+                                    @if ($user->getRoleNames()->last() == 'ejecutivo')
+                                        <span class="" data-bs-toggle="tooltip" data-bs-original-title="Asignar Equipo">
+                                            <a href="javascript:;" class="cursor-pointer" onclick="asignarEquipo({{ $user->id }})">
+                                                <i class="fa-solid fa-sync"></i>
+                                            </a>
+                                        </span>
+                                    @endif
+                                    <span class="ml-2" data-bs-toggle="tooltip" data-bs-original-title="Asignar Rol">
+                                        <a href="javascript:;" class="cursor-pointer" onclick="asignarRol({{ $user->id }})">
+                                            <i class="fa-solid fa-tower-control"></i>
+                                        </a>
+                                    </span>
+                                    <span class="ml-2" data-bs-toggle="tooltip" data-bs-original-title="Editar Usuario">
+                                        <a href="javascript:;" class="cursor-pointer" onclick="editarUsuario({{ $user->id }})">
+                                            <i class="fa-solid fa-pen"></i>
+                                        </a>
+                                    </span>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($users as $user)
-                                <tr>
-                                    <td class="align-middle text-center">
-                                        <h6 class="mb-0 text-xs uppercase">{{ $user->name }}</h6>
-                                    </td>
-                                    <td class="align-middle text-center">
-                                        <h6 class="mb-0 text-xs uppercase">{{ $user->identity_document }}</h6>
-                                    </td>
-                                    <td class="align-middle text-center">
-                                        <p class="text-xs font-weight-bold mb-0">{{ $user->email }}</p>
-                                    </td>
-                                    <td class="align-middle text-center">
-                                        <p class="text-xs font-weight-bold mb-0 uppercase">{{ $user->equipos->last()->nombre ?? '' }}</p>
-                                    </td>
-                                    <td class="align-middle text-center">
-                                        <p class="text-xs font-weight-bold mb-0 uppercase">{{ $user->getRoleNames()->last() }}</p>
-                                    </td>
-                                    <td class="align-middle text-center">
-                                        <p class="text-xs font-weight-bold mb-0 uppercase">{{ $user->sede->nombre }}</p>
-                                    </td>
-                                    <td class="align-middle text-right">
-                                        @if ($user->getRoleNames()->last() == 'ejecutivo')
-                                            <span class="" data-bs-toggle="tooltip" data-bs-original-title="Asignar Equipo">
-                                                <a href="javascript:;" class="cursor-pointer" onclick="asignarEquipo({{ $user->id }})">
-                                                    <i class="fa-solid fa-sync"></i>
-                                                </a>
-                                            </span>
-                                        @endif
-                                        <span class="ml-2" data-bs-toggle="tooltip" data-bs-original-title="Asignar Rol">
-                                            <a href="javascript:;" class="cursor-pointer" onclick="asignarRol({{ $user->id }})">
-                                                <i class="fa-solid fa-tower-control"></i>
-                                            </a>
-                                        </span>
-                                        <span class="ml-2" data-bs-toggle="tooltip" data-bs-original-title="Editar Usuario">
-                                            <a href="javascript:;" class="cursor-pointer" onclick="editarUsuario({{ $user->id }})">
-                                                <i class="fa-solid fa-pen"></i>
-                                            </a>
-                                        </span>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </x-sistema.tabla-contenedor>
+                        @endforeach
+                    </x-slot>
+                    <x-slot:tfoot></x-slot>
+                </x-ui.table>
             </div>
         </x-sistema.card-contenedor>
     @endsection
-
-    @section('modal')
-        <div id="contModal"></div>
-    @endsection
-
     @section('script')
         <script>
             function agregarUsuario() {
@@ -90,7 +65,7 @@
                         view: 'create'
                     },
                     success: function( result ) {
-                        $('#contModal').html(result);
+                        $('#contenedorModal').html(result);
                         openModal();
                     },
                     error: function( response ) {
@@ -106,7 +81,7 @@
                         view: 'edit-asignar-equipo'
                     },
                     success: function( result ) {
-                        $('#contModal').html(result);
+                        $('#contenedorModal').html(result);
                         openModal();
                     },
                     error: function( response ) {
@@ -122,7 +97,7 @@
                         view: 'edit-asignar-rol'
                     },
                     success: function( result ) {
-                        $('#contModal').html(result);
+                        $('#contenedorModal').html(result);
                         openModal();
                     },
                     error: function( response ) {
@@ -138,7 +113,7 @@
                         view: 'edit'
                     },
                     success: function( result ) {
-                        $('#contModal').html(result);
+                        $('#contenedorModal').html(result);
                         openModal();
                     },
                     error: function( response ) {
