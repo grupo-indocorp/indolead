@@ -1,4 +1,4 @@
-<x-sistema.modal class="w-[500px]" title="Agregar Usuario">
+<x-sistema.modal class="" style="width: 500px;" title="Agregar Usuario">
     <section class="flex gap-2">
         <article class="w-1/2">
             <div class="form-group">

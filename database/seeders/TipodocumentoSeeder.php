@@ -13,7 +13,6 @@ class TipodocumentoSeeder extends Seeder
      */
     public function run(): void
     {
-        //
         Tipodocumento::create([
             'id_name' => 'dni',
             'name' => 'Documento Nacional de Identidad',
