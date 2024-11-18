@@ -13,6 +13,7 @@ use App\Http\Controllers\ConfiguracionSistemaController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EquipoController;
 use App\Http\Controllers\EvaporacionController;
+use App\Http\Controllers\EvaporacionGestionController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\FunnelController;
 use App\Http\Controllers\GestionClienteController;
@@ -56,11 +57,13 @@ Route::middleware([
         'reporte_cliente' => ReporteClienteController::class,
         'reporte_cliente_nuevo' => ReporteClienteNuevoController::class,
         'producto' => ProductoController::class,
-        'evaporacion' => EvaporacionController::class,
         // Cliente
         'cliente' => ClienteController::class,
         'cliente-consultor' => ClienteConsultorController::class,
         'cliente-gestion' => ClienteGestionController::class,
+        // evaporacion
+        'evaporacion' => EvaporacionController::class,
+        'evaporacion-gestion' => EvaporacionGestionController::class,
         // Configuraciones
         'configuracion' => ConfiguracionController::class,
         'configuracion-sistema' => ConfiguracionSistemaController::class,

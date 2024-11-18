@@ -121,12 +121,16 @@ class NotificacionController extends Controller
      */
     public function edit(string $id)
     {
-        if (request('view') == 'edit') {
+        $view = request('view');
+        if ($view === 'edit') {
             $notificacion = Notificacion::find($id);
             return view('sistema.notificacion.edit', compact('notificacion'));
-        } elseif (request('view') == 'delete') {
+        } elseif ($view === 'delete') {
             $notificacion = Notificacion::find($id);
             return view('sistema.notificacion.delete', compact('notificacion'));
+        } elseif ($view === 'gestion-evaporacion') {
+            $notificacion = Notificacion::find($id);
+            return view('sistema.notificacion.gestion-evaporacion', compact('notificacion'));
         }
     }
 
@@ -135,7 +139,8 @@ class NotificacionController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        if (request('view') == 'update') {
+        $view = request('view');
+        if ($view == 'update') {
             $request->validate([
                 'asunto' => 'required|bail',
                 'mensaje' => 'required|bail',
@@ -155,6 +160,22 @@ class NotificacionController extends Controller
             $notificacion->hora = request('hora');
             $notificacion->notificacion = 0;
             $notificacion->save();
+        } elseif ($view === 'update-gestion-evaporacion') {
+            $request->validate(
+                [
+                    'comentario_gestion' => 'required',
+                ],
+                [
+                    'comentario_gestion.required' => 'El "comentario" es obligatorio.',
+                ]
+            );
+            $notificacion = Notificacion::find($id);
+            $notificacion->comentario_gestion = request('comentario_gestion');
+            $notificacion->save();
+
+            // Establecer el mensaje de éxito en la sesión
+            session()->flash('success', 'Gestión de evaporación creado correctamente');
+            return response()->json(['redirect' => true]);
         }
     }
 
