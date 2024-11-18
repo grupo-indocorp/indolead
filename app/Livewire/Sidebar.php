@@ -52,18 +52,6 @@ class Sidebar extends Component
                 'can' => 'sistema.equipo',
             ],
             [
-                'icon' => 'fa-tower-control',
-                'nombre' => 'Roles',
-                'url' => 'role',
-                'can' => 'sistema.role',
-            ],
-            [
-                'icon' => 'fa-gear',
-                'nombre' => 'Configuración',
-                'url' => 'configuracion',
-                'can' => 'sistema.configuracion',
-            ],
-            [
                 'icon' => 'fa-chart-user',
                 'nombre' => 'Reportes',
                 'url' => 'reporte',
@@ -76,10 +64,22 @@ class Sidebar extends Component
                 'can' => 'sistema.evaporacion',
             ],
             [
-                'icon' => 'fa-mug-hot',
-                'nombre' => 'Postvemta',
-                'url' => 'postventa',
-                'can' => 'sistema.postventa',
+                'icon' => 'fa-calendar',
+                'nombre' => 'Gestión de Evaporación',
+                'url' => 'evaporacion-gestion',
+                'can' => 'sistema.evaporacion-gestion',
+            ],
+            [
+                'icon' => 'fa-tower-control',
+                'nombre' => 'Roles',
+                'url' => 'role',
+                'can' => 'sistema.role',
+            ],
+            [
+                'icon' => 'fa-gear',
+                'nombre' => 'Configuración',
+                'url' => 'configuracion',
+                'can' => 'sistema.configuracion',
             ],
         ];
         return view('livewire.sidebar', compact('links'));
