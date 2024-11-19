@@ -14,6 +14,7 @@ class SecodiFunnelExport implements FromQuery, WithHeadings, WithMapping
     use Exportable;
 
     protected $filtro;
+
     protected $user;
 
     public function __construct($filtro, $user)
@@ -25,6 +26,7 @@ class SecodiFunnelExport implements FromQuery, WithHeadings, WithMapping
     public function query()
     {
         $where = Helpers::filtroExportCliente(json_decode($this->filtro), $this->user);
+
         return Exportcliente::query()->where($where);
     }
 
@@ -50,7 +52,7 @@ class SecodiFunnelExport implements FromQuery, WithHeadings, WithMapping
             'Fecha Ultimo Contacto',
             'Observaciones',
             'Dirección de Instalación',
-            'Próxima LLamada'
+            'Próxima LLamada',
         ];
     }
 
@@ -76,7 +78,7 @@ class SecodiFunnelExport implements FromQuery, WithHeadings, WithMapping
             $cliente->fecha_ultimo_contacto,
             $cliente->comentario_5,
             $cliente->ciudad,
-            $cliente->fecha_proximo_contacto
+            $cliente->fecha_proximo_contacto,
         ];
     }
 }

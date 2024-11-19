@@ -14,6 +14,7 @@ class ConfiguracionProductoController extends Controller
     public function index()
     {
         $productos = Producto::all();
+
         return view('sistema.configuracion.producto.index', compact('productos'));
     }
 
@@ -25,6 +26,7 @@ class ConfiguracionProductoController extends Controller
         $view = request('view');
         if ($view === 'create-producto') {
             $categorias = Categoria::where('estado', true)->get();
+
             return view('sistema.configuracion.producto.create', compact('categorias'));
         }
     }
@@ -47,7 +49,7 @@ class ConfiguracionProductoController extends Controller
                     'categoria_id.required' => 'La "Categoría" es obligatorio.',
                 ]
             );
-            $producto = new Producto();
+            $producto = new Producto;
             $producto->nombre = request('nombre');
             $producto->categoria_id = request('categoria_id');
             $producto->save();
@@ -71,6 +73,7 @@ class ConfiguracionProductoController extends Controller
         if ($view === 'edit-producto') {
             $producto = Producto::find($id);
             $categorias = Categoria::all();
+
             return view('sistema.configuracion.producto.edit', compact('producto', 'categorias'));
         }
     }

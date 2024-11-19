@@ -16,6 +16,7 @@ class EquipoController extends Controller
     public function index()
     {
         $equipos = Equipo::with(['user:id,name', 'sede:id,nombre'])->orderByDesc('id')->paginate(8);
+
         return view('sistema.equipo.index', compact('equipos'));
     }
 
@@ -27,6 +28,7 @@ class EquipoController extends Controller
         if (request('view') == 'create') {
             $users = User::all();
             $sedes = Sede::all();
+
             return view('sistema.equipo.create', compact('users', 'sedes'));
         }
     }
@@ -42,11 +44,11 @@ class EquipoController extends Controller
                 'sede_id' => 'required|bail',
                 'user_id' => 'required|bail',
             ],
-            [
-                'nombre.required' => 'El "Nombre" es obligatorio.',
-                'sede_id.required' => 'La "Sede" es obligatorio.',
-                'user_id.required' => 'El "Supervisor" es obligatorio.',
-            ]);
+                [
+                    'nombre.required' => 'El "Nombre" es obligatorio.',
+                    'sede_id.required' => 'La "Sede" es obligatorio.',
+                    'user_id.required' => 'El "Supervisor" es obligatorio.',
+                ]);
             $equipo = new Equipo;
             $equipo->nombre = request('nombre');
             $equipo->sede_id = request('sede_id');
@@ -63,6 +65,7 @@ class EquipoController extends Controller
         $view = request('view');
         if ($view === 'show-cambiar-equipo') {
             $user = User::find(request('user_id'));
+
             return $user;
         }
     }
@@ -76,9 +79,11 @@ class EquipoController extends Controller
         if (request('view') == 'edit') {
             $users = User::all();
             $sedes = Sede::all();
+
             return view('sistema.equipo.edit', compact('equipo', 'users', 'sedes'));
         } elseif (request('view') == 'edit-ejecutivo') {
             $equipos = Equipo::all();
+
             return view('sistema.equipo.ejecutivo', compact('equipo', 'equipos'));
         }
     }
@@ -96,11 +101,11 @@ class EquipoController extends Controller
                 'sede_id' => 'required|bail',
                 'user_id' => 'required|bail',
             ],
-            [
-                'nombre.required' => 'El "Nombre" es obligatorio.',
-                'sede_id.required' => 'La "Sede" es obligatorio.',
-                'user_id.required' => 'El "Supervisor" es obligatorio.',
-            ]);
+                [
+                    'nombre.required' => 'El "Nombre" es obligatorio.',
+                    'sede_id.required' => 'La "Sede" es obligatorio.',
+                    'user_id.required' => 'El "Supervisor" es obligatorio.',
+                ]);
             $equipo->nombre = request('nombre');
             $equipo->sede_id = request('sede_id');
             $equipo->user_id = request('user_id');
@@ -115,13 +120,13 @@ class EquipoController extends Controller
                 ]
             );
             $user = User::find(request('user_id'));
-            if (!$user->equipos->isEmpty()) {
+            if (! $user->equipos->isEmpty()) {
                 for ($i = 0; $i < count($user->equipos); $i++) {
                     $user->equipos()->detach($user->equipos[$i]->id);
                 }
             }
             $user->equipos()->attach(request('equipo_id'));
-            if (!$user->clientes->isEmpty()) {
+            if (! $user->clientes->isEmpty()) {
                 foreach ($user->clientes as $value) {
                     $cliente = Cliente::find($value->id);
                     $cliente->equipo_id = request('equipo_id');

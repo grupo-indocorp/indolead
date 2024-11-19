@@ -36,6 +36,7 @@ class ConfiguracionExcelController extends Controller
                 'secodi' => is_null(request('excelSecodi')) ? false : true,
             ];
             Helpers::configuracionExcelJsonPut('excel', $configData);
+
             return redirect()->route('configuracion-excel.index')->with('success', 'Accesos de Excel Actualizados.');
         }
     }
@@ -58,6 +59,7 @@ class ConfiguracionExcelController extends Controller
             $config = Helpers::configuracionExcelJsonGet();
             $indotech = $config['excel']['indotech'];
             $secodi = $config['excel']['secodi'];
+
             return view('sistema.configuracion.excel.edit', compact('indotech', 'secodi'));
         }
     }

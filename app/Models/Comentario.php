@@ -10,15 +10,18 @@ class Comentario extends Model
     use HasFactory;
 
     // Relación uno a muchos inversa
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function cliente() {
+    public function cliente()
+    {
         return $this->belongsTo(Cliente::class);
     }
 
-    public function etiqueta() {
+    public function etiqueta()
+    {
         return $this->belongsTo(Etiqueta::class);
     }
 }

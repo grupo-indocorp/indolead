@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Producto;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class ProductoSeeder extends Seeder
@@ -14,16 +13,16 @@ class ProductoSeeder extends Seeder
     public function run(): void
     {
         Producto::factory()->create([
-            'nombre' => 'Móvil Alta Nueva'
+            'nombre' => 'Móvil Alta Nueva',
         ]);
         Producto::factory()->create([
-            'nombre' => 'Móvil Portabilidad'
+            'nombre' => 'Móvil Portabilidad',
         ]);
         Producto::factory()->create([
-            'nombre' => 'Fija'
+            'nombre' => 'Fija',
         ]);
         Producto::factory()->create([
-            'nombre' => 'Avanzada'
+            'nombre' => 'Avanzada',
         ]);
     }
 }

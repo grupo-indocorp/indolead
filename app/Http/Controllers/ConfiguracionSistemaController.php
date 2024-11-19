@@ -14,6 +14,7 @@ class ConfiguracionSistemaController extends Controller
     public function index()
     {
         $sistema = Sistema::first();
+
         return view('sistema.configuracion.sistema.index', compact('sistema'));
     }
 
@@ -43,11 +44,12 @@ class ConfiguracionSistemaController extends Controller
             if ($request->hasFile('icono')) {
                 $iconoPath = $request->file('icono')->store('images', 'public');
             }
-            $sistema = new Sistema();
+            $sistema = new Sistema;
             $sistema->nombre = request('nombre');
             $sistema->logo = $logoPath;
             $sistema->icono = $iconoPath;
             $sistema->save();
+
             return back()->with('success', 'Sistema creado correctamente');
         }
     }
@@ -68,6 +70,7 @@ class ConfiguracionSistemaController extends Controller
         $view = request('view');
         if ($view === 'edit-sistema') {
             $sistema = Sistema::first();
+
             return view('sistema.configuracion.sistema.edit', compact('sistema'));
         }
     }
@@ -98,6 +101,7 @@ class ConfiguracionSistemaController extends Controller
             $sistema->logo = $logoPath;
             $sistema->icono = $iconoPath;
             $sistema->save();
+
             return back()->with('success', 'Sistema actualizado correctamente.');
         }
     }

@@ -42,6 +42,7 @@ class ConfiguracionFichaClienteController extends Controller
                 'agencia' => is_null(request('agencia')) ? false : true,
             ];
             Helpers::configuracionDatosAdicionalesJsonPut('datosAdicionales', $configData);
+
             return redirect()->route('configuracion-ficha-cliente.index')->with('success', 'Accesos de Ficha Cliente Actualizados.');
         }
     }
@@ -62,6 +63,7 @@ class ConfiguracionFichaClienteController extends Controller
         $view = request('view');
         if ($view === 'edit-datos-adicionales') {
             $configDatosAdicionales = Helpers::configuracionDatosAdicionalesJsonGet();
+
             return view('sistema.configuracion.ficha_cliente.edit_datos_adicionales', compact('configDatosAdicionales'));
         }
     }

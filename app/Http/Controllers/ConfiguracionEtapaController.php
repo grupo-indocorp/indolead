@@ -13,6 +13,7 @@ class ConfiguracionEtapaController extends Controller
     public function index()
     {
         $etapas = Etapa::all();
+
         return view('sistema.configuracion.etapa.index', compact('etapas'));
     }
 
@@ -43,7 +44,7 @@ class ConfiguracionEtapaController extends Controller
                     'nombre.unique' => 'El "Nombre" ya se encuentra registrado.',
                 ]
             );
-            $etapa = new Etapa();
+            $etapa = new Etapa;
             $etapa->nombre = request('nombre');
             $etapa->save();
         }
@@ -65,9 +66,11 @@ class ConfiguracionEtapaController extends Controller
         $view = request('view');
         if ($view === 'edit-etapa') {
             $etapa = Etapa::find($id);
+
             return view('sistema.configuracion.etapa.edit', compact('etapa'));
         } elseif ($view === 'delete-etapa') {
             $etapa = Etapa::find($id);
+
             return view('sistema.configuracion.etapa.delete', compact('etapa'));
         }
     }
@@ -81,7 +84,7 @@ class ConfiguracionEtapaController extends Controller
         if ($view === 'update-etapa') {
             $request->validate(
                 [
-                    'nombre' => 'required|unique:etapas,nombre,' . $id . '|bail',
+                    'nombre' => 'required|unique:etapas,nombre,'.$id.'|bail',
                     'blindaje' => 'required|integer|min:0|bail',
                     'avance' => 'required|min:0|bail',
                     'probabilidad' => 'required|bail',
@@ -101,7 +104,7 @@ class ConfiguracionEtapaController extends Controller
             $etapa = Etapa::find($id);
             $etapa->nombre = request('nombre');
             $etapa->color = $color;
-            $etapa->opacity = $color . "4d";
+            $etapa->opacity = $color.'4d';
             $etapa->blindaje = request('blindaje');
             $etapa->avance = request('avance');
             $etapa->probabilidad = request('probabilidad');

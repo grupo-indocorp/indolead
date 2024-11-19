@@ -13,7 +13,7 @@ class ClientesExport implements FromView
         $filtro = json_decode(request('filtro'));
         $where = [];
         if (isset($filtro->filtro_ruc)) {
-            $where[] = ['ruc', 'LIKE', $filtro->filtro_ruc . '%'];
+            $where[] = ['ruc', 'LIKE', $filtro->filtro_ruc.'%'];
         }
         if ($filtro->filtro_etapa_id != 0) {
             $where[] = ['etapa_id', $filtro->filtro_etapa_id];
@@ -40,10 +40,10 @@ class ClientesExport implements FromView
             }
         }
         if (isset($filtro->filtro_fecha_desde)) {
-            $where[] = ['fecha_gestion', '>=', $filtro->filtro_fecha_desde . ' 00:00:00'];
+            $where[] = ['fecha_gestion', '>=', $filtro->filtro_fecha_desde.' 00:00:00'];
         }
         if (isset($filtro->filtro_fecha_hasta)) {
-            $where[] = ['fecha_gestion', '<=', $filtro->filtro_fecha_hasta . ' 23:59:59'];
+            $where[] = ['fecha_gestion', '<=', $filtro->filtro_fecha_hasta.' 23:59:59'];
         }
 
         ini_set('memory_limit', '2048M');
@@ -60,6 +60,7 @@ class ClientesExport implements FromView
             ->where($where)
             ->orderByDesc('id')
             ->get();
+
         return view('exports.clientes', compact('clientes'));
     }
 }

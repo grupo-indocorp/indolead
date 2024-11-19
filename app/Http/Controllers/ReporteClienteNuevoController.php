@@ -2,13 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Cliente;
 use App\Models\Equipo;
 use App\Models\Sede;
-use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class ReporteClienteNuevoController extends Controller
 {
@@ -27,6 +24,7 @@ class ReporteClienteNuevoController extends Controller
         $month = $request->query('mes', now()->format('Y-m'));
         $startOfMonth = Carbon::createFromFormat('Y-m', $month)->startOfMonth();
         $endOfMonth = Carbon::createFromFormat('Y-m', $month)->endOfMonth();
+
         return view('sistema.reporte_cliente_nuevo.index', compact('month', 'startOfMonth', 'endOfMonth', 'minMonth', 'currentMonth', 'equipos', 'mostrarEjecutivos'));
     }
 

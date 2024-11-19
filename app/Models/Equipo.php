@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Equipo extends Model
 {
@@ -28,7 +27,7 @@ class Equipo extends Model
     }
 
     // Relación muchos a muchos
-    public function users() { //usersHistorial
-        return $this->belongsToMany(User::class)->withPivot('id')->withTimestamps();
+    public function users() //usersHistorial
+    {return $this->belongsToMany(User::class)->withPivot('id')->withTimestamps();
     }
 }

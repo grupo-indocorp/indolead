@@ -14,6 +14,7 @@ class ReporteController extends Controller
     public function index()
     {
         $sedes = Sede::all();
+
         return view('sistema.reporte.index', compact('sedes'));
     }
 
@@ -38,14 +39,15 @@ class ReporteController extends Controller
             foreach ($clientes as $value) {
                 if (isset($value->user->equipos->last()->sede_id) && $value->user->equipos->last()->sede_id == request('sede_id')) {
                     $data[] = [
-                        'id'=>$value->id,
-                        'ruc'=>$value->ruc
+                        'id' => $value->id,
+                        'ruc' => $value->ruc,
                     ];
                 }
             }
             dd($data);
             $fecha_desde = request('fecha_desde');
             $fecha_hasta = request('fecha_hasta');
+
             return view('sistema.reporte.create_filtro_cliente', compact('clientes', 'fecha_desde', 'fecha_hasta'));
         }
     }

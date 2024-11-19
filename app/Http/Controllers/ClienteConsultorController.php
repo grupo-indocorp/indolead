@@ -42,6 +42,7 @@ class ClienteConsultorController extends Controller
             }
         }
         $mensaje = $mensaje ?? false;
+
         return view('sistema.cliente.consultor.index', compact('mensaje', 'cliente'));
     }
 
@@ -68,6 +69,7 @@ class ClienteConsultorController extends Controller
     {
         if (request('view') == 'show-cliente') {
             $cliente = Cliente::find($id);
+
             return view('sistema.cliente.consultor.edit', compact('cliente'));
         }
     }
@@ -111,9 +113,9 @@ class ClienteConsultorController extends Controller
             $cliente->save();
             // comentario
             $etapa = Etapa::find(request('etapa_id'));
-            $comentario = new Comentario();
+            $comentario = new Comentario;
             $comentario->comentario = request('comentario');
-            $comentario->detalle = 'Cambio de etapa a ' . $etapa->nombre;
+            $comentario->detalle = 'Cambio de etapa a '.$etapa->nombre;
             $comentario->cliente_id = $cliente->id;
             $comentario->user_id = $ejecutivo->id;
             $comentario->etiqueta_id = 3; // etiqueta_id, 3=solicitado;

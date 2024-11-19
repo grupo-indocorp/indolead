@@ -25,6 +25,7 @@ class ListaUsuarioController extends Controller
             });
         }
         $users = $users->orderByDesc('id')->get();
+
         return view('sistema.lista_usuario.index', compact('users'));
     }
 
@@ -38,6 +39,7 @@ class ListaUsuarioController extends Controller
             $roles = Role::all();
             $equipos = Equipo::all();
             $tipodocumentos = Tipodocumento::all();
+
             return view('sistema.lista_usuario.create', compact(
                 'sedes',
                 'roles',
@@ -64,17 +66,17 @@ class ListaUsuarioController extends Controller
                 'sede_id' => 'required',
                 'role_id' => 'required',
             ],
-            [
-                'first_name.required' => 'El "Nombre" es obligatorio.',
-                'first_surname.required' => 'El "Apellido Paterno" es obligatorio.',
-                'personal_phone.required' => 'El "Celular" es obligatorio.',
-                'personal_email.required' => 'El "Correo Electrónico" es obligatorio.',
-                'personal_email.email' => 'El "Correo" no es válido, (email@example.com).',
-                'tipodocumento_id.required' => 'El "Tipo de Documento" es obligatorio.',
-                'identity_document.required' => 'El "Nro. de Identificación" es obligatorio.',
-                'sede_id.required' => 'La "Sede" es obligatorio.',
-                'role_id.required' => 'El "Rol" es obligatorio.',
-            ]);
+                [
+                    'first_name.required' => 'El "Nombre" es obligatorio.',
+                    'first_surname.required' => 'El "Apellido Paterno" es obligatorio.',
+                    'personal_phone.required' => 'El "Celular" es obligatorio.',
+                    'personal_email.required' => 'El "Correo Electrónico" es obligatorio.',
+                    'personal_email.email' => 'El "Correo" no es válido, (email@example.com).',
+                    'tipodocumento_id.required' => 'El "Tipo de Documento" es obligatorio.',
+                    'identity_document.required' => 'El "Nro. de Identificación" es obligatorio.',
+                    'sede_id.required' => 'La "Sede" es obligatorio.',
+                    'role_id.required' => 'El "Rol" es obligatorio.',
+                ]);
             // Si es Ejecutivo, obligar Equipo
             if (request('roleNombre') === 'ejecutivo') {
                 $request->validate(
@@ -92,8 +94,8 @@ class ListaUsuarioController extends Controller
             $second_name = strtolower(request('second_name')) ?? '';
             $first_surname = strtolower(request('first_surname'));
             $second_surname = strtolower(request('second_surname')) ?? '';
-            $name = $first_name .' '. $second_name .' '. $first_surname .' '. $second_surname;
-            $email = str_replace(' ', '', $first_name) . '.' . str_replace(' ', '', $first_surname) . '@indotechsac.com';
+            $name = $first_name.' '.$second_name.' '.$first_surname.' '.$second_surname;
+            $email = str_replace(' ', '', $first_name).'.'.str_replace(' ', '', $first_surname).'@indotechsac.com';
             $user = User::create([
                 'first_name' => $first_name,
                 'second_name' => $second_name,
@@ -117,6 +119,7 @@ class ListaUsuarioController extends Controller
 
             // Establecer el mensaje de éxito en la sesión
             session()->flash('success', 'Usuario creado correctamente');
+
             return response()->json(['redirect' => true]);
         }
     }
@@ -137,12 +140,15 @@ class ListaUsuarioController extends Controller
         $user = User::find($id);
         if (request('view') == 'edit') {
             $sedes = Sede::all();
+
             return view('sistema.lista_usuario.edit', compact('user', 'sedes'));
         } elseif (request('view') == 'edit-asignar-equipo') {
             $equipos = Equipo::all();
+
             return view('sistema.lista_usuario.asignar-equipo', compact('user', 'equipos'));
         } elseif (request('view') == 'edit-asignar-rol') {
             $roles = Role::all();
+
             return view('sistema.lista_usuario.asignar-rol', compact('user', 'roles'));
         }
     }
@@ -159,19 +165,19 @@ class ListaUsuarioController extends Controller
                 'email' => 'required|bail',
                 'sede_id' => 'required|bail',
             ],
-            [
-                'name.required' => 'El "Nombre" es obligatorio.',
-                'email.required' => 'El "Correo" es obligatorio.',
-                'sede_id.required' => 'La "Sede" es obligatorio.',
-            ]);
+                [
+                    'name.required' => 'El "Nombre" es obligatorio.',
+                    'email.required' => 'El "Correo" es obligatorio.',
+                    'sede_id.required' => 'La "Sede" es obligatorio.',
+                ]);
             if (request('password') != '') {
                 $request->validate([
                     'password' => 'required|min:8|bail',
                 ],
-                [
-                    'password.required' => 'La "Contraseña" es obligatorio.',
-                    'password.min' => 'La "Contraseña" debe tener 8 dígitos como mínimo.',
-                ]);
+                    [
+                        'password.required' => 'La "Contraseña" es obligatorio.',
+                        'password.min' => 'La "Contraseña" debe tener 8 dígitos como mínimo.',
+                    ]);
             }
             $user = User::find($id);
             $user->name = request('name');
@@ -186,16 +192,16 @@ class ListaUsuarioController extends Controller
             $request->validate([
                 'equipo_id' => 'required|bail',
             ],
-            [
-                'equipo_id.required' => 'El "Equipo" es obligatorio.',
-            ]);
-            if (!$user->equipos->isEmpty()) {
-                for ($i=0; $i < count($user->equipos); $i++) {
+                [
+                    'equipo_id.required' => 'El "Equipo" es obligatorio.',
+                ]);
+            if (! $user->equipos->isEmpty()) {
+                for ($i = 0; $i < count($user->equipos); $i++) {
                     $user->equipos()->detach($user->equipos[$i]->id);
                 }
             }
             $user->equipos()->attach(request('equipo_id'));
-            if (!$user->clientes->isEmpty()) {
+            if (! $user->clientes->isEmpty()) {
                 foreach ($user->clientes as $value) {
                     $cliente = Cliente::find($value->id);
                     $cliente->equipo_id = request('equipo_id');
@@ -206,9 +212,9 @@ class ListaUsuarioController extends Controller
             $request->validate([
                 'role_id' => 'required|bail',
             ],
-            [
-                'role_id.required' => 'El "Rol" es obligatorio.',
-            ]);
+                [
+                    'role_id.required' => 'El "Rol" es obligatorio.',
+                ]);
             $role = Role::find(request('role_id'));
             foreach ($user->getRoleNames() as $value) {
                 $user->removeRole($value);
@@ -219,10 +225,10 @@ class ListaUsuarioController extends Controller
                 $request->validate([
                     'password' => 'required|min:8|bail',
                 ],
-                [
-                    'password.required' => 'La "Contraseña" es obligatorio.',
-                    'password.min' => 'La "Contraseña" debe tener 8 dígitos como mínimo.',
-                ]);
+                    [
+                        'password.required' => 'La "Contraseña" es obligatorio.',
+                        'password.min' => 'La "Contraseña" debe tener 8 dígitos como mínimo.',
+                    ]);
                 $user = User::find($id);
                 $user->password = bcrypt(request('password'));
                 $user->save();

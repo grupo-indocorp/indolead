@@ -3,9 +3,9 @@
 namespace App\Charts;
 
 use App\Models\Cliente;
-use Illuminate\Http\Request;
 use ArielMejiaDev\LarapexCharts\LarapexChart;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class GraficoDeConversion
 {

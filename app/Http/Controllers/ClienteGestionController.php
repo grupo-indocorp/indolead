@@ -87,7 +87,7 @@ class ClienteGestionController extends Controller
         $etapas = Etapa::all();
 
         $where = [];
-        $where[] = ['ruc', 'LIKE', $filtro_ruc . '%'];
+        $where[] = ['ruc', 'LIKE', $filtro_ruc.'%'];
         if ($filtro_etapa_id != 0) {
             $where[] = ['etapa_id', $filtro_etapa_id];
         }
@@ -106,10 +106,10 @@ class ClienteGestionController extends Controller
             }
         }
         if (isset($filtro_fecha_desde)) {
-            $where[] = ['fecha_gestion', '>=', $filtro_fecha_desde . ' 00:00:00'];
+            $where[] = ['fecha_gestion', '>=', $filtro_fecha_desde.' 00:00:00'];
         }
         if (isset($filtro_fecha_hasta)) {
-            $where[] = ['fecha_gestion', '<=', $filtro_fecha_hasta . ' 23:59:59'];
+            $where[] = ['fecha_gestion', '<=', $filtro_fecha_hasta.' 23:59:59'];
         }
         if ($user->hasRole('jefe comercial') || $user->hasRole('supervisor') || $user->hasRole('ejecutivo')) {
             $where[] = ['sede_id', $user->sede_id];
@@ -119,7 +119,7 @@ class ClienteGestionController extends Controller
             }
         }
         $clientes = Cliente::with(['user', 'equipo', 'sede', 'etapa', 'comentarios'])
-        ->where($where)
+            ->where($where)
             ->orderByDesc('fecha_gestion')
             ->paginate(50);
         $data_etapas = $this->clienteService->etapasConConteo()['data_etapas'];
@@ -204,6 +204,7 @@ class ClienteGestionController extends Controller
         } elseif ($view === 'show-editar-venta') {
             $venta = Venta::find($id);
             $productos = $venta->productos;
+
             return $productos;
         } elseif ($view === 'show-ultima-venta') {
             $cliente = Cliente::find($id);
@@ -211,6 +212,7 @@ class ClienteGestionController extends Controller
             if (isset($cliente)) {
                 $productos = isset($cliente->ventas->last()->productos) ? $cliente->ventas->last()->productos : false;
             }
+
             return $productos;
         } elseif ($view === 'show-select-sede') {
             $sede = Sede::find($id);
@@ -221,6 +223,7 @@ class ClienteGestionController extends Controller
                 $equipos = Equipo::all();
                 $users = User::role('ejecutivo')->get();
             }
+
             return response()->json([
                 'equipos' => $equipos,
                 'users' => $users,
@@ -228,6 +231,7 @@ class ClienteGestionController extends Controller
         } elseif ($view === 'show-select-equipo') {
             $equipo = Equipo::find($id);
             $users = $equipo->users;
+
             return response()->json([
                 'users' => $users,
             ]);
@@ -238,6 +242,7 @@ class ClienteGestionController extends Controller
             } else {
                 $users = User::role('ejecutivo')->get();
             }
+
             return response()->json([
                 'users' => $users,
             ]);
@@ -245,6 +250,7 @@ class ClienteGestionController extends Controller
             $sedes = Sede::all();
             $equipos = Equipo::all();
             $users = User::role('ejecutivo')->get();
+
             return response()->json([
                 'sedes' => $sedes,
                 'equipos' => $equipos,
@@ -269,6 +275,7 @@ class ClienteGestionController extends Controller
             }
             $clients = request('clients');
             $etapas = Etapa::all();
+
             return view('sistema.cliente.gestion.asignar', compact(
                 'equipos',
                 'ejecutivos',
@@ -279,6 +286,7 @@ class ClienteGestionController extends Controller
             $cliente_id = $id;
             $user = auth()->user();
             $data = $this->clienteService->obtenerClienteDetalle($user, $cliente_id);
+
             return view('sistema.cliente.gestion.detalle', compact('data'));
         }
     }
@@ -293,7 +301,7 @@ class ClienteGestionController extends Controller
         if ($view === 'update-cliente') {
             $request->validate(
                 [
-                    'ruc' => 'required|numeric|digits:11|starts_with:20,10|unique:clientes,ruc,' . $id . '|bail',
+                    'ruc' => 'required|numeric|digits:11|starts_with:20,10|unique:clientes,ruc,'.$id.'|bail',
                     'razon_social' => 'required|bail',
                     'ciudad' => 'required|bail',
                 ],
@@ -312,6 +320,7 @@ class ClienteGestionController extends Controller
             $cliente->ciudad = request('ciudad');
             $cliente->save();
             $this->clienteService->exportclienteStore($cliente->id);
+
             return response()->json($cliente);
         } elseif ($view === 'update-contacto') {
             $request->validate(
@@ -330,7 +339,7 @@ class ClienteGestionController extends Controller
                     'cargo.required' => 'El "Cargo" es obligatorio.',
                 ]
             );
-            $contacto = new Contacto();
+            $contacto = new Contacto;
             $contacto->dni = request('dni');
             $contacto->nombre = request('nombre');
             $contacto->celular = request('celular');
@@ -354,6 +363,7 @@ class ClienteGestionController extends Controller
                 ];
             }
             $this->clienteService->exportclienteStore($cliente->id);
+
             return response()->json($contactos);
         } elseif ($view === 'update-comentario') {
             $request->validate(
@@ -365,7 +375,7 @@ class ClienteGestionController extends Controller
                 ]
             );
             $etapa = Etapa::find($cliente->etapa_id);
-            $comentario = new Comentario();
+            $comentario = new Comentario;
             $comentario->comentario = request('comentario');
             $comentario->detalle = $etapa->nombre;
             $comentario->user_id = auth()->user()->id;
@@ -390,6 +400,7 @@ class ClienteGestionController extends Controller
             $cliente->etiqueta_id = 4; // gestionado
             $cliente->save();
             $this->clienteService->exportclienteStore($cliente->id);
+
             return response()->json($comentarios);
         } elseif ($view === 'update-movistar') {
             $request->validate(
@@ -414,7 +425,7 @@ class ClienteGestionController extends Controller
                     'agencia_id.required' => 'La "Agencia" es obligatorio.',
                 ]
             );
-            $movistar = new Movistar();
+            $movistar = new Movistar;
             $movistar->linea_claro = request('linea_claro');
             $movistar->linea_entel = request('linea_entel');
             $movistar->linea_bitel = request('linea_bitel');
@@ -446,7 +457,7 @@ class ClienteGestionController extends Controller
             $cliente->save();
 
             $etapa = Etapa::find(request('etapa_id'));
-            $comentario = new Comentario();
+            $comentario = new Comentario;
             $comentario->comentario = request('comentario');
             $comentario->detalle = 'Cambio de etapa a '.$etapa->nombre;
             $comentario->user_id = auth()->user()->id;
@@ -466,6 +477,7 @@ class ClienteGestionController extends Controller
                 ];
             }
             $this->clienteService->exportclienteStore($cliente->id);
+
             return response()->json($comentarios);
         } elseif ($view === 'update-cargo') {
             $ventas = Venta::find(request('venta_id'));
@@ -474,9 +486,9 @@ class ClienteGestionController extends Controller
                     DB::table('producto_venta')->where('venta_id', $value->pivot->venta_id)->delete();
                 }
             }
-            if (!is_null(request('dataCargo'))) {
+            if (! is_null(request('dataCargo'))) {
                 $venta_total = 0;
-                $venta = new Venta();
+                $venta = new Venta;
                 $venta->cliente_id = $cliente->id;
                 $venta->user_id = auth()->user()->id;
                 $venta->save();
@@ -494,6 +506,7 @@ class ClienteGestionController extends Controller
                 $venta->save();
             }
             $this->clienteService->exportclienteStore($cliente->id);
+
             return $venta->productos;
         } elseif ($view === 'update-asignar') {
             $request->validate(
@@ -523,9 +536,9 @@ class ClienteGestionController extends Controller
                 $client->etapas()->attach(1);
                 // comentario
                 $etapa = Etapa::find(request('etapa_id'));
-                $comentario = new Comentario();
+                $comentario = new Comentario;
                 $comentario->comentario = 'Cliente asignado.';
-                $comentario->detalle = 'Cambio de etapa a ' . $etapa->nombre;
+                $comentario->detalle = 'Cambio de etapa a '.$etapa->nombre;
                 $comentario->cliente_id = $client->id;
                 $comentario->user_id = auth()->user()->id;
                 $comentario->etiqueta_id = 2; // etiqueta_id, 2=asignado;

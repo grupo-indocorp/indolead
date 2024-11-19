@@ -2,11 +2,11 @@
 
 namespace App\Charts;
 
-use App\Models\User;
 use App\Models\Cliente;
 use App\Models\Etapa;
-use Illuminate\Http\Request;
+use App\Models\User;
 use ArielMejiaDev\LarapexCharts\LarapexChart;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class GraficoDeAnillo
@@ -55,7 +55,7 @@ class GraficoDeAnillo
 
         $chartLabels = [];
         foreach ($etapasNombres as $index => $nombre) {
-            $chartLabels[] = $nombre . " (" . $etapasCounts[$index] . ")";
+            $chartLabels[] = $nombre.' ('.$etapasCounts[$index].')';
         }
 
         $chart = $this->chart->donutChart()
@@ -67,9 +67,9 @@ class GraficoDeAnillo
             ->setOptions([
                 'dataLabels' => [
                     'enabled' => true,
-                    'formatter' => function($val, $opts) {
-                        return round($val) . '%';
-                    }
+                    'formatter' => function ($val, $opts) {
+                        return round($val).'%';
+                    },
                 ],
                 'plotOptions' => [
                     'pie' => [
@@ -81,42 +81,44 @@ class GraficoDeAnillo
                                 ],
                                 'value' => [
                                     'show' => true,
-                                    'formatter' => function($val, $opts) {
+                                    'formatter' => function ($val, $opts) {
                                         return $opts->w.globals.seriesTotals[$opts->dataPointIndex];
-                                    }
+                                    },
                                 ],
                                 'total' => [
                                     'show' => true,
                                     'label' => 'Total',
                                     'formatter' => function () use ($totalClientes) {
                                         return $totalClientes;
-                                    }
-                                ]
-                            ]
-                        ]
-                    ]
+                                    },
+                                ],
+                            ],
+                        ],
+                    ],
                 ],
                 'tooltip' => [
                     'enabled' => true,
                     'theme' => 'dark',
                     'y' => [
-                        'formatter' => function($val, $opts) use ($etapasNombres, $etapasCounts) {
+                        'formatter' => function ($val, $opts) use ($etapasNombres, $etapasCounts) {
                             $index = $opts->dataPointIndex;
                             $nombre = $etapasNombres[$index];
                             $conteo = $etapasCounts[$index];
                             $percentage = round(($conteo / array_sum($etapasCounts)) * 100, 2);
-                            return $conteo . " clientes (" . $percentage . "%)";
-                        }
-                    ]
+
+                            return $conteo.' clientes ('.$percentage.'%)';
+                        },
+                    ],
                 ],
                 'legend' => [
                     'show' => true,
                     'position' => 'bottom',
-                    'formatter' => function($seriesName, $opts) use ($etapasCounts) {
+                    'formatter' => function ($seriesName, $opts) use ($etapasCounts) {
                         $index = $opts->dataPointIndex;
-                        return $seriesName . ": " . $etapasCounts[$index];
-                    }
-                ]
+
+                        return $seriesName.': '.$etapasCounts[$index];
+                    },
+                ],
             ]);
 
         return $chart;

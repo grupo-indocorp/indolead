@@ -8,16 +8,17 @@ use Illuminate\Http\Request;
 
 class ConfiguracionController extends Controller
 {
-    public function updateExportCliente() {
+    public function updateExportCliente()
+    {
         set_time_limit(300);
         $totalCount = Cliente::count();
         Cliente::orderBy('id')->limit(2000)->get()->each(function ($value) {
-        // Cliente::orderBy('id')->skip(2000)->take(2000)->get()->each(function ($value) {
-        // Cliente::orderBy('id')->skip(4000)->take(2000)->get()->each(function ($value) {
-        // Cliente::orderBy('id')->skip(6000)->take(2000)->get()->each(function ($value) {
-        // Cliente::orderBy('id')->skip(8000)->take(2000)->get()->each(function ($value) {
-        // if ($totalCount > 10000) {
-        // Cliente::orderBy('id')->skip(10000)->take($totalCount - 10000)->get()->each(function ($value) {
+            // Cliente::orderBy('id')->skip(2000)->take(2000)->get()->each(function ($value) {
+            // Cliente::orderBy('id')->skip(4000)->take(2000)->get()->each(function ($value) {
+            // Cliente::orderBy('id')->skip(6000)->take(2000)->get()->each(function ($value) {
+            // Cliente::orderBy('id')->skip(8000)->take(2000)->get()->each(function ($value) {
+            // if ($totalCount > 10000) {
+            // Cliente::orderBy('id')->skip(10000)->take($totalCount - 10000)->get()->each(function ($value) {
             // Ventas
             $ventas = $value->ventas->last();
             $m_cant = 0;
@@ -62,12 +63,12 @@ class ConfiguracionController extends Controller
             // Comentarios
             $comentarios = $value->comentarios()->latest()->take(5)->get();
             $comentariosArray = $comentarios->toArray();
-            $textoPredeterminado = "";
+            $textoPredeterminado = '';
             while (count($comentariosArray) < 5) {
                 $comentariosArray[] = ['comentario' => $textoPredeterminado];
             }
 
-            $exportCliente = new Exportcliente();
+            $exportCliente = new Exportcliente;
             $exportCliente->ruc = $value->ruc;
             $exportCliente->razon_social = $value->razon_social;
             $exportCliente->ciudad = $value->ciudad;
@@ -172,12 +173,12 @@ class ConfiguracionController extends Controller
             // Comentarios
             $comentarios = $value->comentarios()->latest()->take(5)->get();
             $comentariosArray = $comentarios->toArray();
-            $textoPredeterminado = "";
+            $textoPredeterminado = '';
             while (count($comentariosArray) < 5) {
                 $comentariosArray[] = ['comentario' => $textoPredeterminado];
             }
 
-            $exportCliente = new Exportcliente();
+            $exportCliente = new Exportcliente;
             $exportCliente->ruc = $value->ruc;
             $exportCliente->razon_social = $value->razon_social;
             $exportCliente->ciudad = $value->ciudad;
@@ -286,12 +287,12 @@ class ConfiguracionController extends Controller
             // Comentarios
             $comentarios = $value->comentarios()->latest()->take(5)->get();
             $comentariosArray = $comentarios->toArray();
-            $textoPredeterminado = "";
+            $textoPredeterminado = '';
             while (count($comentariosArray) < 5) {
                 $comentariosArray[] = ['comentario' => $textoPredeterminado];
             }
 
-            $exportCliente = new Exportcliente();
+            $exportCliente = new Exportcliente;
             $exportCliente->ruc = $value->ruc;
             $exportCliente->razon_social = $value->razon_social;
             $exportCliente->ciudad = $value->ciudad;
@@ -400,12 +401,12 @@ class ConfiguracionController extends Controller
             // Comentarios
             $comentarios = $value->comentarios()->latest()->take(5)->get();
             $comentariosArray = $comentarios->toArray();
-            $textoPredeterminado = "";
+            $textoPredeterminado = '';
             while (count($comentariosArray) < 5) {
                 $comentariosArray[] = ['comentario' => $textoPredeterminado];
             }
 
-            $exportCliente = new Exportcliente();
+            $exportCliente = new Exportcliente;
             $exportCliente->ruc = $value->ruc;
             $exportCliente->razon_social = $value->razon_social;
             $exportCliente->ciudad = $value->ciudad;
@@ -514,12 +515,12 @@ class ConfiguracionController extends Controller
             // Comentarios
             $comentarios = $value->comentarios()->latest()->take(5)->get();
             $comentariosArray = $comentarios->toArray();
-            $textoPredeterminado = "";
+            $textoPredeterminado = '';
             while (count($comentariosArray) < 5) {
                 $comentariosArray[] = ['comentario' => $textoPredeterminado];
             }
 
-            $exportCliente = new Exportcliente();
+            $exportCliente = new Exportcliente;
             $exportCliente->ruc = $value->ruc;
             $exportCliente->razon_social = $value->razon_social;
             $exportCliente->ciudad = $value->ciudad;
@@ -628,12 +629,12 @@ class ConfiguracionController extends Controller
             // Comentarios
             $comentarios = $value->comentarios()->latest()->take(5)->get();
             $comentariosArray = $comentarios->toArray();
-            $textoPredeterminado = "";
+            $textoPredeterminado = '';
             while (count($comentariosArray) < 5) {
                 $comentariosArray[] = ['comentario' => $textoPredeterminado];
             }
 
-            $exportCliente = new Exportcliente();
+            $exportCliente = new Exportcliente;
             $exportCliente->ruc = $value->ruc;
             $exportCliente->razon_social = $value->razon_social;
             $exportCliente->ciudad = $value->ciudad;
@@ -744,12 +745,12 @@ class ConfiguracionController extends Controller
                 // Comentarios
                 $comentarios = $value->comentarios()->latest()->take(5)->get();
                 $comentariosArray = $comentarios->toArray();
-                $textoPredeterminado = "";
+                $textoPredeterminado = '';
                 while (count($comentariosArray) < 5) {
                     $comentariosArray[] = ['comentario' => $textoPredeterminado];
                 }
 
-                $exportCliente = new Exportcliente();
+                $exportCliente = new Exportcliente;
                 $exportCliente->ruc = $value->ruc;
                 $exportCliente->razon_social = $value->razon_social;
                 $exportCliente->ciudad = $value->ciudad;
@@ -819,34 +820,35 @@ class ConfiguracionController extends Controller
             [
                 'title' => 'Sistema',
                 'icon' => '<i class="fa-solid fa-planet-moon"></i>',
-                'link' => 'configuracion-sistema'
+                'link' => 'configuracion-sistema',
             ],
             [
                 'title' => 'Etapas',
                 'icon' => '<i class="fa-solid fa-arrow-progress"></i>',
-                'link' => 'configuracion-etapa'
+                'link' => 'configuracion-etapa',
             ],
             [
                 'title' => 'Categorias',
                 'icon' => '<i class="fa-solid fa-layer-group"></i>',
-                'link' => 'configuracion-categoria'
+                'link' => 'configuracion-categoria',
             ],
             [
                 'title' => 'Productos',
                 'icon' => '<i class="fa-solid fa-cart-shopping"></i>',
-                'link' => 'configuracion-producto'
+                'link' => 'configuracion-producto',
             ],
             [
                 'title' => 'Excel',
                 'icon' => '<i class="fa-solid fa-file-excel"></i>',
-                'link' => 'configuracion-excel'
+                'link' => 'configuracion-excel',
             ],
             [
                 'title' => 'Ficha del Cliente',
                 'icon' => '<i class="fa-solid fa-database"></i>',
-                'link' => 'configuracion-ficha-cliente'
+                'link' => 'configuracion-ficha-cliente',
             ],
         ];
+
         return view('sistema.configuracion.index', compact('links'));
     }
 

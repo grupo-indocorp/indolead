@@ -11,8 +11,6 @@ class EvaporacionImport implements ToModel, WithStartRow
 {
     /**
      * Indica la fila de inicio (segunda fila).
-     *
-     * @return int
      */
     public function startRow(): int
     {
@@ -20,10 +18,8 @@ class EvaporacionImport implements ToModel, WithStartRow
     }
 
     /**
-    * @param array $row
-    *
-    * @return \Illuminate\Database\Eloquent\Model|null
-    */
+     * @return \Illuminate\Database\Eloquent\Model|null
+     */
     public function model(array $row)
     {
         $evaporaciones = Evaporacion::where('numero_servicio', $row[3])->first();
@@ -51,7 +47,7 @@ class EvaporacionImport implements ToModel, WithStartRow
         $excel36 = isset($row[36]) ? (int) $row[36] : null;
         $fecha_vencimiento3 = $excel36 ? Carbon::createFromDate(1900, 1, 1)->addDays($excel36 - 2) : null;
 
-        if (!is_null($evaporaciones)) {
+        if (! is_null($evaporaciones)) {
             $evaporaciones->update([
                 'ruc' => $row[1] ?? '',
                 'razon_social' => $row[2] ?? '',

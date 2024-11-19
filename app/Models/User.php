@@ -16,9 +16,9 @@ class User extends Authenticatable
     use HasApiTokens;
     use HasFactory;
     use HasProfilePhoto;
+    use HasRoles;
     use Notifiable;
     use TwoFactorAuthenticatable;
-    use HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -69,24 +69,29 @@ class User extends Authenticatable
     ];
 
     // Relación uno a uno
-    public function equipo() {
+    public function equipo()
+    {
         return $this->hasOne(Equipo::class);
     }
 
     //Relación uno a muchos
-    public function comentarios() {
+    public function comentarios()
+    {
         return $this->hasMany(Comentario::class);
     }
 
-    public function ventas() {
+    public function ventas()
+    {
         return $this->hasMany(Venta::class);
     }
 
-    public function clientes() {
+    public function clientes()
+    {
         return $this->hasMany(Cliente::class);
     }
 
-    public function notificacions() {
+    public function notificacions()
+    {
         return $this->hasMany(Notificacion::class);
     }
 
@@ -97,11 +102,13 @@ class User extends Authenticatable
     }
 
     // Relación muchos a muchos
-    public function clientesHistorial() {
+    public function clientesHistorial()
+    {
         return $this->belongsToMany(Cliente::class)->withTimestamps();
     }
 
-    public function equipos() {
+    public function equipos()
+    {
         return $this->belongsToMany(Equipo::class)->withPivot('id')->withTimestamps();
     }
 }

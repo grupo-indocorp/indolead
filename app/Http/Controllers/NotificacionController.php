@@ -16,6 +16,7 @@ class NotificacionController extends Controller
     public function index()
     {
         $notificaciones = Notificacion::where('user_id', auth()->user()->id)->orderBy('fecha')->get();
+
         return view('sistema.notificacion.index', compact('notificaciones'));
     }
 
@@ -27,12 +28,15 @@ class NotificacionController extends Controller
         if (request('view') == 'create') {
             $tipos = Notificaciontipo::all();
             $fecha = now()->format('Y-m-d');
+
             return view('sistema.notificacion.create', compact('tipos', 'fecha'));
         } elseif (request('view') == 'historial') {
             $notificaciones = Notificacion::where('user_id', auth()->user()->id)->orderBy('fecha')->get();
+
             return view('sistema.notificacion.historial', compact('notificaciones'));
         } elseif (request('view') == 'pendiente') {
             $notificaciones = Helpers::NotificacionRecordatorio();
+
             return view('sistema.notificacion.historial', compact('notificaciones'));
         }
     }
@@ -50,14 +54,14 @@ class NotificacionController extends Controller
                 'fecha' => 'required|bail',
                 'hora' => 'required|bail',
             ],
-            [
-                'notificaciontipo_id.required' => 'El "Tipo de Notificación" es obligatorio.',
-                'asunto.required' => 'El "Asunto" es obligatorio.',
-                'mensaje.required' => 'El "Mensaje" es obligatorio.',
-                'fecha.required' => 'La "Fecha" es obligatorio.',
-                'hora.required' => 'La "Hora" es obligatorio.',
-            ]);
-            $notificacion = new Notificacion();
+                [
+                    'notificaciontipo_id.required' => 'El "Tipo de Notificación" es obligatorio.',
+                    'asunto.required' => 'El "Asunto" es obligatorio.',
+                    'mensaje.required' => 'El "Mensaje" es obligatorio.',
+                    'fecha.required' => 'La "Fecha" es obligatorio.',
+                    'hora.required' => 'La "Hora" es obligatorio.',
+                ]);
+            $notificacion = new Notificacion;
             $notificacion->asunto = request('asunto');
             $notificacion->mensaje = request('mensaje');
             $notificacion->fecha = request('fecha');
@@ -72,12 +76,12 @@ class NotificacionController extends Controller
                 'fecha' => 'required|bail',
                 'hora' => 'required|bail',
             ],
-            [
-                'notificaciontipo_id.required' => 'El "Tipo de Notificación" es obligatorio.',
-                'mensaje.required' => 'El "Mensaje" es obligatorio.',
-                'fecha.required' => 'La "Fecha" es obligatorio.',
-                'hora.required' => 'La "Hora" es obligatorio.',
-            ]);
+                [
+                    'notificaciontipo_id.required' => 'El "Tipo de Notificación" es obligatorio.',
+                    'mensaje.required' => 'El "Mensaje" es obligatorio.',
+                    'fecha.required' => 'La "Fecha" es obligatorio.',
+                    'hora.required' => 'La "Hora" es obligatorio.',
+                ]);
             $asunto = '';
             $cliente = Cliente::find(request('cliente_id'));
             if (request('notificaciontipo_id') == 2) {
@@ -85,7 +89,7 @@ class NotificacionController extends Controller
             } elseif (request('notificaciontipo_id') == 3) {
                 $asunto = "Llamada al Cliente: $cliente->ruc - $cliente->razon_social";
             }
-            $notificacion = new Notificacion();
+            $notificacion = new Notificacion;
             $notificacion->asunto = $asunto;
             $notificacion->mensaje = request('mensaje');
             $notificacion->fecha = request('fecha');
@@ -104,6 +108,7 @@ class NotificacionController extends Controller
                     'hora' => $value->hora,
                 ];
             }
+
             return response()->json($notificacions);
         }
     }
@@ -124,12 +129,15 @@ class NotificacionController extends Controller
         $view = request('view');
         if ($view === 'edit') {
             $notificacion = Notificacion::find($id);
+
             return view('sistema.notificacion.edit', compact('notificacion'));
         } elseif ($view === 'delete') {
             $notificacion = Notificacion::find($id);
+
             return view('sistema.notificacion.delete', compact('notificacion'));
         } elseif ($view === 'gestion-evaporacion') {
             $notificacion = Notificacion::find($id);
+
             return view('sistema.notificacion.gestion-evaporacion', compact('notificacion'));
         }
     }
@@ -147,12 +155,12 @@ class NotificacionController extends Controller
                 'fecha' => 'required|bail',
                 'hora' => 'required|bail',
             ],
-            [
-                'asunto.required' => 'El "Asunto" es obligatorio.',
-                'mensaje.required' => 'El "Mensaje" es obligatorio.',
-                'fecha.required' => 'La "Fecha" es obligatorio.',
-                'hora.required' => 'La "Hora" es obligatorio.',
-            ]);
+                [
+                    'asunto.required' => 'El "Asunto" es obligatorio.',
+                    'mensaje.required' => 'El "Mensaje" es obligatorio.',
+                    'fecha.required' => 'La "Fecha" es obligatorio.',
+                    'hora.required' => 'La "Hora" es obligatorio.',
+                ]);
             $notificacion = Notificacion::find($id);
             $notificacion->asunto = request('asunto');
             $notificacion->mensaje = request('mensaje');
@@ -175,6 +183,7 @@ class NotificacionController extends Controller
 
             // Establecer el mensaje de éxito en la sesión
             session()->flash('success', 'Gestión de evaporación creado correctamente');
+
             return response()->json(['redirect' => true]);
         }
     }
