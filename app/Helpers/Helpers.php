@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Helpers;
 
 use App\Models\Notificacion;
@@ -14,6 +15,7 @@ class Helpers
             ->where('hora', '>', now()->format('H:i:00'))
             ->orderBy('hora')
             ->get();
+
         return $notificaciones;
     }
 
@@ -27,9 +29,10 @@ class Helpers
 
     /**
      * Crea o actualiza el json de configuracion
+     *
      * @return array de configuracion
      */
-    public static function configuracionJsonPut($configTipo='', $configData=[])
+    public static function configuracionJsonPut($configTipo = '', $configData = [])
     {
         return true;
     }
@@ -44,11 +47,13 @@ class Helpers
         if (is_null($configuracionExcel)) {
             $configuracionExcel = Helpers::configuracionExcelJsonPut();
         }
+
         return $configuracionExcel;
     }
 
     /**
      * Crea o actualiza el json de configuracion
+     *
      * @return array de configuracion de excel
      */
     public static function configuracionExcelJsonPut($configTipo = '', $configData = [])
@@ -73,6 +78,7 @@ class Helpers
         }
         $json = json_encode($configuracionExcel, JSON_PRETTY_PRINT);
         Storage::disk('public')->put('configuracionExcel.json', $json);
+
         return $configuracionExcel;
     }
 
@@ -86,11 +92,13 @@ class Helpers
         if (is_null($configuracionDatosAdicionales)) {
             $configuracionDatosAdicionales = Helpers::configuracionDatosAdicionalesJsonPut();
         }
+
         return $configuracionDatosAdicionales;
     }
 
     /**
      * Crea o actualiza el json de configuracion de datos adiconales
+     *
      * @return array de configuracion de datos adiconales
      */
     public static function configuracionDatosAdicionalesJsonPut($configTipo = '', $configData = [])
@@ -129,19 +137,21 @@ class Helpers
         }
         $json = json_encode($configuracionDatosAdicionales, JSON_PRETTY_PRINT);
         Storage::disk('public')->put('configuracionDatosAdicionales.json', $json);
+
         return $configuracionDatosAdicionales;
     }
 
     /**
      * Filtro desde gestion de clientes
      * Que sirve para exportar los excel
+     *
      * @return array where para Exportcliente
      */
     public static function filtroExportCliente($filtro, $user)
     {
         $where = [];
         if (isset($filtro->filtro_ruc)) {
-            $where[] = ['ruc', 'LIKE', $filtro->filtro_ruc . '%'];
+            $where[] = ['ruc', 'LIKE', $filtro->filtro_ruc.'%'];
         }
         if ($filtro->filtro_etapa_id != 0) {
             $where[] = ['etapa_id', $filtro->filtro_etapa_id];
@@ -168,10 +178,10 @@ class Helpers
             }
         }
         if (isset($filtro->filtro_fecha_desde)) {
-            $where[] = ['fecha_ultimo_contacto', '>=', $filtro->filtro_fecha_desde . ' 00:00:00'];
+            $where[] = ['fecha_ultimo_contacto', '>=', $filtro->filtro_fecha_desde.' 00:00:00'];
         }
         if (isset($filtro->filtro_fecha_hasta)) {
-            $where[] = ['fecha_ultimo_contacto', '<=', $filtro->filtro_fecha_hasta . ' 23:59:59'];
+            $where[] = ['fecha_ultimo_contacto', '<=', $filtro->filtro_fecha_hasta.' 23:59:59'];
         }
 
         return $where;

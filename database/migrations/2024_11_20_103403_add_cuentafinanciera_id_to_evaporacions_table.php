@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('equipos', function (Blueprint $table) {
-            $table->foreignId('sede_id')->after('nombre')->default(1)->constrained();
+        Schema::table('evaporacions', function (Blueprint $table) {
+            $table->foreignId('cuentafinanciera_id')->nullable()->constrained();
         });
     }
 
@@ -21,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('equipos', function (Blueprint $table) {});
+        Schema::table('evaporacions', function (Blueprint $table) {
+            //
+        });
     }
 };

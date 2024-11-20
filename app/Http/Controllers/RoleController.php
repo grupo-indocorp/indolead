@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\RoleRequest;
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class RoleController extends Controller
 {
@@ -15,6 +15,7 @@ class RoleController extends Controller
     public function index()
     {
         $roles = Role::all();
+
         return view('sistema.role.index', compact('roles'));
     }
 
@@ -35,6 +36,7 @@ class RoleController extends Controller
 
         // Establecer el mensaje de éxito en la sesión
         session()->flash('success', 'Rol creado correctamente');
+
         return response()->json(['redirect' => true]);
     }
 
@@ -57,9 +59,10 @@ class RoleController extends Controller
                 $permissions[] = [
                     'id' => $item->id,
                     'name' => $item->name,
-                    'checked'=> $checked,
+                    'checked' => $checked,
                 ];
             }
+
             return view('sistema.role.permisos', compact('role', 'permissions'));
         }
     }
@@ -70,6 +73,7 @@ class RoleController extends Controller
     public function edit(string $id)
     {
         $role = Role::find($id);
+
         return view('sistema.role.edit', compact('role'));
     }
 
@@ -87,6 +91,7 @@ class RoleController extends Controller
                 $role->givePermissionTo($permission->name);
             }
         }
+
         return redirect()->route('role.index')->with('success', 'Permisos Actualizados.');
     }
 

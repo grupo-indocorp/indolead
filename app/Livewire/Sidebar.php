@@ -82,6 +82,7 @@ class Sidebar extends Component
                 'can' => 'sistema.configuracion',
             ],
         ];
+
         return view('livewire.sidebar', compact('links'));
     }
 }

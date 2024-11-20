@@ -31,6 +31,7 @@ class Movistars extends Component
         $clientetipos = Clientetipo::all();
         $agencias = Agencia::all();
         $config = Helpers::configuracionDatosAdicionalesJsonGet();
+
         return view('components.sistema.cliente.movistars', compact('estadowicks', 'estadoditos', 'clientetipos', 'agencias', 'config'));
     }
 }

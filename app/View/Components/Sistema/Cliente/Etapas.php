@@ -23,6 +23,7 @@ class Etapas extends Component
     public function render(): View|Closure|string
     {
         $etapas = Etapa::all();
+
         return view('components.sistema.cliente.etapas', compact('etapas'));
     }
 }

@@ -37,15 +37,15 @@ class EnviarEvaporacionCommand extends Command
         foreach ($evaporaciones as $value) {
             $user = User::where('identity_document', $value->identificacion_ejecutivo)->first();
             if ($user) {
-                if (!is_null($value->fecha_emision3) && $value->estado_facturacion3 === 'Pendiente') {
+                if (! is_null($value->fecha_emision3) && $value->estado_facturacion3 === 'Pendiente') {
                     $cliente = Cliente::where('ruc', $value->ruc)->first();
-                    $mensaje = "RECORDATORIO DE VENCIMIENTO DE FACTURA\n" .
-                        "Cliente: $value->ruc - $value->razon_social\n" .
-                        "Factura N° 3\n" .
-                        "Fecha de Emisión: $value->fecha_emision3\n" .
-                        "Fecha de Vencimiento: $value->fecha_vencimiento3\n" .
-                        "Número: $value->numero_servicio" .
-                        "Cuenta Financiera: $value->cuenta_financiera\n" .
+                    $mensaje = "RECORDATORIO DE VENCIMIENTO DE FACTURA\n".
+                        "Cliente: $value->ruc - $value->razon_social\n".
+                        "Factura N° 3\n".
+                        "Fecha de Emisión: $value->fecha_emision3\n".
+                        "Fecha de Vencimiento: $value->fecha_vencimiento3\n".
+                        "Número: $value->numero_servicio".
+                        "Cuenta Financiera: $value->cuenta_financiera\n".
                         "Cargo Fijo: S/ $value->cargo_fijo";
 
                     // Notificación 2 días antes del vencimiento hasta el dia de vencimiento
@@ -63,15 +63,15 @@ class EnviarEvaporacionCommand extends Command
                         $notificacion->cliente_id = $cliente->id ?? null;
                         $notificacion->save();
                     }
-                } elseif (!is_null($value->fecha_emision2) && $value->estado_facturacion2 === 'Pendiente') {
+                } elseif (! is_null($value->fecha_emision2) && $value->estado_facturacion2 === 'Pendiente') {
                     $cliente = Cliente::where('ruc', $value->ruc)->first();
-                    $mensaje = "RECORDATORIO DE VENCIMIENTO DE FACTURA\n" .
-                        "Cliente: $value->ruc - $value->razon_social\n" .
-                        "Factura N° 2\n" .
-                        "Fecha de Emisión: $value->fecha_emision2\n" .
-                        "Fecha de Vencimiento: $value->fecha_vencimiento2\n" .
-                        "Número: $value->numero_servicio" .
-                        "Cuenta Financiera: $value->cuenta_financiera\n" .
+                    $mensaje = "RECORDATORIO DE VENCIMIENTO DE FACTURA\n".
+                        "Cliente: $value->ruc - $value->razon_social\n".
+                        "Factura N° 2\n".
+                        "Fecha de Emisión: $value->fecha_emision2\n".
+                        "Fecha de Vencimiento: $value->fecha_vencimiento2\n".
+                        "Número: $value->numero_servicio".
+                        "Cuenta Financiera: $value->cuenta_financiera\n".
                         "Cargo Fijo: S/ $value->cargo_fijo";
 
                     // Notificación 2 días antes del vencimiento hasta el dia de vencimiento
@@ -89,15 +89,15 @@ class EnviarEvaporacionCommand extends Command
                         $notificacion->cliente_id = $cliente->id ?? null;
                         $notificacion->save();
                     }
-                } elseif (!is_null($value->fecha_emision1) && $value->estado_facturacion1 === 'Pendiente') {
+                } elseif (! is_null($value->fecha_emision1) && $value->estado_facturacion1 === 'Pendiente') {
                     $cliente = Cliente::where('ruc', $value->ruc)->first();
-                    $mensaje = "RECORDATORIO DE VENCIMIENTO DE FACTURA\n" .
-                        "Cliente: $value->ruc - $value->razon_social\n" .
-                        "Factura N° 1\n" .
-                        "Fecha de Emisión: $value->fecha_emision1\n" .
-                        "Fecha de Vencimiento: $value->fecha_vencimiento1\n" .
-                        "Número: $value->numero_servicio" .
-                        "Cuenta Financiera: $value->cuenta_financiera\n" .
+                    $mensaje = "RECORDATORIO DE VENCIMIENTO DE FACTURA\n".
+                        "Cliente: $value->ruc - $value->razon_social\n".
+                        "Factura N° 1\n".
+                        "Fecha de Emisión: $value->fecha_emision1\n".
+                        "Fecha de Vencimiento: $value->fecha_vencimiento1\n".
+                        "Número: $value->numero_servicio".
+                        "Cuenta Financiera: $value->cuenta_financiera\n".
                         "Cargo Fijo: S/ $value->cargo_fijo";
 
                     // Notificación 2 días antes del vencimiento hasta el dia de vencimiento

@@ -24,7 +24,7 @@ class ContactoFactory extends Factory
             'correo' => $this->faker->freeEmail(),
             'fecha_ultimo' => $this->faker->date,
             'fecha_proximo' => $this->faker->date,
-            'cliente_id' => Cliente::all()->random()->id
+            'cliente_id' => Cliente::all()->random()->id,
         ];
     }
 }

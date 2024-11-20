@@ -16,16 +16,16 @@ class DatabaseSeeder extends Seeder
         /** Tablas unitarias
          * Se usa para user, cliente, equipo:
          * SedeSeeder
-         * 
+         *
          * Datos Adicionales de Movistar:
          * EstadowickSeeder, EstadoditoSeeder, ClientetipoSeeder, AgenciaSeeder
-         * 
+         *
          * Para el uso de la Agenda:
          * NotificaciontipoSeeder
-         * 
+         *
          * Se crean los roles y permisos
          * RoleSeeder
-         * 
+         *
          * Etiqueta
          */
         $this->call(SedeSeeder::class);

@@ -9,6 +9,7 @@ use Illuminate\View\Component;
 class Titulo extends Component
 {
     public $title;
+
     /**
      * Create a new component instance.
      */

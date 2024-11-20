@@ -3,11 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cliente;
-use App\Models\Comentario;
-use App\Models\Contacto;
 use App\Models\Etapa;
-use App\Models\Movistar;
-use App\Models\User;
 use App\Services\ClienteService;
 use Illuminate\Http\Request;
 
@@ -19,6 +15,7 @@ class FunnelController extends Controller
     {
         $this->clienteService = $clienteService;
     }
+
     /**
      * Display a listing of the resource.
      */
@@ -31,7 +28,8 @@ class FunnelController extends Controller
         }
         $clientes = $this->clienteService->obtenerClientes($data);
         $etapas = Etapa::all();
-		return view('sistema.funnel.index' , compact('clientes', 'etapas'));
+
+        return view('sistema.funnel.index', compact('clientes', 'etapas'));
     }
 
     /**
@@ -41,6 +39,7 @@ class FunnelController extends Controller
     {
         if (request('view') == 'create') {
             $etapas = Etapa::all();
+
             return view('sistema.funnel.create', compact('etapas'));
         }
     }
@@ -48,9 +47,7 @@ class FunnelController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-    }
+    public function store(Request $request) {}
 
     /**
      * Display the specified resource.
@@ -59,6 +56,7 @@ class FunnelController extends Controller
     {
         if (request('view') == 'detalle') {
             $data = $this->clienteService->obtenerClienteDetalle($id);
+
             return view('sistema.funnel.detalle', compact('data'));
         } elseif (request('view') == 'show-funnel') {
             if (auth()->user()->hasRole('administrador')) {
@@ -72,6 +70,7 @@ class FunnelController extends Controller
                 'clientes' => $clientes,
                 'etapas' => $etapas,
             ];
+
             return response()->json($data);
         }
     }

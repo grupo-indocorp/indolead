@@ -77,13 +77,7 @@ Route::middleware([
     Route::post('clientes/import/', [GestionClienteController::class, 'import']);
 
     // Actualizar datos de clientes a la nueva tabla export_cliente
-    Route::get('update_export_cliente', [ConfiguracionController::class, 'updateExportCliente']);
-    Route::get('update_uno', [ConfiguracionController::class, 'updateUno']);
-    Route::get('update_dos', [ConfiguracionController::class, 'updateDos']);
-    Route::get('update_tres', [ConfiguracionController::class, 'updateTres']);
-    Route::get('update_cuatro', [ConfiguracionController::class, 'updateCuatro']);
-    Route::get('update_cinco', [ConfiguracionController::class, 'updateCinco']);
-    Route::get('update_seis', [ConfiguracionController::class, 'updateSeis']);
+    Route::get('update-cuentafinanciera', [ConfiguracionController::class, 'updateCuentaFinanciera']);
 
     // Export
     Route::get('export/secodi/funnel', [ExportController::class, 'secodiFunnel']);

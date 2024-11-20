@@ -13,6 +13,7 @@ class ConfiguracionCategoriaController extends Controller
     public function index()
     {
         $categorias = Categoria::all();
+
         return view('sistema.configuracion.categoria.index', compact('categorias'));
     }
 
@@ -43,7 +44,7 @@ class ConfiguracionCategoriaController extends Controller
                     'nombre.unique' => 'El "Nombre" ya se encuentra registrado.',
                 ]
             );
-            $categoria = new Categoria();
+            $categoria = new Categoria;
             $categoria->nombre = request('nombre');
             $categoria->estado = request('estado') === 'false' ? false : true;
             $categoria->save();
@@ -66,6 +67,7 @@ class ConfiguracionCategoriaController extends Controller
         $view = request('view');
         if ($view === 'edit-categoria') {
             $categoria = Categoria::find($id);
+
             return view('sistema.configuracion.categoria.edit', compact('categoria'));
         }
     }

@@ -24,6 +24,7 @@ class Create extends Component
     {
         $notificaciontipos = Notificaciontipo::whereBetween('id', [2, 3])->get();
         $fecha = now()->format('Y-m-d');
+
         return view('components.sistema.notificacion.create', compact('notificaciontipos', 'fecha'));
     }
 }

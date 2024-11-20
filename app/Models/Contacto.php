@@ -10,7 +10,8 @@ class Contacto extends Model
     use HasFactory;
 
     // Relación uno a muchos inversa
-    public function cliente() {
+    public function cliente()
+    {
         return $this->belongsTo(Cliente::class);
     }
 }

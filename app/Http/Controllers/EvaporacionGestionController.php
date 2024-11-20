@@ -16,6 +16,7 @@ class EvaporacionGestionController extends Controller
             ->whereNotNull('comentario_gestion')
             ->orderBy('comentario_gestion_estado')
             ->paginate(20);
+
         return view('sistema.evaporacion.gestion.index', compact('notificacions'));
     }
 
@@ -48,9 +49,10 @@ class EvaporacionGestionController extends Controller
      */
     public function edit(string $id)
     {
-        $view =request('view');
+        $view = request('view');
         if ($view === 'detalle') {
             $notificacion = Notificacion::find($id);
+
             return view('sistema.evaporacion.gestion.detalle', compact('notificacion'));
         }
     }
@@ -68,6 +70,7 @@ class EvaporacionGestionController extends Controller
 
             // Establecer el mensaje de éxito en la sesión
             session()->flash('success', 'Gestión de evaporación creado correctamente');
+
             return response()->json(['redirect' => true]);
         }
     }

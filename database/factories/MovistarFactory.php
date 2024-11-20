@@ -25,7 +25,7 @@ class MovistarFactory extends Factory
             'ejecutivo_salesforce' => $this->faker->text(8),
             'agencia' => $this->faker->company,
             'clientetipo_id' => 1,
-            'cliente_id' => Cliente::all()->random()->id
+            'cliente_id' => Cliente::all()->random()->id,
         ];
     }
 }

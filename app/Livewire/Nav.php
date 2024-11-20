@@ -9,6 +9,7 @@ class Nav extends Component
     public function render()
     {
         $user = auth()->user();
+
         return view('livewire.nav', compact('user'));
     }
 }

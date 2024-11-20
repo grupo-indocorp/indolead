@@ -2,7 +2,6 @@
 
 namespace App\View\Components\Sistema\Cliente;
 
-use App\Models\Producto;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
