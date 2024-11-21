@@ -10,6 +10,7 @@ use App\Http\Controllers\ConfiguracionExcelController;
 use App\Http\Controllers\ConfiguracionFichaClienteController;
 use App\Http\Controllers\ConfiguracionProductoController;
 use App\Http\Controllers\ConfiguracionSistemaController;
+use App\Http\Controllers\CuentafinancieraController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EquipoController;
 use App\Http\Controllers\EvaporacionController;
@@ -62,8 +63,10 @@ Route::middleware([
         'cliente-consultor' => ClienteConsultorController::class,
         'cliente-gestion' => ClienteGestionController::class,
         // evaporacion
-        'evaporacion' => EvaporacionController::class,
-        'evaporacion-gestion' => EvaporacionGestionController::class,
+        // 'evaporacion' => EvaporacionController::class,
+        // 'evaporacion-gestion' => EvaporacionGestionController::class,
+
+        'cuentas-financieras' => CuentafinancieraController::class,
         // Configuraciones
         'configuracion' => ConfiguracionController::class,
         'configuracion-sistema' => ConfiguracionSistemaController::class,
