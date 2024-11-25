@@ -14,6 +14,7 @@ class IndotechFunnelExport implements FromQuery, WithHeadings, WithMapping
     use Exportable;
 
     protected $filtro;
+
     protected $user;
 
     public function __construct($filtro, $user)
@@ -25,6 +26,7 @@ class IndotechFunnelExport implements FromQuery, WithHeadings, WithMapping
     public function query()
     {
         $where = Helpers::filtroExportCliente(json_decode($this->filtro), $this->user);
+
         return Exportcliente::query()->where($where);
     }
 

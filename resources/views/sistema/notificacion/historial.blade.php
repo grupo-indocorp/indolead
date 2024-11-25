@@ -1,4 +1,4 @@
-<x-sistema.modal title="Notificaciones" dialog_id="dialog">
+<x-sistema.modal class="" style="width: 500px;" title="Notificaciones">
     <div class="p-2">
         <div class="timeline timeline-one-side">
             @foreach ($notificaciones as $notificacion)

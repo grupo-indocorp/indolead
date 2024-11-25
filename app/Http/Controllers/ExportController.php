@@ -12,6 +12,7 @@ class ExportController extends Controller
         $filtro = request('filtro');
         $user = auth()->user();
         $nameExport = 'Secodi.xlsx';
+
         return (new SecodiFunnelExport($filtro, $user))->download($nameExport);
     }
 
@@ -20,6 +21,7 @@ class ExportController extends Controller
         $filtro = request('filtro');
         $user = auth()->user();
         $nameExport = 'Indotech.xlsx';
+
         return (new IndotechFunnelExport($filtro, $user))->download($nameExport);
     }
 }

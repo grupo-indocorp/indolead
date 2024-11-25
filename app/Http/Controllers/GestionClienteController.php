@@ -7,20 +7,14 @@ use App\Helpers\Helpers;
 use App\Http\Requests\ClienteRequest;
 use App\Imports\ClientesImport;
 use App\Models\Cliente;
-use App\Models\Comentario;
-use App\Models\Contacto;
 use App\Models\Equipo;
 use App\Models\Etapa;
-use App\Models\Movistar;
 use App\Models\Sede;
 use App\Models\User;
-use App\Models\Venta;
 use App\Services\ClienteService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
-use Illuminate\Support\Str;
 
 class GestionClienteController extends Controller
 {
@@ -111,7 +105,7 @@ class GestionClienteController extends Controller
         $etapas = Etapa::all();
 
         $where = [];
-        $where[] = ['ruc', 'LIKE', $filtro_ruc . '%'];
+        $where[] = ['ruc', 'LIKE', $filtro_ruc.'%'];
         if ($filtro_etapa_id != 0) {
             $where[] = ['etapa_id', $filtro_etapa_id];
         }
@@ -130,10 +124,10 @@ class GestionClienteController extends Controller
             }
         }
         if (isset($filtro_fecha_desde)) {
-            $where[] = ['fecha_gestion', '>=', $filtro_fecha_desde . ' 00:00:00'];
+            $where[] = ['fecha_gestion', '>=', $filtro_fecha_desde.' 00:00:00'];
         }
         if (isset($filtro_fecha_hasta)) {
-            $where[] = ['fecha_gestion', '<=', $filtro_fecha_hasta . ' 23:59:59'];
+            $where[] = ['fecha_gestion', '<=', $filtro_fecha_hasta.' 23:59:59'];
         }
         if ($user->hasRole('gerente comercial') || $user->hasRole('supervisor') || $user->hasRole('ejecutivo') || $user->hasRole('jefe comercial')) {
             $where[] = ['sede_id', $user->sede_id];
@@ -171,7 +165,7 @@ class GestionClienteController extends Controller
                 }
             }
         }
-        
+
         return view('sistema.cliente.gestion.index', compact(
             'clientes',
             'data_etapas',

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Cliente;
 use App\Models\Equipo;
 use App\Models\Sede;
+use App\Models\Tipodocumento;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
@@ -24,6 +25,7 @@ class ListaUsuarioController extends Controller
             });
         }
         $users = $users->orderByDesc('id')->get();
+
         return view('sistema.lista_usuario.index', compact('users'));
     }
 
@@ -36,7 +38,14 @@ class ListaUsuarioController extends Controller
             $sedes = Sede::all();
             $roles = Role::all();
             $equipos = Equipo::all();
-            return view('sistema.lista_usuario.create', compact('sedes', 'roles', 'equipos'));
+            $tipodocumentos = Tipodocumento::all();
+
+            return view('sistema.lista_usuario.create', compact(
+                'sedes',
+                'roles',
+                'equipos',
+                'tipodocumentos'
+            ));
         }
     }
 
@@ -45,29 +54,34 @@ class ListaUsuarioController extends Controller
      */
     public function store(Request $request)
     {
-        if (request('view') == 'store') {
+        $view = request('view');
+        if ($view === 'store') {
             $request->validate([
-                'name' => 'required|bail',
-                'email' => 'required|email|unique:users|bail',
-                'password' => 'required|min:8|bail',
-                'sede_id' => 'required|bail',
-                'role_id' => 'required|bail',
+                'first_name' => 'required',
+                'first_surname' => 'required',
+                'personal_phone' => 'required',
+                'personal_email' => 'required|email',
+                'tipodocumento_id' => 'required',
+                'identity_document' => 'required',
+                'sede_id' => 'required',
+                'role_id' => 'required',
             ],
-            [
-                'name.required' => 'El "Nombre" es obligatorio.',
-                'email.required' => 'El "Correo" es obligatorio.',
-                'email.email' => 'El "Correo" no es válido, (email@example.com).',
-                'email.unique' => 'El "Correo" debe ser único en los Usuarios.',
-                'password.required' => 'La "Contraseña" es obligatorio.',
-                'password.min' => 'La "Contraseña" debe contener como mínimo 8 caracteres.',
-                'sede_id.required' => 'La "Sede" es obligatorio.',
-                'role_id.required' => 'El "Rol" es obligatorio.',
-            ]);
+                [
+                    'first_name.required' => 'El "Nombre" es obligatorio.',
+                    'first_surname.required' => 'El "Apellido Paterno" es obligatorio.',
+                    'personal_phone.required' => 'El "Celular" es obligatorio.',
+                    'personal_email.required' => 'El "Correo Electrónico" es obligatorio.',
+                    'personal_email.email' => 'El "Correo" no es válido, (email@example.com).',
+                    'tipodocumento_id.required' => 'El "Tipo de Documento" es obligatorio.',
+                    'identity_document.required' => 'El "Nro. de Identificación" es obligatorio.',
+                    'sede_id.required' => 'La "Sede" es obligatorio.',
+                    'role_id.required' => 'El "Rol" es obligatorio.',
+                ]);
             // Si es Ejecutivo, obligar Equipo
-            if (request('role_id') === '4') {
+            if (request('roleNombre') === 'ejecutivo') {
                 $request->validate(
                     [
-                        'equipo_id' => 'required|bail',
+                        'equipo_id' => 'required',
                     ],
                     [
                         'equipo_id.required' => 'El "Equipo" es obligatorio.',
@@ -75,18 +89,38 @@ class ListaUsuarioController extends Controller
                 );
             }
             $role = Role::find(request('role_id'));
-            $user = new User;
-            $user->name = request('name');
-            $user->email = request('email');
-            $user->identity_document = request('identity_document') ?? '';
-            $user->password = bcrypt(request('password'));
-            $user->sede_id = request('sede_id');
+
+            $first_name = strtolower(request('first_name'));
+            $second_name = strtolower(request('second_name')) ?? '';
+            $first_surname = strtolower(request('first_surname'));
+            $second_surname = strtolower(request('second_surname')) ?? '';
+            $name = $first_name.' '.$second_name.' '.$first_surname.' '.$second_surname;
+            $email = str_replace(' ', '', $first_name).'.'.str_replace(' ', '', $first_surname).'@indotechsac.com';
+            $user = User::create([
+                'first_name' => $first_name,
+                'second_name' => $second_name,
+                'first_surname' => $first_surname,
+                'second_surname' => $second_surname,
+                'name' => strtolower($name),
+                'personal_phone' => request('personal_phone'),
+                'personal_email' => strtolower(request('personal_email')),
+                'tipodocumento_id' => request('tipodocumento_id'),
+                'identity_document' => request('identity_document'),
+                'email' => $email,
+                'password' => bcrypt(request('identity_document')),
+                'sede_id' => request('sede_id'),
+            ]);
             $user->assignRole($role->name);
-            $user->save();
+
             // Si es Ejecutivo, registrar Equipo
-            if (request('role_id') === '4') {
+            if (request('roleNombre') === 'ejecutivo') {
                 $user->equipos()->attach(request('equipo_id'));
             }
+
+            // Establecer el mensaje de éxito en la sesión
+            session()->flash('success', 'Usuario creado correctamente');
+
+            return response()->json(['redirect' => true]);
         }
     }
 
@@ -106,12 +140,15 @@ class ListaUsuarioController extends Controller
         $user = User::find($id);
         if (request('view') == 'edit') {
             $sedes = Sede::all();
+
             return view('sistema.lista_usuario.edit', compact('user', 'sedes'));
         } elseif (request('view') == 'edit-asignar-equipo') {
             $equipos = Equipo::all();
+
             return view('sistema.lista_usuario.asignar-equipo', compact('user', 'equipos'));
         } elseif (request('view') == 'edit-asignar-rol') {
             $roles = Role::all();
+
             return view('sistema.lista_usuario.asignar-rol', compact('user', 'roles'));
         }
     }
@@ -128,19 +165,19 @@ class ListaUsuarioController extends Controller
                 'email' => 'required|bail',
                 'sede_id' => 'required|bail',
             ],
-            [
-                'name.required' => 'El "Nombre" es obligatorio.',
-                'email.required' => 'El "Correo" es obligatorio.',
-                'sede_id.required' => 'La "Sede" es obligatorio.',
-            ]);
+                [
+                    'name.required' => 'El "Nombre" es obligatorio.',
+                    'email.required' => 'El "Correo" es obligatorio.',
+                    'sede_id.required' => 'La "Sede" es obligatorio.',
+                ]);
             if (request('password') != '') {
                 $request->validate([
                     'password' => 'required|min:8|bail',
                 ],
-                [
-                    'password.required' => 'La "Contraseña" es obligatorio.',
-                    'password.min' => 'La "Contraseña" debe tener 8 dígitos como mínimo.',
-                ]);
+                    [
+                        'password.required' => 'La "Contraseña" es obligatorio.',
+                        'password.min' => 'La "Contraseña" debe tener 8 dígitos como mínimo.',
+                    ]);
             }
             $user = User::find($id);
             $user->name = request('name');
@@ -155,16 +192,16 @@ class ListaUsuarioController extends Controller
             $request->validate([
                 'equipo_id' => 'required|bail',
             ],
-            [
-                'equipo_id.required' => 'El "Equipo" es obligatorio.',
-            ]);
-            if (!$user->equipos->isEmpty()) {
-                for ($i=0; $i < count($user->equipos); $i++) {
+                [
+                    'equipo_id.required' => 'El "Equipo" es obligatorio.',
+                ]);
+            if (! $user->equipos->isEmpty()) {
+                for ($i = 0; $i < count($user->equipos); $i++) {
                     $user->equipos()->detach($user->equipos[$i]->id);
                 }
             }
             $user->equipos()->attach(request('equipo_id'));
-            if (!$user->clientes->isEmpty()) {
+            if (! $user->clientes->isEmpty()) {
                 foreach ($user->clientes as $value) {
                     $cliente = Cliente::find($value->id);
                     $cliente->equipo_id = request('equipo_id');
@@ -175,9 +212,9 @@ class ListaUsuarioController extends Controller
             $request->validate([
                 'role_id' => 'required|bail',
             ],
-            [
-                'role_id.required' => 'El "Rol" es obligatorio.',
-            ]);
+                [
+                    'role_id.required' => 'El "Rol" es obligatorio.',
+                ]);
             $role = Role::find(request('role_id'));
             foreach ($user->getRoleNames() as $value) {
                 $user->removeRole($value);
@@ -188,10 +225,10 @@ class ListaUsuarioController extends Controller
                 $request->validate([
                     'password' => 'required|min:8|bail',
                 ],
-                [
-                    'password.required' => 'La "Contraseña" es obligatorio.',
-                    'password.min' => 'La "Contraseña" debe tener 8 dígitos como mínimo.',
-                ]);
+                    [
+                        'password.required' => 'La "Contraseña" es obligatorio.',
+                        'password.min' => 'La "Contraseña" debe tener 8 dígitos como mínimo.',
+                    ]);
                 $user = User::find($id);
                 $user->password = bcrypt(request('password'));
                 $user->save();

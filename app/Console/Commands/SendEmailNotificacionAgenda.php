@@ -29,7 +29,7 @@ class SendEmailNotificacionAgenda extends Command
      */
     public function handle()
     {
-        $fecha = new DateTime();
+        $fecha = new DateTime;
         $notificaciones = Notificacion::where('fecha', '<=', $fecha->format('Y-m-d'))->where('notificacion', false)->get();
         foreach ($notificaciones as $notificacion) {
             $hora_programada = new DateTime($notificacion->hora);

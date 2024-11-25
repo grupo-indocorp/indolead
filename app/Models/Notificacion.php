@@ -10,15 +10,18 @@ class Notificacion extends Model
     use HasFactory;
 
     // Relación uno a muchos inversa
-    public function notificaciontipo() {
+    public function notificaciontipo()
+    {
         return $this->belongsTo(Notificaciontipo::class);
     }
 
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function cliente() {
+    public function cliente()
+    {
         return $this->belongsTo(Cliente::class);
     }
 }

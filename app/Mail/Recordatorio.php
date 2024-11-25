@@ -3,7 +3,6 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
@@ -12,6 +11,7 @@ use Illuminate\Queue\SerializesModels;
 class Recordatorio extends Mailable
 {
     use Queueable, SerializesModels;
+
     public $notificacion;
 
     /**
@@ -19,7 +19,7 @@ class Recordatorio extends Mailable
      */
     public function __construct($notificacion)
     {
-        $this->notificacion = $notificacion;    
+        $this->notificacion = $notificacion;
     }
 
     /**
@@ -28,6 +28,7 @@ class Recordatorio extends Mailable
     public function envelope(): Envelope
     {
         $recordatorio = $this->notificacion->asunto;
+
         return new Envelope(
             subject: $recordatorio,
         );
@@ -46,8 +47,9 @@ class Recordatorio extends Mailable
         } elseif ($notify->notificaciontipo_id == 3) { // llamada
             $titulo = "Le recordamos que tiene una llamada programada, $notify->fecha - $notify->hora";
         } else {
-            $titulo = "";
+            $titulo = '';
         }
+
         return new Content(
             markdown: 'emails.recordatorio',
             with: [

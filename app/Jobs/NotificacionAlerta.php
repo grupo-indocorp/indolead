@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Mail;
 class NotificacionAlerta implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
     protected $notificacion;
 
     /**
@@ -29,7 +30,7 @@ class NotificacionAlerta implements ShouldQueue
      */
     public function handle(): void
     {
-        Mail::to($this->notificacion->user->email)->send(new MailNotificacion());
+        Mail::to($this->notificacion->user->email)->send(new MailNotificacion);
         $notificacion = Notificacion::find($this->notificacion->id);
         $notificacion->notificacion = true;
         $notificacion->save();

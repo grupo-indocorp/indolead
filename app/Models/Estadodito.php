@@ -10,7 +10,8 @@ class Estadodito extends Model
     use HasFactory;
 
     //Relación uno a muchos
-    public function movistars() {
+    public function movistars()
+    {
         return $this->hasMany(Movistar::class);
     }
 }

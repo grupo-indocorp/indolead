@@ -10,17 +10,17 @@ use App\Models\Etapa;
 use App\Models\Exportcliente;
 use App\Models\Movistar;
 use App\Models\Venta;
-use Carbon\Carbon;
 
 class ClienteService
 {
-    public function listarClientesPorRol($user) {
+    public function listarClientesPorRol($user)
+    {
         ini_set('memory_limit', '2048M');
         ini_set('max_execution_time', 120);
         if ($user->hasRole(['administrador', 'gerente comercial'])) {
             $clientes = Cliente::with(['etapas', 'user', 'user.equipos', 'comentarios'])->orderByDesc('id')->get();
         } elseif ($user->hasRole(['supervisor'])) {
-            $ejecutivos = array();
+            $ejecutivos = [];
             $equipo = Equipo::find($user->equipo->id);
             foreach ($equipo->users as $ejecutivo) {
                 if ($ejecutivo->equipos()->orderByDesc('pivot_id')->first()->id == $equipo->id) {
@@ -33,17 +33,19 @@ class ClienteService
         } else {
             $clientes = $user->clientes()->with(['etapas', 'user', 'user.equipos', 'comentarios'])->orderByDesc('id')->get();
         }
+
         return $clientes;
     }
 
-    public function conteoClientesPorEtapa($user) {
+    public function conteoClientesPorEtapa($user)
+    {
         $clientes_data = $this->listarClientesPorRol($user);
         $countData = [];
         $conteoClientesPorEtapa = [];
         foreach ($clientes_data as $cliente) {
             // $etapaId = $cliente->etapas()->orderByDesc('pivot_id')->first()->id;
             $etapaId = $cliente->etapas->last()->id;
-            if (!isset($countData[$etapaId])) {
+            if (! isset($countData[$etapaId])) {
                 $countData[$etapaId] = 1;
             } else {
                 $countData[$etapaId]++;
@@ -59,13 +61,14 @@ class ClienteService
                 'color' => $etapa->color,
             ];
         }
+
         return $conteoClientesPorEtapa;
     }
 
-    public function ultimaGestionCliente($comentario) {
+    public function ultimaGestionCliente($comentario) {}
 
-    }
-    public function organizarListaCliente($data, $etapa_id = 0) {
+    public function organizarListaCliente($data, $etapa_id = 0)
+    {
         $clientes = [];
         if ($etapa_id != 0) {
             foreach ($data as $cliente) {
@@ -116,28 +119,35 @@ class ClienteService
                 ];
             }
         }
+
         return $clientes;
     }
 
-    public function listarClientes($user) {
+    public function listarClientes($user)
+    {
         $data = $this->listarClientesPorRol($user);
         $clientes = $this->organizarListaCliente($data);
+
         return $clientes;
     }
 
-    public function listarClientesPorEtapa($user, $etapa_id) {
+    public function listarClientesPorEtapa($user, $etapa_id)
+    {
         $data = $this->listarClientesPorRol($user);
         $clientes = $this->organizarListaCliente($data, $etapa_id);
+
         return $clientes;
     }
 
     public function consultorCliente($busqueda)
     {
         $cliente = Cliente::with(['user', 'equipo', 'etapa'])->where('ruc', $busqueda)->first();
+
         return $cliente;
     }
 
-    public function obtenerClienteDetalle($user, $cliente_id) {
+    public function obtenerClienteDetalle($user, $cliente_id)
+    {
         $cliente = Cliente::find($cliente_id);
         $data_contactos = $cliente->contactos()->orderBy('contactos.id', 'desc')->limit(8)->get();
         $contactos = [];
@@ -181,7 +191,7 @@ class ClienteService
             ];
         }
         $data_notificacions = $cliente->notificacions()->orderBy('notificacions.id', 'desc')->limit(2)->get();
-        $notificacions =  $data_notificacions != '[]' ? $data_notificacions : false;
+        $notificacions = $data_notificacions != '[]' ? $data_notificacions : false;
         $data = [
             'cliente' => $cliente,
             'contactos' => $contactos,
@@ -190,10 +200,12 @@ class ClienteService
             'ventas' => $cliente->ventas->last(),
             'notificacion' => $notificacions,
         ];
+
         return $data;
     }
 
-    public function etapasConConteo() {
+    public function etapasConConteo()
+    {
         $where = [];
         $user = auth()->user();
         if ($user->hasRole('ejecutivo')) {
@@ -240,10 +252,12 @@ class ClienteService
             'data_etapas' => $data_etapas,
             'count_total' => $count_total,
         ];
+
         return $data;
     }
 
-    public function clientesPorRol($user) {
+    public function clientesPorRol($user)
+    {
         $where = [];
         if ($user->hasRole('ejecutivo')) {
             $where[] = ['user_id', $user->id];
@@ -255,6 +269,7 @@ class ClienteService
             $where = [];
         }
         $clientes = Cliente::with(['user', 'equipo', 'sede', 'etapa', 'comentarios'])->where($where)->paginate(2);
+
         return $clientes;
     }
 
@@ -263,7 +278,7 @@ class ClienteService
     {
         $user = auth()->user();
         // Ciente
-        $cliente = new Cliente();
+        $cliente = new Cliente;
         $cliente->ruc = request('ruc');
         $cliente->razon_social = request('razon_social');
         $cliente->ciudad = request('ciudad');
@@ -279,7 +294,7 @@ class ClienteService
         $cliente->etapas()->attach(1);
         // Contacto
         if (request('dni') != '') {
-            $contacto = new Contacto();
+            $contacto = new Contacto;
             $contacto->dni = request('dni');
             $contacto->nombre = request('nombre');
             $contacto->celular = request('celular');
@@ -292,7 +307,7 @@ class ClienteService
         }
         // Comentario
         $etapa = Etapa::find(request('etapa_id'));
-        $comentario = new Comentario();
+        $comentario = new Comentario;
         $comentario->comentario = request('comentario');
         $comentario->detalle = 'Cambio de etapa a '.$etapa->nombre;
         $comentario->user_id = $user->id;
@@ -300,7 +315,7 @@ class ClienteService
         $comentario->etiqueta_id = 1; // etiqueta_id, 1=nuevo;
         $comentario->save();
         // Movistar
-        $movistar = new Movistar();
+        $movistar = new Movistar;
         $movistar->linea_claro = request('linea_claro');
         $movistar->linea_entel = request('linea_entel');
         $movistar->linea_bitel = request('linea_bitel');
@@ -315,9 +330,9 @@ class ClienteService
         // Etapa
         $cliente->etapas()->attach(request('etapa_id'));
         // Cargo
-        if (!is_null(request('dataCargo'))) {
+        if (! is_null(request('dataCargo'))) {
             $venta_total = 0;
-            $venta = new Venta();
+            $venta = new Venta;
             $venta->cliente_id = $cliente->id;
             $venta->user_id = $user->id;
             $venta->save();
@@ -392,12 +407,12 @@ class ClienteService
         // Comentarios
         $comentarios = $value->comentarios()->latest()->take(5)->get();
         $comentariosArray = $comentarios->toArray();
-        $textoPredeterminado = "";
+        $textoPredeterminado = '';
         while (count($comentariosArray) < 5) {
             $comentariosArray[] = ['comentario' => $textoPredeterminado];
         }
 
-        $exportCliente = new Exportcliente();
+        $exportCliente = new Exportcliente;
         $exportCliente->ruc = $value->ruc;
         $exportCliente->razon_social = $value->razon_social;
         $exportCliente->ciudad = $value->ciudad;

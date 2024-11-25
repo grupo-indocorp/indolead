@@ -10,9 +10,9 @@
         <div class="">
             <div class="hidden md:block">
                 <div class="ml-4 flex items-center md:ml-6">
-                    <button type="button" class="ms-2 btn bg-gradient-primary m-0 py-2 px-3 text-xs" onclick="pendienteNotificacion()">
+                    <x-ui.button type="button" class="text-xs" onclick="pendienteNotificacion()">
                         {{ count(Helpers::NotificacionRecordatorio()) }} <i class="fa-solid fa-bell"></i>
-                    </button>
+                    </x-ui.button>
                     <div class="relative ml-3" x-data="{ open:false }">
                         <div class="w-[2.4rem]">
                             <button x-on:click="open = true" type="button" class="flex max-w-xs items-center rounded-full bg-blue-950 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-950" id="user-menu-button" aria-expanded="false" aria-haspopup="true">

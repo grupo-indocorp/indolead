@@ -17,7 +17,7 @@ class Etapa extends Model
 
     // Relación muchos a muchos
     public function clientes() // cambiar a clientesHistorial
-    { 
+    {
         return $this->belongsToMany(Cliente::class)->withPivot('id')->withTimestamps();
     }
 }

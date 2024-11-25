@@ -9,14 +9,12 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 class ClientesImport implements ToModel, WithHeadingRow
 {
     /**
-    * @param array $row
-    *
-    * @return \Illuminate\Database\Eloquent\Model|null
-    */
+     * @return \Illuminate\Database\Eloquent\Model|null
+     */
     public function model(array $row)
     {
         return new Cliente([
-            'ruc' => (string)$row['ruc'],
+            'ruc' => (string) $row['ruc'],
             'razon_social' => $row['razon_social'],
             'ciudad' => $row['ciudad'] ?? '',
         ]);

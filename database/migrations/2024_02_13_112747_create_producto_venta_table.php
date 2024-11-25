@@ -21,7 +21,7 @@ return new class extends Migration
             $table->foreignId('venta_id')->constrained();
             $table->timestamps();
         });
-        
+
     }
 
     /**

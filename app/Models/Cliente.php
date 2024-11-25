@@ -14,28 +14,39 @@ class Cliente extends Model
     protected $guarded = [];
 
     //Relación uno a muchos
-    public function comentarios() {
+    public function comentarios()
+    {
         return $this->hasMany(Comentario::class);
     }
 
-    public function contactos() {
+    public function contactos()
+    {
         return $this->hasMany(Contacto::class);
     }
 
-    public function movistars() {
+    public function movistars()
+    {
         return $this->hasMany(Movistar::class);
     }
 
-    public function ventas() {
+    public function ventas()
+    {
         return $this->hasMany(Venta::class);
     }
 
-    public function notificacions() {
+    public function notificacions()
+    {
         return $this->hasMany(Notificacion::class);
     }
 
+    public function cuentas_financieras()
+    {
+        return $this->hasMany(Cuentafinanciera::class);
+    }
+
     // Relación uno a muchos inversa
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
@@ -60,11 +71,13 @@ class Cliente extends Model
     }
 
     // Relación muchos a muchos
-    public function usersHistorial() {
+    public function usersHistorial()
+    {
         return $this->belongsToMany(User::class)->withTimestamps();
     }
 
-    public function etapas() {
+    public function etapas()
+    {
         return $this->belongsToMany(Etapa::class)->withPivot('id')->withTimestamps();
     }
 

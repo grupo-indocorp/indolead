@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -57,6 +56,8 @@ class RoleSeeder extends Seeder
         Permission::create(['name' => 'sistema.reporte']);
         Permission::create(['name' => 'sistema.reporte.cliente']);
         Permission::create(['name' => 'sistema.evaporacion']);
+        Permission::create(['name' => 'sistema.evaporacion.subir']);
+        Permission::create(['name' => 'sistema.evaporacion-gestion']);
 
         $sistema->syncPermissions(Permission::all());
         $gerente_general->syncPermissions([

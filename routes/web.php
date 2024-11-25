@@ -10,9 +10,11 @@ use App\Http\Controllers\ConfiguracionExcelController;
 use App\Http\Controllers\ConfiguracionFichaClienteController;
 use App\Http\Controllers\ConfiguracionProductoController;
 use App\Http\Controllers\ConfiguracionSistemaController;
+use App\Http\Controllers\CuentafinancieraController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EquipoController;
 use App\Http\Controllers\EvaporacionController;
+use App\Http\Controllers\EvaporacionGestionController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\FunnelController;
 use App\Http\Controllers\GestionClienteController;
@@ -27,6 +29,11 @@ use App\Http\Controllers\ReporteController;
 use App\Http\Controllers\RoleController;
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
+
+// Ruta para la página de componentes
+Route::get('/components', function () {
+    return view('components');
+});
 
 Route::get('/', [HomeController::class, 'home']);
 
@@ -51,11 +58,15 @@ Route::middleware([
         'reporte_cliente' => ReporteClienteController::class,
         'reporte_cliente_nuevo' => ReporteClienteNuevoController::class,
         'producto' => ProductoController::class,
-        'evaporacion' => EvaporacionController::class,
         // Cliente
         'cliente' => ClienteController::class,
         'cliente-consultor' => ClienteConsultorController::class,
         'cliente-gestion' => ClienteGestionController::class,
+        // evaporacion
+        // 'evaporacion' => EvaporacionController::class,
+        // 'evaporacion-gestion' => EvaporacionGestionController::class,
+
+        'cuentas-financieras' => CuentafinancieraController::class,
         // Configuraciones
         'configuracion' => ConfiguracionController::class,
         'configuracion-sistema' => ConfiguracionSistemaController::class,
@@ -69,13 +80,7 @@ Route::middleware([
     Route::post('clientes/import/', [GestionClienteController::class, 'import']);
 
     // Actualizar datos de clientes a la nueva tabla export_cliente
-    Route::get('update_export_cliente', [ConfiguracionController::class, 'updateExportCliente']);
-    Route::get('update_uno', [ConfiguracionController::class, 'updateUno']);
-    Route::get('update_dos', [ConfiguracionController::class, 'updateDos']);
-    Route::get('update_tres', [ConfiguracionController::class, 'updateTres']);
-    Route::get('update_cuatro', [ConfiguracionController::class, 'updateCuatro']);
-    Route::get('update_cinco', [ConfiguracionController::class, 'updateCinco']);
-    Route::get('update_seis', [ConfiguracionController::class, 'updateSeis']);
+    Route::get('update-cuentafinanciera', [ConfiguracionController::class, 'updateCuentaFinanciera']);
 
     // Export
     Route::get('export/secodi/funnel', [ExportController::class, 'secodiFunnel']);

@@ -27,6 +27,7 @@ class EvaporacionController extends Controller
             'fechafin' => request('filtro_fechafin') ?? null,
         ];
         $evaporacion = $this->evaporacionService->evaporacionGet($user, $filter);
+
         return view('sistema.evaporacion.index', compact('evaporacion'));
     }
 
@@ -54,6 +55,7 @@ class EvaporacionController extends Controller
         $view = request('view');
         if ($view === 'show-evaporacion') {
             $evaporacion = Evaporacion::find($id);
+
             return view('sistema.evaporacion.detalle', compact('evaporacion'));
         }
     }

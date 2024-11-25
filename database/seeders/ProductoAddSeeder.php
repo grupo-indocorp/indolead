@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Producto;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class ProductoAddSeeder extends Seeder
@@ -14,10 +13,10 @@ class ProductoAddSeeder extends Seeder
     public function run(): void
     {
         Producto::factory()->create([
-            'nombre' => 'Avanzada 2'
+            'nombre' => 'Avanzada 2',
         ]);
         Producto::factory()->create([
-            'nombre' => 'Avanzada 3'
+            'nombre' => 'Avanzada 3',
         ]);
     }
 }

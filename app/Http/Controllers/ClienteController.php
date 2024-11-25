@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ClienteRequest;
-use App\Models\Cliente;
 use App\Models\Etapa;
 use App\Services\ClienteService;
 use Illuminate\Http\Request;
@@ -33,6 +32,7 @@ class ClienteController extends Controller
         $view = request('view');
         if ($view === 'create') {
             $etapas = Etapa::all();
+
             return view('sistema.cliente.create', compact('etapas'));
         }
     }
@@ -66,6 +66,7 @@ class ClienteController extends Controller
 
             // Establecer el mensaje de éxito en la sesión
             session()->flash('success', 'Cliente creado correctamente');
+
             return response()->json(['redirect' => true]);
         }
     }

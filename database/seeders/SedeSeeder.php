@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Sede;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class SedeSeeder extends Seeder
@@ -14,11 +13,11 @@ class SedeSeeder extends Seeder
     public function run(): void
     {
         Sede::factory()->create([
-            'nombre' => 'Huancayo'
+            'nombre' => 'Huancayo',
         ]);
 
         Sede::factory()->create([
-            'nombre' => 'Lima'
+            'nombre' => 'Lima',
         ]);
     }
 }

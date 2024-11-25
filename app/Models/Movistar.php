@@ -10,23 +10,28 @@ class Movistar extends Model
     use HasFactory;
 
     // Relación uno a muchos inversa
-    public function cliente() {
+    public function cliente()
+    {
         return $this->belongsTo(Cliente::class);
     }
 
-    public function clientetipo() {
+    public function clientetipo()
+    {
         return $this->belongsTo(Clientetipo::class);
     }
 
-    public function estadowick() {
+    public function estadowick()
+    {
         return $this->belongsTo(Estadowick::class);
     }
 
-    public function estadodito() {
+    public function estadodito()
+    {
         return $this->belongsTo(Estadodito::class);
     }
 
-    public function agencia() {
+    public function agencia()
+    {
         return $this->belongsTo(Agencia::class);
     }
 }

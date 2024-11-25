@@ -39,9 +39,11 @@ class ProductoController extends Controller
         $view = request('view');
         if ($view === 'show-producto-select') {
             $productos = Producto::all();
+
             return $productos;
         } elseif ($view === 'show-producto-table') {
             $producto = Producto::find(request('producto_id'));
+
             return $producto;
         }
     }
