@@ -51,9 +51,11 @@ class CuentafinancieraController extends Controller
         $view = request('view');
         if ($view === 'show-cuentafinanciera') {
             $cuentafinanciera = $this->cuentafinancieraService->cuentafinancieraDetalle($id);
+            $cantidadCuentafinancieras = Cuentafinanciera::where('cliente_id', $cuentafinanciera->cliente_id)->get();
 
             return view('sistema.cuentafinanciera.detalle', compact(
-                'cuentafinanciera'
+                'cuentafinanciera',
+                'cantidadCuentafinancieras',
             ));
         }
     }

@@ -12,7 +12,18 @@
             <x-sistema.card>
                 <div class="flex gap-2">
                     <span class="text-base font-bold">CUENTA FINANCIERA:</span>
-                    <span class="text-base font-bold">{{ $cuentafinanciera->cuenta_financiera }}</span>
+                    <div class="form-group w-full">
+                        <select class="form-control uppercase"
+                            name="cuenta_financiera"
+                            id="cuenta_financiera">
+                            @foreach ($cantidadCuentafinancieras as $item)
+                                <option value="{{ $item->id }}"
+                                    @if ($item->id === $cuentafinanciera->id) selected @endif>
+                                    {{ $item->cuenta_financiera }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
                 <table>
                     <tr>

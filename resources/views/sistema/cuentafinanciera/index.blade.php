@@ -29,6 +29,7 @@
                         <tr>
                             <th>{{ __('RUC') }}</th>
                             <th>{{ __('RAZÓN SOCIAL') }}</th>
+                            <th>{{ __('CUENTA FINANCIERA') }}</th>
                             <th>{{ __('EECC') }}</th>
                             <th>{{ __('FECHA EVALUACIÓN') }}</th>
                             <th>{{ __('ESTADO') }}</th>
@@ -41,6 +42,7 @@
                             <tr>
                                 <td>{{ $item->cliente->ruc }}</td>
                                 <td>{{ substr($item->cliente->razon_social, 0, 45) }}</td>
+                                <td>{{ $item->cuenta_financiera }}</td>
                                 <td class="flex flex-col">
                                     <b>{{ $item->user->equipos->last()->nombre }}</b>
                                     <span>{{ $item->user->name }}</span>

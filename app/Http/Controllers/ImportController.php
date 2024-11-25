@@ -11,6 +11,6 @@ class ImportController extends Controller
     {
         Excel::import(new EvaporacionImport, request()->file('file'));
 
-        return redirect()->route('evaporacion.index')->with('success', 'Archivo importado exitosamente.');
+        return redirect()->route('cuentas-financieras.index')->with('success', 'Archivo importado exitosamente.');
     }
 }
