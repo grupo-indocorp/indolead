@@ -18,6 +18,7 @@
                             <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Razón Social</th>
                             <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">EECC</th>
                             <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Fecha de última Gestión</th>
+                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Etapa</th>
                             <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Días sin Gestión</th>
                             <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Solicitar</th>
                         </tr>
@@ -44,7 +45,12 @@
                                     <p class="text-xs text-secondary mb-0">{{ $cliente->user->name }}</p>
                                 </td>
                                 <td class="align-middle text-center">
-                                    <span class="text-secondary text-xs font-weight-normal">{{ $fecha_gestion->format('d/m/Y H:i:s A') }}</span>
+                                    <span class="text-secondary text-xs font-weight-normal">{{ $fecha_gestion->format('d/m/Y') }}</span>
+                                </td>
+                                <td class="align-middle text-center">
+                                    <span class="text-xs font-semibold font-se mb-0 px-3 py-1 rounded-lg" style="background-color: {{ $cliente->etapa->opacity }};">
+                                        {{ $cliente->etapa->nombre }}
+                                    </span>
                                 </td>
                                 <td class="align-middle text-center text-sm">
                                     @if ($dias >= $cliente->etapa->blindaje)

@@ -16,23 +16,20 @@ class ConfiguracionController extends Controller
         $evaporacions = Evaporacion::select('cuenta_financiera', 'ruc', 'identificacion_ejecutivo')
             ->groupBy('cuenta_financiera', 'ruc', 'identificacion_ejecutivo')
             ->get();
+        $count = 0;
         foreach ($evaporacions as $value) {
+            $count++;
             $cliente_id = Cliente::where('ruc', $value->ruc)->first()->id;
             $user = User::where('identity_document', $value->identificacion_ejecutivo)->first();
             if (!is_null($user)) {
                 Cuentafinanciera::insert([
                     'cuenta_financiera' => $value->cuenta_financiera,
-                    'fecha_evaluacion' => null,
-                    'estado_evaluacion' => null,
                     'user_id' => $user->id,
-                    'equipo_id' => null,
                     'cliente_id' => $cliente_id,
                 ]);
             }
         }
-        $cuentafinancieras = Cuentafinanciera::all();
-        dd($cuentafinancieras);
-        dd('aqui se actualizó cuenta financiera');
+        dd($count, 'aqui se actualizó cuenta financiera');
     }
 
     /**

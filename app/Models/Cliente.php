@@ -39,6 +39,11 @@ class Cliente extends Model
         return $this->hasMany(Notificacion::class);
     }
 
+    public function cuentas_financieras()
+    {
+        return $this->hasMany(Cuentafinanciera::class);
+    }
+
     // Relación uno a muchos inversa
     public function user()
     {

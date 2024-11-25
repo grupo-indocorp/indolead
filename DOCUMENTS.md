@@ -29,6 +29,8 @@ Seguimos de forma ordenada la migración e implmentación de datos
     php artisan migrate --path=/database/migrations/2024_11_12_130334_add_foreign_keys_to_detallepagousers_table.php
     php artisan migrate --path=/database/migrations/2024_11_14_130319_make_user_id_nullable_in_notificacions_table.php
     php artisan migrate --path=/database/migrations/2024_11_18_090548_add_comentario_gestion_to_notificacions_table.php
+    php artisan migrate --path=/database/migrations/2024_11_20_101455_create_cuentafinancieras_table.php
+    php artisan migrate --path=/database/migrations/2024_11_20_103403_add_cuentafinanciera_id_to_evaporacions_table.php
 ```
 
 Ejecutando tinker

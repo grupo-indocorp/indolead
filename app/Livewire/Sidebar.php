@@ -60,7 +60,7 @@ class Sidebar extends Component
             [
                 'icon' => 'fa-mug-hot',
                 'nombre' => 'Evaporacion',
-                'url' => 'evaporacion',
+                'url' => 'cuentas-financieras',
                 'can' => 'sistema.evaporacion',
             ],
             [

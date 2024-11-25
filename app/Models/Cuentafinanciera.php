@@ -17,4 +17,15 @@ class Cuentafinanciera extends Model
         'equipo_id',
         'cliente_id',
     ];
+
+    // Relación uno a muchos inversa
+    public function cliente()
+    {
+        return $this->belongsTo(cliente::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

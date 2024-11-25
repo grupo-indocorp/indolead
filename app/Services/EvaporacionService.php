@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Cuentafinanciera;
 use App\Models\Evaporacion;
 
 class EvaporacionService
@@ -9,10 +10,9 @@ class EvaporacionService
     /**
      * Funcion que regresar las evaporaciones segun el rol
      * ejecutivo y por defecto todo
-     *
-     * @param  object  $user
-     * @param  array  $filter
-     *                         ['estado']
+     * @param object  $user
+     * @param array  $filter
+     * ['estado', 'fechainicio', 'fechafin']
      * @return object $evaporacion
      */
     public function evaporacionGet($user, $filter = null)
