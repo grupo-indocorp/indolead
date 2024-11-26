@@ -52,7 +52,7 @@
                                 <td></td>
                                 <td>
                                     <span class="mx-3" data-bs-toggle="tooltip" data-bs-original-title="Detalle">
-                                        <a href="javascript:;" class="cursor-pointer" onclick="detalleCuentafinanciera({{ $item->id }})">
+                                        <a href="javascript:;" class="cursor-pointer" onclick="cuentafinancieraDetalle({{ $item->id }})">
                                             <i class="fa-solid fa-eyes"></i>
                                         </a>
                                     </span>
@@ -68,12 +68,12 @@
     @endsection
     @section('script')
         <script>
-            function detalleCuentafinanciera(cuentafinanciera_id) {
+            function cuentafinancieraDetalle(cuentafinanciera_id) {
                 $.ajax({
                     url: `{{ url('cuentas-financieras/${cuentafinanciera_id}') }}`,
                     method: "GET",
                     data: {
-                        view: 'show-cuentafinanciera',
+                        view: 'show-detalle',
                     },
                     success: function( result ) {
                         $('#contenedorModal').html(result);

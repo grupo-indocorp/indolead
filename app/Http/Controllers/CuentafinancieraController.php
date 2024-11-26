@@ -50,7 +50,7 @@ class CuentafinancieraController extends Controller
     public function show(string $id)
     {
         $view = request('view');
-        if ($view === 'show-cuentafinanciera') {
+        if ($view === 'show-detalle') {
             $cuentafinanciera = $this->cuentafinancieraService->cuentafinancieraDetalle($id);
             $cantidadCuentafinancieras = Cuentafinanciera::where('cliente_id', $cuentafinanciera->cliente_id)->get();
 
@@ -58,13 +58,21 @@ class CuentafinancieraController extends Controller
                 'cuentafinanciera',
                 'cantidadCuentafinancieras',
             ));
-        } elseif ($view === 'show-cuentafinanciera-productos') {
+        } elseif ($view === 'show-productos') {
             $cuentafinanciera = Cuentafinanciera::find($id);
             $productosEvaporacion = Evaporacion::where('cuenta_financiera', $cuentafinanciera->cuenta_financiera)->get();
 
             return view('sistema.cuentafinanciera.productos', compact(
-                'cuentafinanciera',
                 'productosEvaporacion',
+            ));
+        } elseif ($view === 'show-facturas') {
+            $cuentafinanciera = Cuentafinanciera::find($id);
+            $facturasEvaporacion = Evaporacion::where('cuenta_financiera', $cuentafinanciera->cuenta_financiera)
+                ->orderByDesc('id')
+                ->first();
+
+            return view('sistema.cuentafinanciera.facturas', compact(
+                'facturasEvaporacion',
             ));
         }
     }

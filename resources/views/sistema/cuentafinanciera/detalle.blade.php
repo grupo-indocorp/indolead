@@ -58,73 +58,9 @@
             </x-sistema.card>
         </section>
     
-        <section class="grid grid-cols-3 gap-2">
-            <x-sistema.card>
-                <p>Factura 1</p>
-                <table>
-                    <tr>
-                        <td>F. Emisión:</td>
-                        <td></td>
-                        <td>F. Venc.:</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Monto:</td>
-                        <td></td>
-                        <td>Deuda:</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Estado:</td>
-                        <td></td>
-                    </tr>
-                </table>
-            </x-sistema.card>
-            <x-sistema.card>
-                <p>Factura 2</p>
-                <table>
-                    <tr>
-                        <td>F. Emisión:</td>
-                        <td></td>
-                        <td>F. Venc.:</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Monto:</td>
-                        <td></td>
-                        <td>Deuda:</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Estado:</td>
-                        <td></td>
-                    </tr>
-                </table>
-            </x-sistema.card>
-            <x-sistema.card>
-                <p>Factura 3</p>
-                <table>
-                    <tr>
-                        <td>F. Emisión:</td>
-                        <td></td>
-                        <td>F. Venc.:</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Monto:</td>
-                        <td></td>
-                        <td>Deuda:</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Estado:</td>
-                        <td></td>
-                    </tr>
-                </table>
-            </x-sistema.card>
-        </section>
-    
-        <section id="productosCuentafinanciera"></section>
+        <section class="grid grid-cols-3 gap-2" id="cuentafinancieraFacturas"></section>
+
+        <section id="cuentafinancieraProductos"></section>
     </section>
 </x-sistema.modal>
 <script>
@@ -148,21 +84,40 @@
      $(document).ready(function () {
         $('#cuenta_financiera').on('change', function () {
             let cuentafinanciera_id = $(this).val();
-            $.ajax({
-                url: `{{ url('cuentas-financieras/${cuentafinanciera_id}') }}`,
-                method: "GET",
-                data: {
-                    view: 'show-cuentafinanciera-productos',
-                },
-                success: function( result ) {
-                    $('#productosCuentafinanciera').html(result);
-                },
-                error: function( response ) {
-                    console.log('error');
-                }
-            });
+            cuentafinancieraProductos(cuentafinanciera_id);
+            cuentafinancieraFacturas(cuentafinanciera_id);
         });
 
         $('#cuenta_financiera').trigger('change');
     });
+    function cuentafinancieraProductos(cuentafinanciera_id) {
+        $.ajax({
+            url: `{{ url('cuentas-financieras/${cuentafinanciera_id}') }}`,
+            method: "GET",
+            data: {
+                view: 'show-productos',
+            },
+            success: function( result ) {
+                $('#cuentafinancieraProductos').html(result);
+            },
+            error: function( response ) {
+                console.log('error');
+            }
+        });
+    }
+    function cuentafinancieraFacturas(cuentafinanciera_id) {
+        $.ajax({
+            url: `{{ url('cuentas-financieras/${cuentafinanciera_id}') }}`,
+            method: "GET",
+            data: {
+                view: 'show-facturas',
+            },
+            success: function( result ) {
+                $('#cuentafinancieraFacturas').html(result);
+            },
+            error: function( response ) {
+                console.log('error');
+            }
+        });
+    }
 </script>

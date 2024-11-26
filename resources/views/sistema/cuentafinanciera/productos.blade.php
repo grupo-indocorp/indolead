@@ -17,15 +17,19 @@
     <x-slot:tbody>
         @foreach ($productosEvaporacion as $item)
             <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td>{{ $item->numero_servicio }}</td>
+                <td>{{ $item->orden_pedido }}</td>
+                <td>{{ $item->producto }}</td>
+                <td>{{ $item->cargo_fijo }}</td>
+                <td>{{ $item->descuento }}</td>
+                <td>{{ $item->descuento_vigencia }}</td>
+                <td>{{ $item->fecha_solicitud }}</td>
+                <td>{{ $item->fecha_activacion }}</td>
+                <td>{{ $item->periodo_servicio }}</td>
+                <td class="flex flex-col">
+                    <b>{{ $item->fecha_estado_linea }}</b>
+                    <span>{{ $item->estado_linea }}</span>
+                </td>
                 <td></td>
             </tr>
         @endforeach
