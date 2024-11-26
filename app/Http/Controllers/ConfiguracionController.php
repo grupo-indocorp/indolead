@@ -27,8 +27,16 @@ class ConfiguracionController extends Controller
                 $exists = Cuentafinanciera::where('cuenta_financiera', $value->cuenta_financiera)->exists();
 
                 if (!$exists) {
+                    $ultimoEvaporacion = Evaporacion::where('cuenta_financiera', $value->cuenta_financiera)->orderByDesc('id')->first();
+
                     Cuentafinanciera::create([
                         'cuenta_financiera' => $value->cuenta_financiera,
+                        'fecha_evaluacion' => null,
+                        'estado_evaluacion' => null,
+                        'fecha_descuento' => $ultimoEvaporacion->fecha_evaluacion_descuento_vigencia,
+                        'descuento' => $ultimoEvaporacion->evaluacion_descuento,
+                        'descuento_vigencia' => $ultimoEvaporacion->evaluacion_descuento_vigencia,
+                        'ciclo' => $ultimoEvaporacion->ciclo_factuacion,
                         'user_id' => $user->id,
                         'cliente_id' => $cliente->id,
                     ]);

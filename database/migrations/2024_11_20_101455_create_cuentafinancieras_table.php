@@ -14,6 +14,12 @@ return new class extends Migration
         Schema::create('cuentafinancieras', function (Blueprint $table) {
             $table->id();
             $table->string('cuenta_financiera')->unique();
+            $table->dateTime('fecha_evaluacion')->nullable();
+            $table->string('estado_evaluacion')->nullable();
+            $table->dateTime('fecha_descuento');
+            $table->decimal('descuento', 8, 2)->default(0);
+            $table->string('descuento_vigencia');
+            $table->integer('ciclo')->default(0);
             $table->foreignId('user_id')->nullable()->constrained();
             $table->foreignId('cliente_id')->nullable()->constrained();
             $table->timestamps();
