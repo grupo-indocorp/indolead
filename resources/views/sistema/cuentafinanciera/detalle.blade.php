@@ -124,41 +124,45 @@
             </x-sistema.card>
         </section>
     
-        <section>
-            <x-ui.table id="evaporacion">
-                <x-slot:thead>
-                    <tr>
-                        <th>{{ __('NUMERO') }}</th>
-                        <th>{{ __('ORDEN') }}</th>
-                        <th>{{ __('PRODUCTO') }}</th>
-                        <th>{{ __('CARGO FIJO') }}</th>
-                        <th>{{ __('DESCUENTO') }}</th>
-                        <th>{{ __('VIGENCIA DEL DESCUENTO') }}</th>
-                        <th>{{ __('FECHA DE SOLICITUD') }}</th>
-                        <th>{{ __('FECHA DE ACTIVACION') }}</th>
-                        <th>{{ __('PERIODO') }}</th>
-                        <th>{{ __('ESTADO') }}</th>
-                        <th></th>
-                    </tr>
-                </x-slot>
-                <x-slot:tbody>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                </x-slot>
-                <x-slot:tfoot></x-slot>
-            </x-ui.table>
-        </section>
+        <section id="productosCuentafinanciera"></section>
     </section>
 </x-sistema.modal>
 <script>
+    function detalleCuentafinanciera(cuentafinanciera_id) {
+        $.ajax({
+            url: `{{ url('cuentas-financieras/${cuentafinanciera_id}') }}`,
+            method: "GET",
+            data: {
+                view: 'show-cuentafinanciera',
+            },
+            success: function( result ) {
+                $('#contenedorModal').html(result);
+                openModal();
+            },
+            error: function( response ) {
+                console.log('error');
+            }
+        });
+    }
+    // cuenta_financiera
+     $(document).ready(function () {
+        $('#cuenta_financiera').on('change', function () {
+            let cuentafinanciera_id = $(this).val();
+            $.ajax({
+                url: `{{ url('cuentas-financieras/${cuentafinanciera_id}') }}`,
+                method: "GET",
+                data: {
+                    view: 'show-cuentafinanciera-productos',
+                },
+                success: function( result ) {
+                    $('#productosCuentafinanciera').html(result);
+                },
+                error: function( response ) {
+                    console.log('error');
+                }
+            });
+        });
+
+        $('#cuenta_financiera').trigger('change');
+    });
 </script>

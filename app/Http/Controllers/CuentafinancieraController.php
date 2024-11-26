@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cuentafinanciera;
+use App\Models\Evaporacion;
 use App\Services\CuentafinancieraService;
 use Illuminate\Http\Request;
 
@@ -56,6 +57,14 @@ class CuentafinancieraController extends Controller
             return view('sistema.cuentafinanciera.detalle', compact(
                 'cuentafinanciera',
                 'cantidadCuentafinancieras',
+            ));
+        } elseif ($view === 'show-cuentafinanciera-productos') {
+            $cuentafinanciera = Cuentafinanciera::find($id);
+            $productosEvaporacion = Evaporacion::where('cuenta_financiera', $cuentafinanciera->cuenta_financiera)->get();
+
+            return view('sistema.cuentafinanciera.productos', compact(
+                'cuentafinanciera',
+                'productosEvaporacion',
             ));
         }
     }
