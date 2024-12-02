@@ -29,6 +29,7 @@
                         <tr>
                             <th>{{ __('RUC') }}</th>
                             <th>{{ __('RAZÓN SOCIAL') }}</th>
+                            <th>{{ __('CUENTA FINANCIERA') }}</th>
                             <th>{{ __('EECC') }}</th>
                             <th>{{ __('FECHA EVALUACIÓN') }}</th>
                             <th>{{ __('ESTADO') }}</th>
@@ -41,6 +42,7 @@
                             <tr>
                                 <td>{{ $item->cliente->ruc }}</td>
                                 <td>{{ substr($item->cliente->razon_social, 0, 45) }}</td>
+                                <td>{{ $item->cuenta_financiera }}</td>
                                 <td class="flex flex-col">
                                     <b>{{ $item->user->equipos->last()->nombre }}</b>
                                     <span>{{ $item->user->name }}</span>
@@ -50,7 +52,7 @@
                                 <td></td>
                                 <td>
                                     <span class="mx-3" data-bs-toggle="tooltip" data-bs-original-title="Detalle">
-                                        <a href="javascript:;" class="cursor-pointer" onclick="detalleCuentafinanciera({{ $item->id }})">
+                                        <a href="javascript:;" class="cursor-pointer" onclick="cuentafinancieraDetalle({{ $item->id }})">
                                             <i class="fa-solid fa-eyes"></i>
                                         </a>
                                     </span>
@@ -66,12 +68,12 @@
     @endsection
     @section('script')
         <script>
-            function detalleCuentafinanciera(cuentafinanciera_id) {
+            function cuentafinancieraDetalle(cuentafinanciera_id) {
                 $.ajax({
                     url: `{{ url('cuentas-financieras/${cuentafinanciera_id}') }}`,
                     method: "GET",
                     data: {
-                        view: 'show-cuentafinanciera',
+                        view: 'show-detalle',
                     },
                     success: function( result ) {
                         $('#contenedorModal').html(result);

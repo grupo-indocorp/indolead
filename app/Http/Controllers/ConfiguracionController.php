@@ -19,17 +19,42 @@ class ConfiguracionController extends Controller
         $count = 0;
         foreach ($evaporacions as $value) {
             $count++;
-            $cliente_id = Cliente::where('ruc', $value->ruc)->first()->id;
+
+            $cliente = Cliente::where('ruc', $value->ruc)->first();
             $user = User::where('identity_document', $value->identificacion_ejecutivo)->first();
-            if (!is_null($user)) {
-                Cuentafinanciera::insert([
-                    'cuenta_financiera' => $value->cuenta_financiera,
-                    'user_id' => $user->id,
-                    'cliente_id' => $cliente_id,
-                ]);
+
+            if (!is_null($cliente) && !is_null($user)) {
+                $exists = Cuentafinanciera::where('cuenta_financiera', $value->cuenta_financiera)->exists();
+
+                if (!$exists) {
+                    $ultimoEvaporacion = Evaporacion::where('cuenta_financiera', $value->cuenta_financiera)->orderByDesc('id')->first();
+
+                    Cuentafinanciera::create([
+                        'cuenta_financiera' => $value->cuenta_financiera,
+                        'fecha_evaluacion' => null,
+                        'estado_evaluacion' => null,
+                        'fecha_descuento' => $ultimoEvaporacion->fecha_evaluacion_descuento_vigencia ?? null,
+                        'descuento' => $ultimoEvaporacion->evaluacion_descuento,
+                        'descuento_vigencia' => $ultimoEvaporacion->evaluacion_descuento_vigencia,
+                        'ciclo' => $ultimoEvaporacion->ciclo_factuacion,
+                        'user_id' => $user->id,
+                        'cliente_id' => $cliente->id,
+                    ]);
+                }
             }
         }
         dd($count, 'aqui se actualizó cuenta financiera');
+    }
+
+    public function updateCuentaFinancieraId()
+    {
+        $cuentasfinancieras = Cuentafinanciera::all();
+        foreach ($cuentasfinancieras as $item) {
+            Evaporacion::where('cuenta_financiera', $item->cuenta_financiera)->update([
+                'cuentafinanciera_id' => $item->id,
+            ]);
+        }
+        dd('aqui se actualizó cuentafinanciera_id de evaporacions');
     }
 
     /**
