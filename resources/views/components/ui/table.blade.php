@@ -1,14 +1,16 @@
-<table {{ $attributes->merge(['id' => 'ui-table', 'class' => 'ui-table table align-items-center mb-0']) }}>
-    <thead>
-        {{ $thead }}
-    </thead>
-    <tbody num="0">
-        {{ $tbody }}
-    </tbody>
-    <tfoot>
-        {{ $tfoot }}
-    </tfoot>
-</table>
+<section class="overflow-x-auto">
+    <table {{ $attributes->merge(['id' => 'ui-table', 'class' => 'ui-table table align-items-center mb-0']) }}>
+        <thead>
+            {{ $thead }}
+        </thead>
+        <tbody num="0">
+            {{ $tbody }}
+        </tbody>
+        <tfoot>
+            {{ $tfoot }}
+        </tfoot>
+    </table>
+</section>
 <script>
     $(document).ready(function(){
         $('.ui-table th').addClass('text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7');

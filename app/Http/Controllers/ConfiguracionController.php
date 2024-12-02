@@ -33,7 +33,7 @@ class ConfiguracionController extends Controller
                         'cuenta_financiera' => $value->cuenta_financiera,
                         'fecha_evaluacion' => null,
                         'estado_evaluacion' => null,
-                        'fecha_descuento' => $ultimoEvaporacion->fecha_evaluacion_descuento_vigencia,
+                        'fecha_descuento' => $ultimoEvaporacion->fecha_evaluacion_descuento_vigencia ?? null,
                         'descuento' => $ultimoEvaporacion->evaluacion_descuento,
                         'descuento_vigencia' => $ultimoEvaporacion->evaluacion_descuento_vigencia,
                         'ciclo' => $ultimoEvaporacion->ciclo_factuacion,
@@ -44,6 +44,17 @@ class ConfiguracionController extends Controller
             }
         }
         dd($count, 'aqui se actualizó cuenta financiera');
+    }
+
+    public function updateCuentaFinancieraId()
+    {
+        $cuentasfinancieras = Cuentafinanciera::all();
+        foreach ($cuentasfinancieras as $item) {
+            Evaporacion::where('cuenta_financiera', $item->cuenta_financiera)->update([
+                'cuentafinanciera_id' => $item->id,
+            ]);
+        }
+        dd('aqui se actualizó cuentafinanciera_id de evaporacions');
     }
 
     /**

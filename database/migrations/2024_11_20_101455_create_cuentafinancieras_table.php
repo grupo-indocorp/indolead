@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('cuenta_financiera')->unique();
             $table->dateTime('fecha_evaluacion')->nullable();
             $table->string('estado_evaluacion')->nullable();
-            $table->dateTime('fecha_descuento');
+            $table->dateTime('fecha_descuento')->nullable();
             $table->decimal('descuento', 8, 2)->default(0);
             $table->string('descuento_vigencia');
             $table->integer('ciclo')->default(0);
