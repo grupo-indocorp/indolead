@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Cuentafinanciera;
+use Illuminate\Support\Facades\DB;
 
 class CuentafinancieraService
 {
@@ -12,7 +13,10 @@ class CuentafinancieraService
      */
     public function cuentafinancieraGet()
     {
-        $cuentafinanciera = Cuentafinanciera::with(['cliente', 'user', 'user.equipos'])->paginate(20);
+        $cuentafinanciera = Cuentafinanciera::with(['cliente', 'user', 'user.equipos'])
+            ->orderBy('cliente_id')
+            ->paginate(100);
+
         return $cuentafinanciera;
     }
 
