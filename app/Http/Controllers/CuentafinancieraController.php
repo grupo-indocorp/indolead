@@ -98,7 +98,18 @@ class CuentafinancieraController extends Controller
     public function update(Request $request, string $id)
     {
         $view = request('view');
-        if ($view === 'update-producto-edit') {
+        if ($view === 'update-cuentafinanciera') {
+            $cuentafinanciera = Cuentafinanciera::find($id);
+            $cuentafinanciera->fecha_evaluacion = now();
+            $cuentafinanciera->fecha_descuento = request('fecha_descuento');
+            $cuentafinanciera->descuento = request('descuento');
+            $cuentafinanciera->descuento_vigencia = request('descuento_vigencia');
+            $cuentafinanciera->save();
+
+            return response()->json([
+                'success' => true,
+            ]);
+        } elseif ($view === 'update-producto-edit') {
             $evaporacion = Evaporacion::find(request('evaporacion_id'));
             $evaporacion->cargo_fijo = request('cargo_fijo');
             $evaporacion->fecha_estado_linea = request('fecha_estado_linea');
@@ -129,7 +140,7 @@ class CuentafinancieraController extends Controller
             $cuentafinanciera->save();
 
             // Guardar historial de comentarios de la cuenta financiera
-            $comentariocf = new Comentariocf();
+            $comentariocf = new Comentariocf;
             $comentariocf->comentario = request('observacion_calidad');
             $comentariocf->user_id = auth()->user()->id;
             $comentariocf->cuentafinanciera_id = $id;

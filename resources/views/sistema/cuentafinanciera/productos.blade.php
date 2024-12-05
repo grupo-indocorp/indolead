@@ -1,4 +1,4 @@
-<x-ui.table id="evaporacion">
+<x-ui.table>
     <x-slot:thead>
         <tr>
             <th>{{ __('NUMERO') }}</th>

@@ -15,7 +15,7 @@ class CuentafinancieraService
     {
         $cuentafinanciera = Cuentafinanciera::with(['cliente', 'user', 'user.equipos', 'evaporacions'])
             ->orderBy('cliente_id')
-            ->paginate(50);
+            ->paginate(10);
 
         return $cuentafinanciera;
     }
