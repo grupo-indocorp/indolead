@@ -49,7 +49,7 @@
                                 </td>
                                 <td>{{ $item->fecha_evaluacion }}</td>
                                 <td></td>
-                                <td>{{ substr($item->evaporacions->last()->observacion, 0, 45) }}</td>
+                                <td>{{ substr($item->ultimo_comentario, 0, 45) }}</td>
                                 <td>
                                     <span class="mx-3" data-bs-toggle="tooltip" data-bs-original-title="Detalle">
                                         <a href="javascript:;" class="cursor-pointer" onclick="cuentafinancieraDetalle({{ $item->id }})">

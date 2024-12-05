@@ -38,4 +38,9 @@ class Cuentafinanciera extends Model
     {
         return $this->hasMany(Evaporacion::class);
     }
+
+    public function comentariocfs()
+    {
+        return $this->hasMany(Comentariocf::class);
+    }
 }

@@ -22,10 +22,10 @@ class ConfiguracionController extends Controller
             $cliente = Cliente::where('ruc', $value->ruc)->first();
             $user = User::where('identity_document', $value->identificacion_ejecutivo)->first();
 
-            if (!is_null($cliente) && !is_null($user)) {
+            if (! is_null($cliente) && ! is_null($user)) {
                 $exists = Cuentafinanciera::where('cuenta_financiera', $value->cuenta_financiera)->exists();
 
-                if (!$exists) {
+                if (! $exists) {
                     $ultimoEvaporacion = Evaporacion::where('cuenta_financiera', $value->cuenta_financiera)->orderByDesc('id')->first();
 
                     Cuentafinanciera::create([

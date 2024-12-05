@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comentariocf;
 use App\Models\Cuentafinanciera;
 use App\Models\Evaporacion;
 use App\Services\CuentafinancieraService;
@@ -118,13 +119,21 @@ class CuentafinancieraController extends Controller
             $evaporacion = Evaporacion::where('cuentafinanciera_id', $id)->get();
             foreach ($evaporacion as $value) {
                 Evaporacion::find($value->id)->update([
-                    'observacion' => request('observacion_calidad')
+                    'observacion' => request('observacion_calidad'),
                 ]);
             }
 
             $cuentafinanciera = Cuentafinanciera::find($id);
             $cuentafinanciera->fecha_evaluacion = now();
+            $cuentafinanciera->ultimo_comentario = request('observacion_calidad');
             $cuentafinanciera->save();
+
+            // Guardar historial de comentarios de la cuenta financiera
+            $comentariocf = new Comentariocf();
+            $comentariocf->comentario = request('observacion_calidad');
+            $comentariocf->user_id = auth()->user()->id;
+            $comentariocf->cuentafinanciera_id = $id;
+            $comentariocf->save();
 
             return response()->json([
                 'success' => true,
