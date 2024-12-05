@@ -32,4 +32,10 @@ class Cuentafinanciera extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    // Relación uno a muchos
+    public function evaporacions()
+    {
+        return $this->hasMany(Evaporacion::class);
+    }
 }

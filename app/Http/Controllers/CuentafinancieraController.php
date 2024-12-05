@@ -114,6 +114,21 @@ class CuentafinancieraController extends Controller
                 'fechaEstadoLinea' => $evaporacion->fecha_estado_linea,
                 'estadoLinea' => $evaporacion->estado_linea,
             ]);
+        } elseif ($view === 'update-comentario-calidad') {
+            $evaporacion = Evaporacion::where('cuentafinanciera_id', $id)->get();
+            foreach ($evaporacion as $value) {
+                Evaporacion::find($value->id)->update([
+                    'observacion' => request('observacion_calidad')
+                ]);
+            }
+
+            $cuentafinanciera = Cuentafinanciera::find($id);
+            $cuentafinanciera->fecha_evaluacion = now();
+            $cuentafinanciera->save();
+
+            return response()->json([
+                'success' => true,
+            ]);
         }
     }
 

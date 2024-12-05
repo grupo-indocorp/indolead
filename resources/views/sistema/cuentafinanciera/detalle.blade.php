@@ -35,23 +35,65 @@
             </x-sistema.card>
             <x-sistema.card x-data="{
                     editMode: false,
+                    isSaving: false,
+                    observacion_calidad: '',
+                    saveObservacion() {
+                        if (this.observacion_calidad.trim() === '') {
+                            alert('La observación no puede estar vacía.');
+                            return;
+                        } else {
+                            limpiarError();
+                            capturarToken();
+    
+                            this.isSaving = true;
+                            let self = this;
+                            $.ajax({
+                                url: `{{ url('cuentas-financieras/'. $cuentafinanciera->id) }}`,
+                                method: 'PUT',
+                                data: {
+                                    view: 'update-comentario-calidad',
+                                    observacion_calidad: self.observacion_calidad,
+                                },
+                                success: function(result) {
+                                    // Salir del modo edición
+                                    self.editMode = false;
+                                    alert('Cambios guardados correctamente');
+                                    {{-- self.observacion_calidad = ''; --}}
+    
+                                    // Actualizar fecha_evaluacion de cuenta financiera
+                                    cuentafinancieraShow('{{ $cuentafinanciera->id }}');
+                                },
+                                error: function(response) {
+                                    mostrarError(response);
+                                    alert('Hubo un error al guardar los cambios');
+                                },
+                                complete: function() {
+                                    self.isSaving = false;
+                                }
+                            });
+                        }
+                    }
                 }">
                 <div class="form-group">
                     <div class="flex justify-between">
                         <label for="observacion_calidad" class="form-control-label">OBSERVACIÓN:</label>
                         <div>
                             <template x-if="!editMode">
-                                <span class="hover:cursor-pointer hover:text-slate-500"@click="editMode = true">
+                                <span class="hover:cursor-pointer hover:text-slate-500"
+                                    @click="editMode = true">
                                     <i class="fa-solid fa-pen-to-square"></i>
                                 </span>
                             </template>
                             <template x-if="editMode">
-                                <span class="hover:cursor-pointer hover:text-slate-500">
+                                <span class="hover:cursor-pointer hover:text-slate-500"
+                                    @click="if (!isSaving) { saveObservacion(); }"
+                                    :disabled="isSaving">
                                     <i class="fa-solid fa-floppy-disk"></i>
                                 </span>
                             </template>
                             <template x-if="editMode">
-                                <span class="hover:cursor-pointer hover:text-slate-500">
+                                <span class="hover:cursor-pointer hover:text-slate-500"
+                                    @click="editMode = false">
                                     <i class="fa-solid fa-xmark"></i>
                                 </span>
                             </template>
@@ -60,7 +102,9 @@
                     <textarea class="form-control"
                         rows="3"
                         id="observacion_calidad"
-                        name="observacion_calidad"></textarea>
+                        name="observacion_calidad"
+                        x-model="observacion_calidad"
+                        :disabled="!editMode"></textarea>
                 </div>
             </x-sistema.card>
         </section>

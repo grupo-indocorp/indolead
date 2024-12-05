@@ -107,7 +107,7 @@ class EnviarEvaporacionCommand extends Command
                     if ($fechaActual->greaterThanOrEqualTo($fechaLimite) && $fechaActual->lessThanOrEqualTo($fechaVencimiento)) {
                         // dump($value->fecha_vencimiento1, $fechaLimite, $fechaActual->greaterThanOrEqualTo($fechaLimite), $fechaActual->lessThanOrEqualTo($fechaVencimiento));
                         $notificacion = new Notificacion;
-                        $notificacion->asunto = "EVAPORACION $value->ruc";
+                        $notificacion->asunto = "FACTURACIÓN DEL CLIENTE - $value->ruc";
                         $notificacion->mensaje = $mensaje;
                         $notificacion->fecha = Carbon::today();
                         $notificacion->hora = Carbon::createFromTime(11, 0, 0);

@@ -13,9 +13,9 @@ class CuentafinancieraService
      */
     public function cuentafinancieraGet()
     {
-        $cuentafinanciera = Cuentafinanciera::with(['cliente', 'user', 'user.equipos'])
+        $cuentafinanciera = Cuentafinanciera::with(['cliente', 'user', 'user.equipos', 'evaporacions'])
             ->orderBy('cliente_id')
-            ->paginate(100);
+            ->paginate(50);
 
         return $cuentafinanciera;
     }
@@ -27,8 +27,7 @@ class CuentafinancieraService
      */
     public function cuentafinancieraDetalle($cuentafinanciera_id)
     {
-        $cuentafinanciera = Cuentafinanciera::with(['cliente', 'user'])->find($cuentafinanciera_id);
-        // $cuentafinanciera = Cuentafinanciera::with(['cliente', 'user', 'user.equipos'])->paginate(20);
+        $cuentafinanciera = Cuentafinanciera::with(['cliente', 'user', 'evaporacions'])->find($cuentafinanciera_id);
         return $cuentafinanciera;
     }
 }

@@ -44,12 +44,12 @@
                                 <td>{{ substr($item->cliente->razon_social, 0, 45) }}</td>
                                 <td>{{ $item->cuenta_financiera }}</td>
                                 <td class="flex flex-col">
-                                    <b>{{ $item->user->equipos->last()->nombre }}</b>
+                                    <b>{{ $item->user->equipos->last()->nombre ?? '' }}</b>
                                     <span>{{ $item->user->name }}</span>
                                 </td>
+                                <td>{{ $item->fecha_evaluacion }}</td>
                                 <td></td>
-                                <td></td>
-                                <td></td>
+                                <td>{{ substr($item->evaporacions->last()->observacion, 0, 45) }}</td>
                                 <td>
                                     <span class="mx-3" data-bs-toggle="tooltip" data-bs-original-title="Detalle">
                                         <a href="javascript:;" class="cursor-pointer" onclick="cuentafinancieraDetalle({{ $item->id }})">
