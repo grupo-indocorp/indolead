@@ -34,29 +34,28 @@
                             <th>{{ __('FECHA EVALUACIÓN') }}</th>
                             <th>{{ __('ESTADO') }}</th>
                             <th>{{ __('OBSERVACIÓN') }}</th>
-                            <th></th>
                         </tr>
                     </x-slot:thead>
                     <x-slot:tbody>
                         @foreach ($cuentafinancieras as $item)
                             <tr>
-                                <td>{{ $item->cliente->ruc }}</td>
+                                <td>
+                                    <b class="cursor-pointer hover:text-sky-600"
+                                        data-bs-toggle="tooltip"
+                                        data-bs-original-title="Detalle"
+                                        onclick="cuentafinancieraDetalle({{ $item->id }})">
+                                        {{ $item->cliente->ruc }}
+                                    </b>
+                                </td>
                                 <td>{{ substr($item->cliente->razon_social, 0, 45) }}</td>
                                 <td>{{ $item->cuenta_financiera }}</td>
                                 <td class="flex flex-col">
-                                    <b>{{ $item->user->equipos->last()->nombre }}</b>
+                                    <b>{{ $item->user->equipos->last()->nombre ?? '' }}</b>
                                     <span>{{ $item->user->name }}</span>
                                 </td>
+                                <td>{{ $item->fecha_evaluacion }}</td>
                                 <td></td>
-                                <td></td>
-                                <td></td>
-                                <td>
-                                    <span class="mx-3" data-bs-toggle="tooltip" data-bs-original-title="Detalle">
-                                        <a href="javascript:;" class="cursor-pointer" onclick="cuentafinancieraDetalle({{ $item->id }})">
-                                            <i class="fa-solid fa-eyes"></i>
-                                        </a>
-                                    </span>
-                                </td>
+                                <td>{{ substr($item->ultimo_comentario, 0, 45) }}</td>
                             </tr>
                         @endforeach
                     </x-slot:tbody>

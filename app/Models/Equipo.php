@@ -28,6 +28,7 @@ class Equipo extends Model
 
     // Relación muchos a muchos
     public function users() //usersHistorial
-    {return $this->belongsToMany(User::class)->withPivot('id')->withTimestamps();
+    {
+        return $this->belongsToMany(User::class)->withPivot('id')->withTimestamps();
     }
 }

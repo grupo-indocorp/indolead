@@ -7,7 +7,6 @@ use App\Models\Cuentafinanciera;
 use App\Models\Evaporacion;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class ConfiguracionController extends Controller
 {
@@ -23,10 +22,10 @@ class ConfiguracionController extends Controller
             $cliente = Cliente::where('ruc', $value->ruc)->first();
             $user = User::where('identity_document', $value->identificacion_ejecutivo)->first();
 
-            if (!is_null($cliente) && !is_null($user)) {
+            if (! is_null($cliente) && ! is_null($user)) {
                 $exists = Cuentafinanciera::where('cuenta_financiera', $value->cuenta_financiera)->exists();
 
-                if (!$exists) {
+                if (! $exists) {
                     $ultimoEvaporacion = Evaporacion::where('cuenta_financiera', $value->cuenta_financiera)->orderByDesc('id')->first();
 
                     Cuentafinanciera::create([
@@ -34,9 +33,23 @@ class ConfiguracionController extends Controller
                         'fecha_evaluacion' => null,
                         'estado_evaluacion' => null,
                         'fecha_descuento' => $ultimoEvaporacion->fecha_evaluacion_descuento_vigencia ?? null,
-                        'descuento' => $ultimoEvaporacion->evaluacion_descuento,
-                        'descuento_vigencia' => $ultimoEvaporacion->evaluacion_descuento_vigencia,
-                        'ciclo' => $ultimoEvaporacion->ciclo_factuacion,
+                        'descuento' => $ultimoEvaporacion->evaluacion_descuento != '' ? $ultimoEvaporacion->evaluacion_descuento : 0,
+                        'descuento_vigencia' => $ultimoEvaporacion->evaluacion_descuento_vigencia != '' ? $ultimoEvaporacion->evaluacion_descuento_vigencia : 0,
+                        'ciclo' => $ultimoEvaporacion->ciclo_factuacion != '' ? $ultimoEvaporacion->ciclo_factuacion : 0,
+                        'user_id' => $user->id,
+                        'cliente_id' => $cliente->id,
+                    ]);
+                } else {
+                    $ultimoEvaporacion = Evaporacion::where('cuenta_financiera', $value->cuenta_financiera)->orderByDesc('id')->first();
+
+                    Cuentafinanciera::where('cuenta_financiera', $value->cuenta_financiera)->update([
+                        'cuenta_financiera' => $value->cuenta_financiera,
+                        'fecha_evaluacion' => null,
+                        'estado_evaluacion' => null,
+                        'fecha_descuento' => $ultimoEvaporacion->fecha_evaluacion_descuento_vigencia ?? null,
+                        'descuento' => $ultimoEvaporacion->evaluacion_descuento != '' ? $ultimoEvaporacion->evaluacion_descuento : 0,
+                        'descuento_vigencia' => $ultimoEvaporacion->evaluacion_descuento_vigencia != '' ? $ultimoEvaporacion->evaluacion_descuento_vigencia : 0,
+                        'ciclo' => $ultimoEvaporacion->ciclo_factuacion != '' ? $ultimoEvaporacion->ciclo_factuacion : 0,
                         'user_id' => $user->id,
                         'cliente_id' => $cliente->id,
                     ]);

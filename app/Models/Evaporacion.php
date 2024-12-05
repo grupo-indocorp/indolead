@@ -51,4 +51,10 @@ class Evaporacion extends Model
         'deuda3',
         'observacion',
     ];
+
+    // Relación uno a muchos inversa
+    public function cuentafinanciera()
+    {
+        return $this->belongsTo(Cuentafinanciera::class);
+    }
 }

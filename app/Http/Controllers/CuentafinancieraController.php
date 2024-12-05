@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comentariocf;
 use App\Models\Cuentafinanciera;
+use App\Models\Estadofactura;
 use App\Models\Evaporacion;
+use App\Models\Factura;
 use App\Services\CuentafinancieraService;
 use Illuminate\Http\Request;
 
@@ -76,9 +79,11 @@ class CuentafinancieraController extends Controller
             $facturasEvaporacion = Evaporacion::where('cuenta_financiera', $cuentafinanciera->cuenta_financiera)
                 ->orderByDesc('id')
                 ->first();
+            $estadofacturas = Estadofactura::all();
 
             return view('sistema.cuentafinanciera.facturas', compact(
                 'facturasEvaporacion',
+                'estadofacturas',
             ));
         }
     }
@@ -97,7 +102,18 @@ class CuentafinancieraController extends Controller
     public function update(Request $request, string $id)
     {
         $view = request('view');
-        if ($view === 'update-producto-edit') {
+        if ($view === 'update-cuentafinanciera') {
+            $cuentafinanciera = Cuentafinanciera::find($id);
+            $cuentafinanciera->fecha_evaluacion = now();
+            $cuentafinanciera->fecha_descuento = request('fecha_descuento');
+            $cuentafinanciera->descuento = request('descuento');
+            $cuentafinanciera->descuento_vigencia = request('descuento_vigencia');
+            $cuentafinanciera->save();
+
+            return response()->json([
+                'success' => true,
+            ]);
+        } elseif ($view === 'update-producto-edit') {
             $evaporacion = Evaporacion::find(request('evaporacion_id'));
             $evaporacion->cargo_fijo = request('cargo_fijo');
             $evaporacion->fecha_estado_linea = request('fecha_estado_linea');
@@ -113,6 +129,42 @@ class CuentafinancieraController extends Controller
                 'cargoFijo' => $evaporacion->cargo_fijo,
                 'fechaEstadoLinea' => $evaporacion->fecha_estado_linea,
                 'estadoLinea' => $evaporacion->estado_linea,
+            ]);
+        } elseif ($view === 'update-comentario-calidad') {
+            $evaporacion = Evaporacion::where('cuentafinanciera_id', $id)->get();
+            foreach ($evaporacion as $value) {
+                Evaporacion::find($value->id)->update([
+                    'observacion' => request('observacion_calidad'),
+                ]);
+            }
+
+            $cuentafinanciera = Cuentafinanciera::find($id);
+            $cuentafinanciera->fecha_evaluacion = now();
+            $cuentafinanciera->ultimo_comentario = request('observacion_calidad');
+            $cuentafinanciera->save();
+
+            // Guardar historial de comentarios de la cuenta financiera
+            $comentariocf = new Comentariocf;
+            $comentariocf->comentario = request('observacion_calidad');
+            $comentariocf->user_id = auth()->user()->id;
+            $comentariocf->cuentafinanciera_id = $id;
+            $comentariocf->save();
+
+            return response()->json([
+                'success' => true,
+            ]);
+        } elseif ($view === 'update-factura') {
+            $factura = new Factura();
+            $factura->fecha_emision = now();
+            $factura->fecha_vencimiento = now();
+            $factura->monto = 0;
+            $factura->deuda = 0;
+            $factura->estadofactura_id = 3;
+            $factura->cuentafinanciera_id = $id;
+            $factura->save();
+
+            return response()->json([
+                'success' => true,
             ]);
         }
     }
