@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Comentariocf;
 use App\Models\Cuentafinanciera;
+use App\Models\Estadofactura;
 use App\Models\Evaporacion;
+use App\Models\Factura;
 use App\Services\CuentafinancieraService;
 use Illuminate\Http\Request;
 
@@ -77,9 +79,11 @@ class CuentafinancieraController extends Controller
             $facturasEvaporacion = Evaporacion::where('cuenta_financiera', $cuentafinanciera->cuenta_financiera)
                 ->orderByDesc('id')
                 ->first();
+            $estadofacturas = Estadofactura::all();
 
             return view('sistema.cuentafinanciera.facturas', compact(
                 'facturasEvaporacion',
+                'estadofacturas',
             ));
         }
     }
@@ -145,6 +149,19 @@ class CuentafinancieraController extends Controller
             $comentariocf->user_id = auth()->user()->id;
             $comentariocf->cuentafinanciera_id = $id;
             $comentariocf->save();
+
+            return response()->json([
+                'success' => true,
+            ]);
+        } elseif ($view === 'update-factura') {
+            $factura = new Factura();
+            $factura->fecha_emision = now();
+            $factura->fecha_vencimiento = now();
+            $factura->monto = 0;
+            $factura->deuda = 0;
+            $factura->estadofactura_id = 3;
+            $factura->cuentafinanciera_id = $id;
+            $factura->save();
 
             return response()->json([
                 'success' => true,

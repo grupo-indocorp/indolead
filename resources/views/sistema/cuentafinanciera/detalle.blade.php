@@ -33,7 +33,6 @@
                             success: function(result) {
                                 // Salir del modo edición
                                 self.editMode = false;
-                                alert('Cambios guardados correctamente');
 
                                 // Actualizar fecha_evaluacion de cuenta financiera
                                 cuentafinancieraShow('{{ $cuentafinanciera->id }}');
@@ -200,8 +199,6 @@
         $('#cuenta_financiera').on('change', function () {
             let cuentafinanciera_id = $(this).val();
             cuentafinancieraShow(cuentafinanciera_id);
-            cuentafinancieraProductos(cuentafinanciera_id);
-            cuentafinancieraFacturas(cuentafinanciera_id);
         });
 
         $('#cuenta_financiera').trigger('change');
@@ -215,6 +212,8 @@
             },
             success: function( result ) {
                 $('#cuentafinancieraShow').html(result);
+                cuentafinancieraProductos(cuentafinanciera_id);
+                cuentafinancieraFacturas(cuentafinanciera_id);
             },
             error: function( response ) {
                 console.log('error');
