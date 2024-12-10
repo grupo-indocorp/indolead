@@ -14,6 +14,8 @@ class Cuentafinanciera extends Model
         'fecha_evaluacion',
         'estado_evaluacion',
         'fecha_descuento',
+        'backoffice_descuento',
+        'backoffice_descuento_vigencia',
         'descuento',
         'descuento_vigencia',
         'ciclo',

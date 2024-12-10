@@ -51,4 +51,5 @@ Ejecutando luego `php artisan migrate`, agregamos datos a la tabla
 estadofacturas
 ```bash
     php artisan db:seed --class=EstadofacturaSeeder
+    php artisan db:seed --class=CuentafinancieracicloSeeder
 ```
