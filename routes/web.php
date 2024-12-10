@@ -80,9 +80,7 @@ Route::middleware([
     Route::post('clientes/import/', [GestionClienteController::class, 'import']);
 
     // Actualizar datos de clientes a la nueva tabla export_cliente
-    Route::get('update-cuentafinanciera', [ConfiguracionController::class, 'updateCuentaFinanciera']);
-    // actualizar cuentafinanciera_id en la tabla evaporacions
-    Route::get('update-cuentafinanciera_id', [ConfiguracionController::class, 'updateCuentaFinancieraId']);
+    Route::get('update-cuentafinanciera', [ConfiguracionController::class, 'updateCuentaFinanciera'])->name('update.cuentafinanciera');
 
     // Export
     Route::get('export/secodi/funnel', [ExportController::class, 'secodiFunnel']);

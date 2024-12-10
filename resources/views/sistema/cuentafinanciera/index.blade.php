@@ -50,15 +50,15 @@
                                             data-bs-toggle="tooltip"
                                             data-bs-original-title="Detalle"
                                             onclick="cuentafinancieraDetalle({{ $item->id }})">
-                                            {{ $item->cliente->ruc ?? '' }}
+                                            {{ $item->text_cliente_ruc }}
                                         </b>
-                                        <span>{{ substr($item->cliente->razon_social, 0, 45) ?? ''}}</span>
+                                        <span>{{ substr($item->text_cliente_razon_social, 0, 45)}}</span>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="flex flex-col">
-                                        <b>{{ $item->user->equipos->last()->nombre ?? '' }}</b>
-                                        <span>{{ $item->user->name }}</span>
+                                        <b>{{ $item->text_user_equipo }}</b>
+                                        <span>{{ $item->text_user_nombre }}</span>
                                     </div>
                                 </td>
                                 <td></td>
