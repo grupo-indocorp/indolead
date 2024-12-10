@@ -12,8 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('cuentafinancieras', function (Blueprint $table) {
-            $table->string('backoffice_descuento_vigencia')->default('')->after('descuento_vigencia');
-            $table->decimal('backoffice_descuento', 8, 2)->default(0)->after('descuento_vigencia');
+            $table->string('text_cliente_ruc')->default('')->after('ciclo');
+            $table->string('text_cliente_razon_social')->default('')->after('text_cliente_ruc');
+            $table->string('text_user_nombre')->default('')->after('text_cliente_razon_social');
+            $table->string('text_user_equipo')->default('')->after('text_user_nombre');
         });
     }
 

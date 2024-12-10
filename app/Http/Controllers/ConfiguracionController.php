@@ -38,6 +38,10 @@ class ConfiguracionController extends Controller
                         'descuento' => $ultimoEvaporacion->evaluacion_descuento != '' ? $ultimoEvaporacion->evaluacion_descuento : 0,
                         'descuento_vigencia' => $ultimoEvaporacion->evaluacion_descuento_vigencia != '' ? $ultimoEvaporacion->evaluacion_descuento_vigencia : 0,
                         'ciclo' => $ultimoEvaporacion->ciclo_factuacion != '' ? $ultimoEvaporacion->ciclo_factuacion : 0,
+                        'text_cliente_ruc' => $cliente->ruc,
+                        'text_cliente_razon_social' => $cliente->razon_social,
+                        'text_user_nombre' => $user->name,
+                        'text_user_equipo' => $user->equipos->last()->nombre,
                         'user_id' => $user->id,
                         'cliente_id' => $cliente->id,
                     ]);
@@ -54,24 +58,24 @@ class ConfiguracionController extends Controller
                         'descuento' => $ultimoEvaporacion->evaluacion_descuento != '' ? $ultimoEvaporacion->evaluacion_descuento : 0,
                         'descuento_vigencia' => $ultimoEvaporacion->evaluacion_descuento_vigencia != '' ? $ultimoEvaporacion->evaluacion_descuento_vigencia : 0,
                         'ciclo' => $ultimoEvaporacion->ciclo_factuacion != '' ? $ultimoEvaporacion->ciclo_factuacion : 0,
+                        'text_cliente_ruc' => $cliente->ruc,
+                        'text_cliente_razon_social' => $cliente->razon_social,
+                        'text_user_nombre' => $user->name,
+                        'text_user_equipo' => $user->equipos->last()->nombre,
                         'user_id' => $user->id,
                         'cliente_id' => $cliente->id,
                     ]);
                 }
             }
         }
-        dd($count, 'aqui se actualizó cuenta financiera');
-    }
 
-    public function updateCuentaFinancieraId()
-    {
         $cuentasfinancieras = Cuentafinanciera::all();
         foreach ($cuentasfinancieras as $item) {
             Evaporacion::where('cuenta_financiera', $item->cuenta_financiera)->update([
                 'cuentafinanciera_id' => $item->id,
             ]);
         }
-        dd('aqui se actualizó cuentafinanciera_id de evaporacions');
+        return redirect()->route('cuentas-financieras.index')->with('success', 'Archivo importado exitosamente.');
     }
 
     /**
