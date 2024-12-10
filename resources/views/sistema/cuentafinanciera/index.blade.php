@@ -27,35 +27,48 @@
                 <x-ui.table id="evaporacion">
                     <x-slot:thead>
                         <tr>
-                            <th>{{ __('RUC') }}</th>
-                            <th>{{ __('RAZÓN SOCIAL') }}</th>
-                            <th>{{ __('CUENTA FINANCIERA') }}</th>
-                            <th>{{ __('EECC') }}</th>
-                            <th>{{ __('FECHA EVALUACIÓN') }}</th>
-                            <th>{{ __('ESTADO') }}</th>
-                            <th>{{ __('OBSERVACIÓN') }}</th>
+                            <th>{{ __('Cuenta Financiera') }}</th>
+                            <th>{{ __('Ruc') }}</th>
+                            <th>{{ __('Ejecutivo') }}</th>
+                            <th>{{ __('Monto de Deuda') }}</th>
+                            <th>{{ __('Estado') }}</th>
+                            <th>{{ __('Periodo') }}</th>
+                            <th>{{ __('Producto (M/F)') }}</th>
+                            <th>{{ __('Ciclo Facturación') }}</th>
+                            <th>{{ __('Estado Factura 1') }}</th>
+                            <th>{{ __('Estado Factura 2') }}</th>
+                            <th>{{ __('Estado Factura 3') }}</th>
                         </tr>
                     </x-slot:thead>
                     <x-slot:tbody>
                         @foreach ($cuentafinancieras as $item)
                             <tr>
-                                <td>
-                                    <b class="cursor-pointer hover:text-sky-600"
-                                        data-bs-toggle="tooltip"
-                                        data-bs-original-title="Detalle"
-                                        onclick="cuentafinancieraDetalle({{ $item->id }})">
-                                        {{ $item->cliente->ruc }}
-                                    </b>
-                                </td>
-                                <td>{{ substr($item->cliente->razon_social, 0, 45) }}</td>
                                 <td>{{ $item->cuenta_financiera }}</td>
-                                <td class="flex flex-col">
-                                    <b>{{ $item->user->equipos->last()->nombre ?? '' }}</b>
-                                    <span>{{ $item->user->name }}</span>
+                                <td>
+                                    <div class="flex flex-col">
+                                        <b class="cursor-pointer hover:text-sky-600"
+                                            data-bs-toggle="tooltip"
+                                            data-bs-original-title="Detalle"
+                                            onclick="cuentafinancieraDetalle({{ $item->id }})">
+                                            {{ $item->cliente->ruc }}
+                                        </b>
+                                        <span>{{ substr($item->cliente->razon_social, 0, 45) }}</span>
+                                    </div>
                                 </td>
-                                <td>{{ $item->fecha_evaluacion }}</td>
+                                <td>
+                                    <div class="flex flex-col">
+                                        <b>{{ $item->user->equipos->last()->nombre ?? '' }}</b>
+                                        <span>{{ $item->user->name }}</span>
+                                    </div>
+                                </td>
                                 <td></td>
-                                <td>{{ substr($item->ultimo_comentario, 0, 45) }}</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>{{ $item->ciclo }}</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
                             </tr>
                         @endforeach
                     </x-slot:tbody>

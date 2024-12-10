@@ -154,7 +154,7 @@ class CuentafinancieraController extends Controller
                 'success' => true,
             ]);
         } elseif ($view === 'update-factura') {
-            $factura = new Factura();
+            $factura = new Factura;
             $factura->fecha_emision = now();
             $factura->fecha_vencimiento = now();
             $factura->monto = 0;
