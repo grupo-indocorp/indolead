@@ -50,9 +50,9 @@
                                             data-bs-toggle="tooltip"
                                             data-bs-original-title="Detalle"
                                             onclick="cuentafinancieraDetalle({{ $item->id }})">
-                                            {{ $item->cliente->ruc }}
+                                            {{ $item->cliente->ruc ?? '' }}
                                         </b>
-                                        <span>{{ substr($item->cliente->razon_social, 0, 45) }}</span>
+                                        <span>{{ substr($item->cliente->razon_social, 0, 45) ?? ''}}</span>
                                     </div>
                                 </td>
                                 <td>
