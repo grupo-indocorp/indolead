@@ -30,7 +30,8 @@
                             <th>{{ __('Cuenta Financiera') }}</th>
                             <th>{{ __('Ruc') }}</th>
                             <th>{{ __('Ejecutivo') }}</th>
-                            <th>{{ __('Monto de Deuda') }}</th>
+                            <th>{{ __('Monto') }}</th>
+                            <th>{{ __('Deuda') }}</th>
                             <th>{{ __('Estado') }}</th>
                             <th>{{ __('Periodo') }}</th>
                             <th>{{ __('Producto (M/F)') }}</th>
@@ -61,9 +62,10 @@
                                         <span>{{ $item->text_user_nombre }}</span>
                                     </div>
                                 </td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                <td>{{ $item->ultimo_monto_factura }}</td>
+                                <td>{{ $item->ultimo_deuda_factura }}</td>
+                                <td>{{ $item->estado_evaluacion }}</td>
+                                <td>{{ $item->periodo }}</td>
                                 <td></td>
                                 <td>{{ $item->ciclo }}</td>
                                 <td></td>

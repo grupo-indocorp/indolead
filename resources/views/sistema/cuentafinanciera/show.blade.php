@@ -28,11 +28,11 @@
     <div class="flex gap-4">
         <div>
             <b>Estado:</b>
-            <span>{{ $cuentafinanciera->estado_evaluacion }}</span>
+            <span class="uppercase">{{ $cuentafinanciera->estado_evaluacion }}</span>
         </div>
         <div>
             <b>Ciclo:</b>
-            <span>{{ $cuentafinanciera->ciclo}}</span>
+            <span>{{ $cuentafinanciera->ciclo }}</span>
         </div>
     </div>
 </section>
