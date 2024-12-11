@@ -31,6 +31,7 @@ class ConfiguracionController extends Controller
                 if (! $exists) {
                     $ultimoEvaporacion = Evaporacion::where('cuenta_financiera', $value->cuenta_financiera)->orderByDesc('id')->first();
 
+                    // $estado3 = Estadofactura::where('name', strtolower($value->estado_facturacion3))->first();
                     Cuentafinanciera::create([
                         'cuenta_financiera' => $value->cuenta_financiera,
                         'fecha_evaluacion' => null,
@@ -54,6 +55,7 @@ class ConfiguracionController extends Controller
                 } else {
                     $ultimoEvaporacion = Evaporacion::where('cuenta_financiera', $value->cuenta_financiera)->orderByDesc('id')->first();
 
+                    // $estado3 = Estadofactura::where('name', strtolower($value->estado_facturacion3))->first();
                     Cuentafinanciera::where('cuenta_financiera', $value->cuenta_financiera)->update([
                         'cuenta_financiera' => $value->cuenta_financiera,
                         'fecha_evaluacion' => null,
