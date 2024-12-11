@@ -169,8 +169,9 @@
                 </div>
             </x-sistema.card>
         </section>
-    
-        <section class="grid grid-cols-3 gap-2" id="cuentafinancieraFacturas"></section>
+
+        {{-- facturas --}}
+        <section id="cuentafinancieraFacturas"></section>
 
         <x-sistema.card>
             <section id="cuentafinancieraProductos"></section>

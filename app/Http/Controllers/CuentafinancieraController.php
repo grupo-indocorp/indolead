@@ -76,13 +76,14 @@ class CuentafinancieraController extends Controller
             ));
         } elseif ($view === 'show-facturas') {
             $cuentafinanciera = Cuentafinanciera::find($id);
-            $facturasEvaporacion = Evaporacion::where('cuenta_financiera', $cuentafinanciera->cuenta_financiera)
-                ->orderByDesc('id')
-                ->first();
+            $facturas = Factura::with(['estadofactura'])
+                ->where('cuentafinanciera_id', $cuentafinanciera->id)
+                ->get();
             $estadofacturas = Estadofactura::all();
 
             return view('sistema.cuentafinanciera.facturas', compact(
-                'facturasEvaporacion',
+                'cuentafinanciera',
+                'facturas',
                 'estadofacturas',
             ));
         }
@@ -162,6 +163,26 @@ class CuentafinancieraController extends Controller
             $factura->estadofactura_id = 3;
             $factura->cuentafinanciera_id = $id;
             $factura->save();
+
+            return response()->json([
+                'success' => true,
+            ]);
+        } elseif ($view === 'update-store-factura') {
+            $cuentafinanciera = Cuentafinanciera::find($id);
+
+            $factura = new Factura;
+            $factura->fecha_emision = now();
+            $factura->fecha_vencimiento = now();
+            $factura->monto = request('monto_factura');
+            $factura->deuda = request('deuda_factura');
+            $factura->estadofactura_id = 3;
+            $factura->cuentafinanciera_id = $cuentafinanciera->id;
+            $factura->save();
+
+            $estadoFactura = Estadofactura::find(3);
+            $cuentafinanciera->fecha_evaluacion = now();
+            $cuentafinanciera->estado_evaluacion = $estadoFactura->name;
+            $cuentafinanciera->save();
 
             return response()->json([
                 'success' => true,

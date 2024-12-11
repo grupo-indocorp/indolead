@@ -16,6 +16,7 @@ use App\Http\Controllers\EquipoController;
 use App\Http\Controllers\EvaporacionController;
 use App\Http\Controllers\EvaporacionGestionController;
 use App\Http\Controllers\ExportController;
+use App\Http\Controllers\FacturaController;
 use App\Http\Controllers\FunnelController;
 use App\Http\Controllers\GestionClienteController;
 use App\Http\Controllers\HomeController;
@@ -67,6 +68,8 @@ Route::middleware([
         // 'evaporacion-gestion' => EvaporacionGestionController::class,
 
         'cuentas-financieras' => CuentafinancieraController::class,
+        'facturas' => FacturaController::class,
+
         // Configuraciones
         'configuracion' => ConfiguracionController::class,
         'configuracion-sistema' => ConfiguracionSistemaController::class,
@@ -79,8 +82,9 @@ Route::middleware([
     Route::get('clientes/export/', [GestionClienteController::class, 'export']);
     Route::post('clientes/import/', [GestionClienteController::class, 'import']);
 
-    // Actualizar datos de clientes a la nueva tabla export_cliente
+    // Actualizar datos de clientes a la nueva tabla
     Route::get('update-cuentafinanciera', [ConfiguracionController::class, 'updateCuentaFinanciera'])->name('update.cuentafinanciera');
+    Route::get('update-facturas', [ConfiguracionController::class, 'updateFactura'])->name('update.factura');
 
     // Export
     Route::get('export/secodi/funnel', [ExportController::class, 'secodiFunnel']);
