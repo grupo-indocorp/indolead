@@ -86,6 +86,7 @@ class ConfiguracionController extends Controller
                 'cuentafinanciera_id' => $item->id,
             ]);
         }
+
         return redirect()->route('cuentas-financieras.index')->with('success', 'Archivo importado exitosamente.');
     }
 
@@ -94,11 +95,11 @@ class ConfiguracionController extends Controller
         $facturasEvaporacion = Evaporacion::orderByDesc('id')
             ->get()
             ->groupBy('cuentafinanciera_id')
-            ->map(fn(Collection $group) => $group->first());
+            ->map(fn (Collection $group) => $group->first());
 
         foreach ($facturasEvaporacion as $key => $value) {
             $estado1 = Estadofactura::where('name', strtolower($value->estado_facturacion1))->first();
-            if (!is_null($estado1) && !is_null($value->cuentafinanciera_id)) {
+            if (! is_null($estado1) && ! is_null($value->cuentafinanciera_id)) {
                 $factura1 = new Factura;
                 $factura1->fecha_emision = $value->fecha_emision1;
                 $factura1->fecha_vencimiento = $value->fecha_vencimiento1;
@@ -110,7 +111,7 @@ class ConfiguracionController extends Controller
             }
 
             $estado2 = Estadofactura::where('name', strtolower($value->estado_facturacion2))->first();
-            if (!is_null($estado2) && !is_null($value->cuentafinanciera_id)) {
+            if (! is_null($estado2) && ! is_null($value->cuentafinanciera_id)) {
                 $factura2 = new Factura;
                 $factura2->fecha_emision = $value->fecha_emision2;
                 $factura2->fecha_vencimiento = $value->fecha_vencimiento2;
@@ -122,7 +123,7 @@ class ConfiguracionController extends Controller
             }
 
             $estado3 = Estadofactura::where('name', strtolower($value->estado_facturacion3))->first();
-            if (!is_null($estado3) && !is_null($value->cuentafinanciera_id)) {
+            if (! is_null($estado3) && ! is_null($value->cuentafinanciera_id)) {
                 $factura3 = new Factura;
                 $factura3->fecha_emision = $value->fecha_emision3;
                 $factura3->fecha_vencimiento = $value->fecha_vencimiento3;

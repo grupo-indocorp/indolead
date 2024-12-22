@@ -39,6 +39,11 @@ class Cuentafinanciera extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function estadofactura()
+    {
+        return $this->belongsTo(Estadofactura::class);
+    }
+
     // Relación uno a muchos
     public function evaporacions()
     {

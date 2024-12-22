@@ -155,19 +155,30 @@ class CuentafinancieraController extends Controller
                 'success' => true,
             ]);
         } elseif ($view === 'update-factura') {
-            $factura = new Factura;
+            $estadoFactura = Estadofactura::find(request('estado_factura'));
+
+            $cuentafinanciera = Cuentafinanciera::find($id);
+
+            $factura = Factura::find(request('factura_id'));
             $factura->fecha_emision = now();
             $factura->fecha_vencimiento = now();
-            $factura->monto = 0;
-            $factura->deuda = 0;
-            $factura->estadofactura_id = 3;
+            $factura->monto = request('monto_factura');
+            $factura->deuda = request('deuda_factura');
+            $factura->estadofactura_id = $estadoFactura->id;
             $factura->cuentafinanciera_id = $id;
             $factura->save();
+
+            $cuentafinanciera->fecha_evaluacion = now();
+            $cuentafinanciera->estadofactura_id = $estadoFactura->id;
+            $cuentafinanciera->estado_evaluacion = $estadoFactura->name;
+            $cuentafinanciera->save();
 
             return response()->json([
                 'success' => true,
             ]);
         } elseif ($view === 'update-store-factura') {
+            $estadoFactura = Estadofactura::find(request('estado_factura'));
+
             $cuentafinanciera = Cuentafinanciera::find($id);
 
             $factura = new Factura;
@@ -175,12 +186,12 @@ class CuentafinancieraController extends Controller
             $factura->fecha_vencimiento = now();
             $factura->monto = request('monto_factura');
             $factura->deuda = request('deuda_factura');
-            $factura->estadofactura_id = 3;
+            $factura->estadofactura_id = $estadoFactura->id;
             $factura->cuentafinanciera_id = $cuentafinanciera->id;
             $factura->save();
 
-            $estadoFactura = Estadofactura::find(3);
             $cuentafinanciera->fecha_evaluacion = now();
+            $cuentafinanciera->estadofactura_id = $estadoFactura->id;
             $cuentafinanciera->estado_evaluacion = $estadoFactura->name;
             $cuentafinanciera->save();
 

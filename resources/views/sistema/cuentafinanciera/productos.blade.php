@@ -5,6 +5,7 @@
             <th>{{ __('ORDEN') }}</th>
             <th>{{ __('PRODUCTO') }}</th>
             <th>{{ __('CARGO FIJO') }}</th>
+            <th>{{ __('MONTO') }}</th>
             <th>{{ __('DESCUENTO') }}</th>
             <th>{{ __('VIGENCIA DEL DESCUENTO') }}</th>
             <th>{{ __('FECHA DE SOLICITUD') }}</th>
@@ -20,6 +21,7 @@
                     editMode: false,
                     isSaving: false,
                     cargoFijo: '{{ $item->cargo_fijo }}',
+                    monto: '{{ $item->cargo_fijo }}',
                     fechaEstadoLinea: '{{ $item->fecha_estado_linea }}',
                     estadoLinea: '{{ $item->estado_linea }}',
                     saveChanges() {
@@ -35,6 +37,7 @@
                                 view: 'update-producto-edit',
                                 evaporacion_id: '{{ $item->id }}',
                                 cargo_fijo: self.cargoFijo,
+                                monto: self.monto,
                                 fecha_estado_linea: self.fechaEstadoLinea,
                                 estado_linea: self.estadoLinea,
                             },
@@ -63,12 +66,13 @@
                 <td>{{ $item->numero_servicio }}</td>
                 <td>{{ $item->orden_pedido }}</td>
                 <td>{{ $item->producto }}</td>
+                <td>{{ $item->cargo_fijo }}</td>
                 <td>
                     <template x-if="!editMode">
-                        <span x-text="cargoFijo"></span>
+                        <span x-text="monto"></span>
                     </template>
                     <template x-if="editMode">
-                        <x-ui.input type="number" x-model="cargoFijo" />
+                        <x-ui.input type="number" x-model="monto" />
                     </template>
                 </td>
                 <td>{{ $item->descuento }}</td>

@@ -64,7 +64,23 @@
                                 </td>
                                 <td>{{ $item->ultimo_monto_factura }}</td>
                                 <td>{{ $item->ultimo_deuda_factura }}</td>
-                                <td>{{ $item->estado_evaluacion }}</td>
+                                <td>
+                                    @if (!is_null($item->estadofactura_id))
+                                        @if ($item->estadofactura->id_name === 'pagado')
+                                            <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-green-50 text-green-500 border border-green-500">
+                                                {{ $item->estadofactura->name }}
+                                            </span>
+                                        @elseif ($item->estadofactura->id_name === 'pagado_ajuste' || $item->estadofactura->id_name === 'pagado_reclamo')
+                                            <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-yellow-50 text-yellow-500 border border-yellow-500">
+                                                {{ $item->estadofactura->name }}
+                                            </span>
+                                        @else
+                                            <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-red-50 text-red-500 border border-red-500">
+                                                {{ $item->estadofactura->name }}
+                                            </span>
+                                        @endif
+                                    @endif
+                                </td>
                                 <td>{{ $item->periodo }}</td>
                                 <td></td>
                                 <td>{{ $item->ciclo }}</td>

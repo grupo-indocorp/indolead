@@ -28,7 +28,21 @@
     <div class="flex gap-4">
         <div>
             <b>Estado:</b>
-            <span class="uppercase">{{ $cuentafinanciera->estado_evaluacion }}</span>
+            @if (!is_null($cuentafinanciera->estadofactura_id))
+                @if ($cuentafinanciera->estadofactura->id_name === 'pagado')
+                    <span class="uppercase text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-green-50 text-green-500 border border-green-500">
+                        {{ $cuentafinanciera->estadofactura->name }}
+                    </span>
+                @elseif ($cuentafinanciera->estadofactura->id_name === 'pagado_ajuste' || $cuentafinanciera->estadofactura->id_name === 'pagado_reclamo')
+                    <span class="uppercase text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-yellow-50 text-yellow-500 border border-yellow-500">
+                        {{ $cuentafinanciera->estadofactura->name }}
+                    </span>
+                @else
+                    <span class="uppercase text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-red-50 text-red-500 border border-red-500">
+                        {{ $cuentafinanciera->estadofactura->name }}
+                    </span>
+                @endif
+            @endif
         </div>
         <div>
             <b>Ciclo:</b>
