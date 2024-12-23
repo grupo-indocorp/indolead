@@ -95,7 +95,7 @@ class InventarioController extends Controller
             'num_ram' => 'required|integer',
             'disco_duro' => 'required|string|max:100',
             'pantalla' => 'required|string|max:100',
-            'color' => 'required|string|max:50',
+            'color' => 'required|string|max:50',    
             'descripcion' => 'nullable|string|max:255',
         ]);
 
