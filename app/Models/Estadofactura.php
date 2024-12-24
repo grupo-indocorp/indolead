@@ -14,4 +14,10 @@ class Estadofactura extends Model
     {
         return $this->hasMany(Factura::class);
     }
+
+    // Relación uno a uno
+    public function cuentafinancieras()
+    {
+        return $this->hasMany(Cuentafinanciera::class);
+    }
 }

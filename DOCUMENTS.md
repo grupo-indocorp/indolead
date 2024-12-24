@@ -52,4 +52,5 @@ estadofacturas
 ```bash
     php artisan db:seed --class=EstadofacturaSeeder
     php artisan db:seed --class=CuentafinancieracicloSeeder
+    php artisan db:seed --class=EstadoproductoSeeder
 ```

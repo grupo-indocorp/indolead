@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Comentariocf;
 use App\Models\Cuentafinanciera;
 use App\Models\Estadofactura;
+use App\Models\Estadoproducto;
 use App\Models\Evaporacion;
 use App\Models\Factura;
+use App\Models\Facturadetalle;
 use App\Services\CuentafinancieraService;
 use Illuminate\Http\Request;
 
@@ -67,13 +69,6 @@ class CuentafinancieraController extends Controller
             return view('sistema.cuentafinanciera.show', compact(
                 'cuentafinanciera',
             ));
-        } elseif ($view === 'show-productos') {
-            $cuentafinanciera = Cuentafinanciera::find($id);
-            $productosEvaporacion = Evaporacion::where('cuenta_financiera', $cuentafinanciera->cuenta_financiera)->get();
-
-            return view('sistema.cuentafinanciera.productos', compact(
-                'productosEvaporacion',
-            ));
         } elseif ($view === 'show-facturas') {
             $cuentafinanciera = Cuentafinanciera::find($id);
             $facturas = Factura::with(['estadofactura'])
@@ -85,6 +80,24 @@ class CuentafinancieraController extends Controller
                 'cuentafinanciera',
                 'facturas',
                 'estadofacturas',
+            ));
+        } elseif ($view === 'show-factura-detalles') {
+            if (!is_null(request('factura_id'))) {
+                $factura = Factura::find(request('factura_id'));
+            } else {
+                $cuentafinanciera = Cuentafinanciera::with(['facturas'])->find($id);
+                if ($cuentafinanciera && $cuentafinanciera->facturas->isNotEmpty()) {
+                    $factura = $cuentafinanciera->facturas->last();
+                }
+            }
+            $facturadetalles = Facturadetalle::with(['estadoproducto', 'factura'])
+                ->where('factura_id', $factura->id)
+                ->get();
+            $estadoproductos = Estadoproducto::all();
+
+            return view('sistema.cuentafinanciera.factura-detalles', compact(
+                'facturadetalles',
+                'estadoproductos',
             ));
         }
     }
@@ -114,23 +127,6 @@ class CuentafinancieraController extends Controller
             return response()->json([
                 'success' => true,
             ]);
-        } elseif ($view === 'update-producto-edit') {
-            $evaporacion = Evaporacion::find(request('evaporacion_id'));
-            $evaporacion->cargo_fijo = request('cargo_fijo');
-            $evaporacion->fecha_estado_linea = request('fecha_estado_linea');
-            $evaporacion->estado_linea = request('estado_linea');
-            $evaporacion->save();
-
-            $cuentafinanciera = Cuentafinanciera::find($id);
-            $cuentafinanciera->fecha_evaluacion = now();
-            $cuentafinanciera->save();
-
-            return response()->json([
-                'success' => true,
-                'cargoFijo' => $evaporacion->cargo_fijo,
-                'fechaEstadoLinea' => $evaporacion->fecha_estado_linea,
-                'estadoLinea' => $evaporacion->estado_linea,
-            ]);
         } elseif ($view === 'update-comentario-calidad') {
             $evaporacion = Evaporacion::where('cuentafinanciera_id', $id)->get();
             foreach ($evaporacion as $value) {
@@ -155,19 +151,30 @@ class CuentafinancieraController extends Controller
                 'success' => true,
             ]);
         } elseif ($view === 'update-factura') {
-            $factura = new Factura;
+            $estadoFactura = Estadofactura::find(request('estado_factura'));
+
+            $cuentafinanciera = Cuentafinanciera::find($id);
+
+            $factura = Factura::find(request('factura_id'));
             $factura->fecha_emision = now();
             $factura->fecha_vencimiento = now();
-            $factura->monto = 0;
-            $factura->deuda = 0;
-            $factura->estadofactura_id = 3;
+            $factura->monto = request('monto_factura');
+            $factura->deuda = request('deuda_factura');
+            $factura->estadofactura_id = $estadoFactura->id;
             $factura->cuentafinanciera_id = $id;
             $factura->save();
+
+            $cuentafinanciera->fecha_evaluacion = now();
+            $cuentafinanciera->estadofactura_id = $estadoFactura->id;
+            $cuentafinanciera->estado_evaluacion = $estadoFactura->name;
+            $cuentafinanciera->save();
 
             return response()->json([
                 'success' => true,
             ]);
         } elseif ($view === 'update-store-factura') {
+            $estadoFactura = Estadofactura::find(request('estado_factura'));
+
             $cuentafinanciera = Cuentafinanciera::find($id);
 
             $factura = new Factura;
@@ -175,17 +182,65 @@ class CuentafinancieraController extends Controller
             $factura->fecha_vencimiento = now();
             $factura->monto = request('monto_factura');
             $factura->deuda = request('deuda_factura');
-            $factura->estadofactura_id = 3;
+            $factura->estadofactura_id = $estadoFactura->id;
             $factura->cuentafinanciera_id = $cuentafinanciera->id;
             $factura->save();
 
-            $estadoFactura = Estadofactura::find(3);
+            // registrar los productos de la factura
+            $productosEvaporacion = Evaporacion::where('cuenta_financiera', $cuentafinanciera->cuenta_financiera)->get();
+            foreach ($productosEvaporacion as $key => $value) {
+                $estadoProducto = Estadoproducto::where('name', $value->estado_linea)->first();
+
+                $facturadetalle = new Facturadetalle();
+                $facturadetalle->numero_servicio = $value->numero_servicio;
+                $facturadetalle->orden_pedido = $value->orden_pedido;
+                $facturadetalle->producto = $value->producto;
+                $facturadetalle->cargo_fijo = $value->cargo_fijo;
+                $facturadetalle->monto = $value->cargo_fijo;
+                $facturadetalle->descuento = $value->descuento;
+                $facturadetalle->descuento_vigencia = $value->descuento_vigencia;
+                $facturadetalle->fecha_solicitud = $value->fecha_solicitud;
+                $facturadetalle->fecha_activacion = $value->fecha_activacion;
+                $facturadetalle->periodo_servicio = $value->periodo_servicio;
+                $facturadetalle->estadoproducto_id = $estadoProducto->id;
+                $facturadetalle->factura_id = $factura->id;
+                $facturadetalle->save();
+            }
+
             $cuentafinanciera->fecha_evaluacion = now();
+            $cuentafinanciera->estadofactura_id = $estadoFactura->id;
             $cuentafinanciera->estado_evaluacion = $estadoFactura->name;
             $cuentafinanciera->save();
 
             return response()->json([
                 'success' => true,
+            ]);
+        } elseif ($view === 'update-factura-detalles') {
+            $facturadetalle = Facturadetalle::find(request('facturadetalle_id'));
+            $estadoProducto = Estadoproducto::find(request('estadoproducto_id'));
+
+            $facturadetalle->monto = request('monto');
+            $facturadetalle->fecha_estadoproducto = request('fecha_estadoproducto');
+            $facturadetalle->estadoproducto_id = $estadoProducto->id;
+            $facturadetalle->save();
+
+            // Actualizando monto de la factura
+            $facturadetalles = Facturadetalle::with(['estadoproducto'])
+                ->where('factura_id', $facturadetalle->factura_id)
+                ->get();
+            $montoTotal = 0;
+            foreach ($facturadetalles as $value) {
+                $montoTotal = $value->monto + $montoTotal;
+            }
+            $factura = Factura::find($facturadetalle->factura_id);
+            $factura->monto = $montoTotal;
+            $factura->save();
+
+            return response()->json([
+                'success' => true,
+                'monto' => $facturadetalle->monto,
+                'fechaEstadoProducto' => $facturadetalle->fecha_estadoproducto,
+                'estadoProducto' => $facturadetalle->estadoproducto->name,
             ]);
         }
     }

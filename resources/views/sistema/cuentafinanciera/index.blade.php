@@ -24,7 +24,7 @@
             </section>
             {{-- Tabla --}}
             <section class="p-4 w-full overflow-x-auto">
-                <x-ui.table id="evaporacion">
+                <x-ui.table id="cuentafinanciera">
                     <x-slot:thead>
                         <tr>
                             <th>{{ __('Cuenta Financiera') }}</th>
@@ -32,17 +32,24 @@
                             <th>{{ __('Ejecutivo') }}</th>
                             <th>{{ __('Monto') }}</th>
                             <th>{{ __('Deuda') }}</th>
-                            <th>{{ __('Estado') }}</th>
+                            <th>{{ __('Estado C.F') }}</th>
+                            <th>{{ __('Estado Producto') }}</th>
                             <th>{{ __('Periodo') }}</th>
                             <th>{{ __('Producto (M/F)') }}</th>
                             <th>{{ __('Ciclo Facturación') }}</th>
-                            <th>{{ __('Estado Factura 1') }}</th>
-                            <th>{{ __('Estado Factura 2') }}</th>
-                            <th>{{ __('Estado Factura 3') }}</th>
+                            <th>{{ __('Factura Antiguo') }}</th>
+                            <th>{{ __('Factura Intermedio') }}</th>
+                            <th>{{ __('Factura Último') }}</th>
                         </tr>
                     </x-slot:thead>
                     <x-slot:tbody>
                         @foreach ($cuentafinancieras as $item)
+                            @php
+                                $facturas = $item->facturas->sortByDesc('id')->values();
+                                $factura1 = $facturas->get(2) ?? '';
+                                $factura2 = $facturas->get(1) ?? '';
+                                $factura3 = $facturas->get(0) ?? '';
+                            @endphp
                             <tr>
                                 <td>{{ $item->cuenta_financiera }}</td>
                                 <td>
@@ -62,15 +69,103 @@
                                         <span>{{ $item->text_user_nombre }}</span>
                                     </div>
                                 </td>
-                                <td>{{ $item->ultimo_monto_factura }}</td>
-                                <td>{{ $item->ultimo_deuda_factura }}</td>
-                                <td>{{ $item->estado_evaluacion }}</td>
-                                <td>{{ $item->periodo }}</td>
+                                <td>{{ $factura3->monto ?? 0 }}</td>
+                                <td>{{ $factura3->deuda ?? 0 }}</td>
+                                <td>
+                                    @if (!is_null($item->estadofactura_id))
+                                        @if ($item->estadofactura->id_name === 'pagado')
+                                            <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-green-50 text-green-500 border border-green-500">
+                                                {{ $item->estadofactura->name }}
+                                            </span>
+                                        @elseif ($item->estadofactura->id_name === 'pagado_ajuste' || $item->estadofactura->id_name === 'pagado_reclamo')
+                                            <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-yellow-50 text-yellow-500 border border-yellow-500">
+                                                {{ $item->estadofactura->name }}
+                                            </span>
+                                        @else
+                                            <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-red-50 text-red-500 border border-red-500">
+                                                {{ $item->estadofactura->name }}
+                                            </span>
+                                        @endif
+                                    @endif
+                                </td>
+                                <td>
+                                    @if ($factura3)
+                                        @switch($factura3->facturadetalles->last()->estadoproducto->id_name)
+                                            @case('activo')
+                                                <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-green-50 text-green-500 border border-green-500">
+                                                    {{ $factura3->facturadetalles->last()->estadoproducto->name }}
+                                                </span>
+                                                @break
+                                            @case('corte_deuda_parcial')
+                                                <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-yellow-50 text-yellow-500 border border-yellow-500">
+                                                    {{ $factura3->facturadetalles->last()->estadoproducto->name }}
+                                                </span>
+                                                @break
+                                            @default
+                                                <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-red-50 text-red-500 border border-red-500">
+                                                    {{ $factura3->facturadetalles->last()->estadoproducto->name }}
+                                                </span>
+                                        @endswitch
+                                    @endif
+                                </td>
+                                <td>
+                                    @if ($factura3)
+                                        {{ $factura3->facturadetalles->last()->periodo_servicio }}
+                                    @endif
+                                </td>
                                 <td></td>
                                 <td>{{ $item->ciclo }}</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                <td>
+                                    @if ($factura1)
+                                        @if ($factura1->estadofactura->id_name === 'pagado')
+                                            <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-green-50 text-green-500 border border-green-500">
+                                                {{ $factura1->estadofactura->name }}
+                                            </span>
+                                        @elseif ($factura1->estadofactura->id_name === 'pagado_ajuste' || $factura1->estadofactura->id_name === 'pagado_reclamo')
+                                            <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-yellow-50 text-yellow-500 border border-yellow-500">
+                                                {{ $factura1->estadofactura->name }}
+                                            </span>
+                                        @else
+                                            <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-red-50 text-red-500 border border-red-500">
+                                                {{ $factura1->estadofactura->name }}
+                                            </span>
+                                        @endif
+                                    @endif
+                                </td>
+                                <td>
+                                    @if ($factura2)
+                                        @if ($factura2->estadofactura->id_name === 'pagado')
+                                            <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-green-50 text-green-500 border border-green-500">
+                                                {{ $factura2->estadofactura->name }}
+                                            </span>
+                                        @elseif ($factura2->estadofactura->id_name === 'pagado_ajuste' || $factura2->estadofactura->id_name === 'pagado_reclamo')
+                                            <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-yellow-50 text-yellow-500 border border-yellow-500">
+                                                {{ $factura2->estadofactura->name }}
+                                            </span>
+                                        @else
+                                            <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-red-50 text-red-500 border border-red-500">
+                                                {{ $factura2->estadofactura->name }}
+                                            </span>
+                                        @endif
+                                    @endif
+                                </td>
+                                <td>
+                                    @if ($factura3)
+                                        @if ($factura3->estadofactura->id_name === 'pagado')
+                                            <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-green-50 text-green-500 border border-green-500">
+                                                {{ $factura3->estadofactura->name }}
+                                            </span>
+                                        @elseif ($factura3->estadofactura->id_name === 'pagado_ajuste' || $factura3->estadofactura->id_name === 'pagado_reclamo')
+                                            <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-yellow-50 text-yellow-500 border border-yellow-500">
+                                                {{ $factura3->estadofactura->name }}
+                                            </span>
+                                        @else
+                                            <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-red-50 text-red-500 border border-red-500">
+                                                {{ $factura3->estadofactura->name }}
+                                            </span>
+                                        @endif
+                                    @endif
+                                </td>
                             </tr>
                         @endforeach
                     </x-slot:tbody>
