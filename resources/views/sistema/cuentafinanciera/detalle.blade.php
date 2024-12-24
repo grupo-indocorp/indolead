@@ -174,7 +174,7 @@
         <section id="cuentafinancieraFacturas"></section>
 
         <x-sistema.card>
-            <section id="cuentafinancieraProductos"></section>
+            <section id="facturaDetalles"></section>
         </x-sistema.card>
     </section>
 </x-sistema.modal>
@@ -213,23 +213,24 @@
             },
             success: function( result ) {
                 $('#cuentafinancieraShow').html(result);
-                cuentafinancieraProductos(cuentafinanciera_id);
                 cuentafinancieraFacturas(cuentafinanciera_id);
+                facturaDetalles(cuentafinanciera_id);
             },
             error: function( response ) {
                 console.log('error');
             }
         });
     }
-    function cuentafinancieraProductos(cuentafinanciera_id) {
+    function facturaDetalles(cuentafinanciera_id, factura_id=null) {
         $.ajax({
             url: `{{ url('cuentas-financieras/${cuentafinanciera_id}') }}`,
             method: "GET",
             data: {
-                view: 'show-productos',
+                view: 'show-factura-detalles',
+                factura_id: factura_id,
             },
             success: function( result ) {
-                $('#cuentafinancieraProductos').html(result);
+                $('#facturaDetalles').html(result);
             },
             error: function( response ) {
                 console.log('error');

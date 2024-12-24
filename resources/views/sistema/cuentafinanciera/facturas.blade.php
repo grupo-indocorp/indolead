@@ -49,27 +49,29 @@
             }">
             <section class="flex justify-between">
                 <h5>Factura {{ $key }}</h5>
-                <div>
-                    <template x-if="!editMode">
-                        <span class="hover:cursor-pointer hover:text-slate-500"
-                            @click="editMode = true">
-                            <i class="fa-solid fa-pen-to-square"></i>
-                        </span>
-                    </template>
-                    <template x-if="editMode">
-                        <span class="hover:cursor-pointer hover:text-slate-500"
-                            @click="if (!isSaving) { saveFactura(); }"
-                            :disabled="isSaving">
-                            <i class="fa-solid fa-floppy-disk"></i>
-                        </span>
-                    </template>
-                    <template x-if="editMode">
-                        <span class="hover:cursor-pointer hover:text-slate-500"
-                            @click="editMode = false">
-                            <i class="fa-solid fa-xmark"></i>
-                        </span>
-                    </template>
-                </div>
+                @if ($loop->last)
+                    <div>
+                        <template x-if="!editMode">
+                            <span class="hover:cursor-pointer hover:text-slate-500"
+                                @click="editMode = true">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </span>
+                        </template>
+                        <template x-if="editMode">
+                            <span class="hover:cursor-pointer hover:text-slate-500"
+                                @click="if (!isSaving) { saveFactura(); }"
+                                :disabled="isSaving">
+                                <i class="fa-solid fa-floppy-disk"></i>
+                            </span>
+                        </template>
+                        <template x-if="editMode">
+                            <span class="hover:cursor-pointer hover:text-slate-500"
+                                @click="editMode = false">
+                                <i class="fa-solid fa-xmark"></i>
+                            </span>
+                        </template>
+                    </div>
+                @endif
             </section>
             <section>
                 <b>Fecha Emisión:</b>

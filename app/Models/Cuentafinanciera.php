@@ -54,4 +54,9 @@ class Cuentafinanciera extends Model
     {
         return $this->hasMany(Comentariocf::class);
     }
+
+    public function facturas()
+    {
+        return $this->hasMany(Factura::class);
+    }
 }
