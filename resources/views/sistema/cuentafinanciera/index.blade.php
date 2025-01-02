@@ -22,6 +22,48 @@
                     </div>
                 @endcan
             </section>
+            {{-- Filter --}}
+            <section class="p-4 pb-0">
+                <form action="{{ route('cuentas-financieras.index') }}" method="GET" class="m-0">
+                    <div class="flex gap-1">
+                        <div class="form-group flex flex-col">
+                            <label for="filtro_equipo_id" class="form-control-label">Equipos:</label>
+                            <select class="form-control" name="filtro_equipo_id" id="filtro_equipo_id" style="width: 250px;">
+                                <option></option>
+                                @foreach ($equipos as $item)
+                                    <option value="{{ $item->id }}"
+                                        @if ($item->id == request('filtro_equipo_id')) selected @endif
+                                        >
+                                        {{ $item->nombre }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group flex flex-col">
+                            <label for="filtro_user_id" class="form-control-label">Ejecutivo:</label>
+                            <select class="form-control" name="filtro_user_id" id="filtro_user_id" onchange="filterCuentaFinanciera()"  style="width: 250px;">
+                                <option></option>
+                                @foreach ($users as $item)
+                                    <option value="{{ $item->id }}"
+                                        @if ($item->id == request('filtro_user_id')) selected @endif
+                                        >
+                                        {{ $item->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group flex flex-col">
+                            <label for="filtro_periodo" class="form-control-label">Periodo:</label>
+                            <input class="form-control" 
+                                type="search"
+                                value="{{ request('filtro_periodo') }}"
+                                id="filtro_periodo"
+                                name="filtro_periodo"
+                                placeholder="Buscar por Periodo">
+                        </div>
+                    </div>
+                </form>
+            </section>
             {{-- Tabla --}}
             <section class="p-4 w-full overflow-x-auto">
                 <x-ui.table id="cuentafinanciera">
@@ -46,9 +88,9 @@
                         @foreach ($cuentafinancieras as $item)
                             @php
                                 $facturas = $item->facturas->sortByDesc('id')->values();
-                                $factura1 = $facturas->get(2) ?? '';
-                                $factura2 = $facturas->get(1) ?? '';
-                                $factura3 = $facturas->get(0) ?? '';
+                                $factura1 = $facturas->get(2) ?? null;
+                                $factura2 = $facturas->get(1) ?? null;
+                                $factura3 = $facturas->get(0) ?? null;
                             @endphp
                             <tr>
                                 <td>{{ $item->cuenta_financiera }}</td>
@@ -69,8 +111,8 @@
                                         <span>{{ $item->text_user_nombre }}</span>
                                     </div>
                                 </td>
-                                <td>{{ $factura3->monto ?? 0 }}</td>
-                                <td>{{ $factura3->deuda ?? 0 }}</td>
+                                <td>{{ $factura3 != null ? $factura3->monto : 0 }}</td>
+                                <td>{{ $factura3 != null ? $factura3->deuda : 0 }}</td>
                                 <td>
                                     @if (!is_null($item->estadofactura_id))
                                         @if ($item->estadofactura->id_name === 'pagado')
@@ -89,7 +131,7 @@
                                     @endif
                                 </td>
                                 <td>
-                                    @if ($factura3)
+                                    @if (!is_null($factura3))
                                         @switch($factura3->facturadetalles->last()->estadoproducto->id_name)
                                             @case('activo')
                                                 <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-green-50 text-green-500 border border-green-500">
@@ -109,14 +151,12 @@
                                     @endif
                                 </td>
                                 <td>
-                                    @if ($factura3)
-                                        {{ $factura3->facturadetalles->last()->periodo_servicio }}
-                                    @endif
+                                    {{ $item->periodo }}
                                 </td>
                                 <td></td>
                                 <td>{{ $item->ciclo }}</td>
                                 <td>
-                                    @if ($factura1)
+                                    @if (!is_null($factura1))
                                         @if ($factura1->estadofactura->id_name === 'pagado')
                                             <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-green-50 text-green-500 border border-green-500">
                                                 {{ $factura1->estadofactura->name }}
@@ -133,7 +173,7 @@
                                     @endif
                                 </td>
                                 <td>
-                                    @if ($factura2)
+                                    @if (!is_null($factura2))
                                         @if ($factura2->estadofactura->id_name === 'pagado')
                                             <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-green-50 text-green-500 border border-green-500">
                                                 {{ $factura2->estadofactura->name }}
@@ -150,7 +190,7 @@
                                     @endif
                                 </td>
                                 <td>
-                                    @if ($factura3)
+                                    @if (!is_null($factura3))
                                         @if ($factura3->estadofactura->id_name === 'pagado')
                                             <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-green-50 text-green-500 border border-green-500">
                                                 {{ $factura3->estadofactura->name }}
@@ -177,6 +217,57 @@
     @endsection
     @section('script')
         <script>
+            $('#filtro_equipo_id').select2({
+                placeholder: 'Seleccionar',
+                allowClear: true,
+            });
+            $('#filtro_user_id').select2({
+                placeholder: 'Seleccionar',
+                allowClear: true,
+            });
+            $('#filtro_equipo_id').on('change', function() {
+                if ($(this).val()) {
+                    $.ajax({
+                        url: `{{ url('cuentas-financieras/${$(this).val()}') }}`,
+                        method: "GET",
+                        data: {
+                            view: 'show-select-equipo',
+                        },
+                        success: function(data) {
+                            let opt_user = '<option></option>';
+                            data.users.map(function (item) {
+                                opt_user += `<option value="${item.id}">${item.name}</option>`;
+                            })
+                            $('#filtro_user_id').html(opt_user);
+                        },
+                        error: function( response ) {
+                            console.log('error');
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        url: `{{ url('cuentas-financieras/0') }}`,
+                        method: "GET",
+                        data: {
+                            view: 'show-select-user',
+                        },
+                        success: function(data) {
+                            let opt_user = '<option></option>';
+                            data.users.map(function (item) {
+                                opt_user += `<option value="${item.id}">${item.name}</option>`;
+                            })
+                            $('#filtro_user_id').html(opt_user);
+                            filterCuentaFinanciera();
+                        },
+                        error: function( response ) {
+                            console.log('error');
+                        }
+                    });
+                }
+            });
+            function filterCuentaFinanciera() {
+                window.location.href = `/cuentas-financieras?filtro_equipo_id=${$('#filtro_equipo_id').val()}&filtro_user_id=${$('#filtro_user_id').val()}&filtro_periodo=${$('#filtro_periodo').val()}`;
+            }
             function cuentafinancieraDetalle(cuentafinanciera_id) {
                 $.ajax({
                     url: `{{ url('cuentas-financieras/${cuentafinanciera_id}') }}`,
