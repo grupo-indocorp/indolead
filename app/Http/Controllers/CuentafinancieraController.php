@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Comentariocf;
 use App\Models\Cuentafinanciera;
+use App\Models\Equipo;
 use App\Models\Estadofactura;
 use App\Models\Estadoproducto;
 use App\Models\Evaporacion;
 use App\Models\Factura;
 use App\Models\Facturadetalle;
+use App\Models\User;
 use App\Services\CuentafinancieraService;
 use Illuminate\Http\Request;
 
@@ -26,10 +28,30 @@ class CuentafinancieraController extends Controller
      */
     public function index()
     {
-        $cuentafinancieras = $this->cuentafinancieraService->cuentafinancieraGet();
+        // Filter
+        $equipo_id = request('filtro_equipo_id');
+        $user_id = request('filtro_user_id');
+        $periodo = request('filtro_periodo');
+
+        $equipos = Equipo::all();
+        if ($equipo_id) {
+            $users = Equipo::find($equipo_id)->users;
+        } else {
+            $users = User::role('ejecutivo')->get();
+        }
+
+        $filters = [
+            'equipo_id' => $equipo_id,
+            'user_id' => $user_id,
+            'periodo' => $periodo,
+        ];
+
+        $cuentafinancieras = $this->cuentafinancieraService->cuentafinancieraGet($filters);
 
         return view('sistema.cuentafinanciera.index', compact(
-            'cuentafinancieras'
+            'cuentafinancieras',
+            'equipos',
+            'users',
         ));
     }
 
@@ -99,6 +121,19 @@ class CuentafinancieraController extends Controller
                 'facturadetalles',
                 'estadoproductos',
             ));
+        }  elseif ($view === 'show-select-equipo') {
+            $equipo = Equipo::find($id);
+            $users = $equipo->users;
+
+            return response()->json([
+                'users' => $users,
+            ]);
+        } elseif ($view === 'show-select-user') {
+            $users = User::role('ejecutivo')->get();
+
+            return response()->json([
+                'users' => $users,
+            ]);
         }
     }
 
@@ -207,9 +242,12 @@ class CuentafinancieraController extends Controller
                 $facturadetalle->save();
             }
 
+            $ultimoDetalle = Facturadetalle::where('factura_id', $factura->id)->latest()->first();
+
             $cuentafinanciera->fecha_evaluacion = now();
             $cuentafinanciera->estadofactura_id = $estadoFactura->id;
             $cuentafinanciera->estado_evaluacion = $estadoFactura->name;
+            $cuentafinanciera->periodo = $ultimoDetalle->periodo_servicio;
             $cuentafinanciera->save();
 
             return response()->json([
