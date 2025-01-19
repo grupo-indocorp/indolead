@@ -24,6 +24,7 @@
 
                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Comentario</th>
                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Fecha de última Gestión</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Total Líneas</th>
                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Días sin Gestión</th>
 
                 @role(['sistema', 'gerente general', 'gerente comercial', 'asistente comercial', 'supervisor', 'capacitador', 'planificacion'])
@@ -34,9 +35,8 @@
         <tbody>
             @foreach ($clientes as $value)
             @php
+                $total_lineas = ($value->movistars->last()->linea_claro??0) + ($value->movistars->last()->linea_entel??0) + ($value->movistars->last()->linea_bitel??0) + ($value->movistars->last()->linea_movistar??0);
                 $comentario = $value->comentarios->last();
-            @endphp
-            @php
                 $fecha_gestion = \Carbon\Carbon::parse($value->fecha_gestion)->startOfDay();
                 $dias = $fecha_gestion->diffInDays(\Carbon\Carbon::now()->startOfDay());
             @endphp
@@ -79,6 +79,9 @@
                 </td>
                 <td class="align-middle text-center">
                     <span class="text-secondary text-xs font-weight-normal">{{ date('d/m/Y H:i:s A', strtotime($value->fecha_gestion)) }}</span>
+                </td>
+                <td class="align-middle text-center">
+                    {{ $total_lineas }}
                 </td>
                 <td class="align-middle text-center text-sm">
                     @if ($dias >= 60)
