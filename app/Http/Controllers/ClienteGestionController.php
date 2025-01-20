@@ -88,6 +88,7 @@ class ClienteGestionController extends Controller
 
         $where = [];
         $where[] = ['ruc', 'LIKE', $filtro_ruc.'%'];
+        $orwhere[] = ['razon_social', 'LIKE', '%'.$filtro_ruc.'%'];
         if ($filtro_etapa_id != 0) {
             $where[] = ['etapa_id', $filtro_etapa_id];
         }
@@ -118,8 +119,9 @@ class ClienteGestionController extends Controller
                 $where[] = ['sede_id', $filtro_sede_id];
             }
         }
-        $clientes = Cliente::with(['user', 'equipo', 'sede', 'etapa', 'comentarios'])
+        $clientes = Cliente::with(['user', 'equipo', 'sede', 'etapa', 'comentarios', 'movistars'])
             ->where($where)
+            ->orWhere($orwhere)
             ->orderByDesc('fecha_gestion')
             ->paginate(50);
         $data_etapas = $this->clienteService->etapasConConteo()['data_etapas'];

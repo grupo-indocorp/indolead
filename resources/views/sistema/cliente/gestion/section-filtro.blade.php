@@ -96,7 +96,7 @@
                 @endrole
                 <div class="form-group">
                     <label for="filtro_ruc" class="form-control-label">Ruc:</label>
-                    <input class="form-control" type="search" value="{{ request('filtro_ruc') }}" id="filtro_ruc" name="filtro_ruc" placeholder="Buscar por RUC">
+                    <input class="form-control" type="search" value="{{ request('filtro_ruc') }}" id="filtro_ruc" name="filtro_ruc" placeholder="Buscar por RUC o Razón Social">
                 </div>
             </div>
         </div>
