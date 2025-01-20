@@ -36,6 +36,7 @@ class User extends Authenticatable
         'personal_phone',
         'personal_email',
         'identity_document',
+        'sede_id',
     ];
 
     /**

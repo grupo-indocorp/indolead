@@ -119,7 +119,7 @@ class ClienteGestionController extends Controller
                 $where[] = ['sede_id', $filtro_sede_id];
             }
         }
-        $clientes = Cliente::with(['user', 'equipo', 'sede', 'etapa', 'comentarios'])
+        $clientes = Cliente::with(['user', 'equipo', 'sede', 'etapa', 'comentarios', 'movistars'])
             ->where($where)
             ->orWhere($orwhere)
             ->orderByDesc('fecha_gestion')

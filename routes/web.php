@@ -28,6 +28,7 @@ use App\Http\Controllers\ReporteClienteController;
 use App\Http\Controllers\ReporteClienteNuevoController;
 use App\Http\Controllers\ReporteController;
 use App\Http\Controllers\RoleController;
+use App\Services\ClienteService;
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
 
@@ -92,6 +93,7 @@ Route::middleware([
 
     // Import
     Route::post('import/evaporacion', [ImportController::class, 'evaporacion'])->name('import.evaporacion');
+    // Route::get('gestioncliente', [ClienteService::class, 'gestionCliente']);
 });
 
 Livewire::setScriptRoute(function ($handle) {
