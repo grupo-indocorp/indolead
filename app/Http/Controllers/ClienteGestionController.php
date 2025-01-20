@@ -91,32 +91,41 @@ class ClienteGestionController extends Controller
         $orwhere[] = ['razon_social', 'LIKE', '%'.$filtro_ruc.'%'];
         if ($filtro_etapa_id != 0) {
             $where[] = ['etapa_id', $filtro_etapa_id];
+            $orwhere[] = ['etapa_id', $filtro_etapa_id];
         }
         if ($user->hasRole('ejecutivo')) {
             $where[] = ['user_id', $user->id];
+            $orwhere[] = ['user_id', $user->id];
         } else {
             if ($filtro_user_id != 0) {
                 $where[] = ['user_id', $filtro_user_id];
+                $orwhere[] = ['user_id', $filtro_user_id];
             }
         }
         if ($user->hasRole('supervisor')) {
             $where[] = ['equipo_id', $user->equipo->id];
+            $orwhere[] = ['equipo_id', $user->equipo->id];
         } else {
             if ($filtro_equipo_id != 0) {
                 $where[] = ['equipo_id', $filtro_equipo_id];
+                $orwhere[] = ['equipo_id', $filtro_equipo_id];
             }
         }
         if (isset($filtro_fecha_desde)) {
             $where[] = ['fecha_gestion', '>=', $filtro_fecha_desde.' 00:00:00'];
+            $orwhere[] = ['fecha_gestion', '>=', $filtro_fecha_desde.' 00:00:00'];
         }
         if (isset($filtro_fecha_hasta)) {
             $where[] = ['fecha_gestion', '<=', $filtro_fecha_hasta.' 23:59:59'];
+            $orwhere[] = ['fecha_gestion', '<=', $filtro_fecha_hasta.' 23:59:59'];
         }
         if ($user->hasRole('jefe comercial') || $user->hasRole('supervisor') || $user->hasRole('ejecutivo')) {
             $where[] = ['sede_id', $user->sede_id];
+            $orwhere[] = ['sede_id', $user->sede_id];
         } else { // administrador, sistema
             if ($filtro_sede_id != 0) {
                 $where[] = ['sede_id', $filtro_sede_id];
+                $orwhere[] = ['sede_id', $filtro_sede_id];
             }
         }
         $clientes = Cliente::with(['user', 'equipo', 'sede', 'etapa', 'comentarios', 'movistars'])
