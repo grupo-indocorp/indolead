@@ -14,9 +14,15 @@ class Cuentafinanciera extends Model
         'fecha_evaluacion',
         'estado_evaluacion',
         'fecha_descuento',
+        'backoffice_descuento',
+        'backoffice_descuento_vigencia',
         'descuento',
         'descuento_vigencia',
         'ciclo',
+        'text_cliente_ruc',
+        'text_cliente_razon_social',
+        'text_user_nombre',
+        'text_user_equipo',
         'user_id',
         'equipo_id',
         'cliente_id',
@@ -25,11 +31,32 @@ class Cuentafinanciera extends Model
     // Relación uno a muchos inversa
     public function cliente()
     {
-        return $this->belongsTo(cliente::class);
+        return $this->belongsTo(Cliente::class);
     }
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function estadofactura()
+    {
+        return $this->belongsTo(Estadofactura::class);
+    }
+
+    // Relación uno a muchos
+    public function evaporacions()
+    {
+        return $this->hasMany(Evaporacion::class);
+    }
+
+    public function comentariocfs()
+    {
+        return $this->hasMany(Comentariocf::class);
+    }
+
+    public function facturas()
+    {
+        return $this->hasMany(Factura::class);
     }
 }

@@ -45,3 +45,12 @@ Ejecutando tinker
     use Spatie\Permission\Models\Permission;
     Permission::create(['name' => 'sistema.evaporacion-gestion']);
 ```
+
+
+Ejecutando luego `php artisan migrate`, agregamos datos a la tabla
+estadofacturas
+```bash
+    php artisan db:seed --class=EstadofacturaSeeder
+    php artisan db:seed --class=CuentafinancieracicloSeeder
+    php artisan db:seed --class=EstadoproductoSeeder
+```

@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Cliente;
 use App\Models\Cuentafinanciera;
+use App\Models\Estadofactura;
 use App\Models\Evaporacion;
+use App\Models\Factura;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Collection;
 
 class ConfiguracionController extends Controller
 {
@@ -23,38 +25,116 @@ class ConfiguracionController extends Controller
             $cliente = Cliente::where('ruc', $value->ruc)->first();
             $user = User::where('identity_document', $value->identificacion_ejecutivo)->first();
 
-            if (!is_null($cliente) && !is_null($user)) {
+            if (! is_null($cliente) && ! is_null($user)) {
                 $exists = Cuentafinanciera::where('cuenta_financiera', $value->cuenta_financiera)->exists();
 
-                if (!$exists) {
+                if (! $exists) {
                     $ultimoEvaporacion = Evaporacion::where('cuenta_financiera', $value->cuenta_financiera)->orderByDesc('id')->first();
 
+                    // $estado3 = Estadofactura::where('name', strtolower($value->estado_facturacion3))->first();
                     Cuentafinanciera::create([
                         'cuenta_financiera' => $value->cuenta_financiera,
                         'fecha_evaluacion' => null,
                         'estado_evaluacion' => null,
+                        'periodo' => $ultimoEvaporacion->periodo_servicio,
+                        'ultimo_deuda_factura' => $ultimoEvaporacion->monto_facturado3,
+                        'ultimo_monto_factura' => $ultimoEvaporacion->deuda3,
                         'fecha_descuento' => $ultimoEvaporacion->fecha_evaluacion_descuento_vigencia ?? null,
-                        'descuento' => $ultimoEvaporacion->evaluacion_descuento,
-                        'descuento_vigencia' => $ultimoEvaporacion->evaluacion_descuento_vigencia,
-                        'ciclo' => $ultimoEvaporacion->ciclo_factuacion,
+                        'backoffice_descuento' => 0,
+                        'backoffice_descuento_vigencia' => '',
+                        'descuento' => $ultimoEvaporacion->evaluacion_descuento != '' ? $ultimoEvaporacion->evaluacion_descuento : 0,
+                        'descuento_vigencia' => $ultimoEvaporacion->evaluacion_descuento_vigencia != '' ? $ultimoEvaporacion->evaluacion_descuento_vigencia : 0,
+                        'ciclo' => $ultimoEvaporacion->ciclo_factuacion != '' ? $ultimoEvaporacion->ciclo_factuacion : 0,
+                        'text_cliente_ruc' => $cliente->ruc,
+                        'text_cliente_razon_social' => $cliente->razon_social,
+                        'text_user_nombre' => $user->name,
+                        'text_user_equipo' => $user->equipos->last()->nombre,
+                        'user_id' => $user->id,
+                        'cliente_id' => $cliente->id,
+                    ]);
+                } else {
+                    $ultimoEvaporacion = Evaporacion::where('cuenta_financiera', $value->cuenta_financiera)->orderByDesc('id')->first();
+
+                    // $estado3 = Estadofactura::where('name', strtolower($value->estado_facturacion3))->first();
+                    Cuentafinanciera::where('cuenta_financiera', $value->cuenta_financiera)->update([
+                        'cuenta_financiera' => $value->cuenta_financiera,
+                        'fecha_evaluacion' => null,
+                        'estado_evaluacion' => null,
+                        'periodo' => $ultimoEvaporacion->periodo_servicio,
+                        'ultimo_deuda_factura' => $ultimoEvaporacion->monto_facturado3,
+                        'ultimo_monto_factura' => $ultimoEvaporacion->deuda3,
+                        'fecha_descuento' => $ultimoEvaporacion->fecha_evaluacion_descuento_vigencia ?? null,
+                        'backoffice_descuento' => 0,
+                        'backoffice_descuento_vigencia' => '',
+                        'descuento' => $ultimoEvaporacion->evaluacion_descuento != '' ? $ultimoEvaporacion->evaluacion_descuento : 0,
+                        'descuento_vigencia' => $ultimoEvaporacion->evaluacion_descuento_vigencia != '' ? $ultimoEvaporacion->evaluacion_descuento_vigencia : 0,
+                        'ciclo' => $ultimoEvaporacion->ciclo_factuacion != '' ? $ultimoEvaporacion->ciclo_factuacion : 0,
+                        'text_cliente_ruc' => $cliente->ruc,
+                        'text_cliente_razon_social' => $cliente->razon_social,
+                        'text_user_nombre' => $user->name,
+                        'text_user_equipo' => $user->equipos->last()->nombre,
                         'user_id' => $user->id,
                         'cliente_id' => $cliente->id,
                     ]);
                 }
             }
         }
-        dd($count, 'aqui se actualizó cuenta financiera');
-    }
 
-    public function updateCuentaFinancieraId()
-    {
         $cuentasfinancieras = Cuentafinanciera::all();
         foreach ($cuentasfinancieras as $item) {
             Evaporacion::where('cuenta_financiera', $item->cuenta_financiera)->update([
                 'cuentafinanciera_id' => $item->id,
             ]);
         }
-        dd('aqui se actualizó cuentafinanciera_id de evaporacions');
+
+        return redirect()->route('cuentas-financieras.index')->with('success', 'Archivo importado exitosamente.');
+    }
+
+    public function updateFactura()
+    {
+        $facturasEvaporacion = Evaporacion::orderByDesc('id')
+            ->get()
+            ->groupBy('cuentafinanciera_id')
+            ->map(fn (Collection $group) => $group->first());
+
+        foreach ($facturasEvaporacion as $key => $value) {
+            $estado1 = Estadofactura::where('name', strtolower($value->estado_facturacion1))->first();
+            if (! is_null($estado1) && ! is_null($value->cuentafinanciera_id)) {
+                $factura1 = new Factura;
+                $factura1->fecha_emision = $value->fecha_emision1;
+                $factura1->fecha_vencimiento = $value->fecha_vencimiento1;
+                $factura1->monto = $value->monto_facturado1;
+                $factura1->deuda = $value->deuda1;
+                $factura1->estadofactura_id = $estado1->id;
+                $factura1->cuentafinanciera_id = $value->cuentafinanciera_id;
+                $factura1->save();
+            }
+
+            $estado2 = Estadofactura::where('name', strtolower($value->estado_facturacion2))->first();
+            if (! is_null($estado2) && ! is_null($value->cuentafinanciera_id)) {
+                $factura2 = new Factura;
+                $factura2->fecha_emision = $value->fecha_emision2;
+                $factura2->fecha_vencimiento = $value->fecha_vencimiento2;
+                $factura2->monto = $value->monto_facturado2;
+                $factura2->deuda = $value->deuda2;
+                $factura2->estadofactura_id = $estado2->id;
+                $factura2->cuentafinanciera_id = $value->cuentafinanciera_id;
+                $factura2->save();
+            }
+
+            $estado3 = Estadofactura::where('name', strtolower($value->estado_facturacion3))->first();
+            if (! is_null($estado3) && ! is_null($value->cuentafinanciera_id)) {
+                $factura3 = new Factura;
+                $factura3->fecha_emision = $value->fecha_emision3;
+                $factura3->fecha_vencimiento = $value->fecha_vencimiento3;
+                $factura3->monto = $value->monto_facturado3;
+                $factura3->deuda = $value->deuda3;
+                $factura3->estadofactura_id = $estado3->id;
+                $factura3->cuentafinanciera_id = $value->cuentafinanciera_id;
+                $factura3->save();
+            }
+        }
+        dd('update-factura');
     }
 
     /**
