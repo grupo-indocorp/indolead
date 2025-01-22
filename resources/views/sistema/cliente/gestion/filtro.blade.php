@@ -24,7 +24,7 @@
 
                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Comentario</th>
                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Fecha de última Gestión</th>
-                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Total Líneas</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Total Líneas <br> en la Competencia</th>
                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Días sin Gestión</th>
 
                 @role(['sistema', 'gerente general', 'gerente comercial', 'asistente comercial', 'supervisor', 'capacitador', 'planificacion'])

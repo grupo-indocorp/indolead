@@ -14,23 +14,23 @@
     <input type="hidden" id="cliente_id" name="cliente_id" value="{{ $cliente->id }}">
     <div class="row p-1">
         <div class="col-9 p-0">
-            <x-sistema.cliente.datos :$cliente>
-                @role('ejecutivo')
-                <x-slot:botonHeader>
-                    <button type="button" class="btn bg-gradient-secondary" onclick="editCliente()" id="btn_editar_cliente">Editar</button>
-                    <button type="button" class="btn bg-gradient-secondary" onclick="saveCliente()" id="btn_guardar_cliente" disabled>Guardar</button>
-                </x-slot>
-                @endrole
-            </x-sistema.cliente.datos>
-            <x-sistema.cliente.contactos :$contactos>
-                @role('ejecutivo')
-                <x-slot:botonFooter>
-                    <button type="button" class="btn bg-gradient-secondary" onclick="saveContacto()" id="btn_guardar_contacto">Guardar</button>
-                </x-slot>
-                @endrole
-            </x-sistema.cliente.contactos>
             <div class="row p-0 m-2">
                 <div class="col-8 p-0">
+                    <x-sistema.cliente.datos :$cliente>
+                        @role('ejecutivo')
+                        <x-slot:botonHeader>
+                            <button type="button" class="btn bg-gradient-secondary" onclick="editCliente()" id="btn_editar_cliente">Editar</button>
+                            <button type="button" class="btn bg-gradient-secondary" onclick="saveCliente()" id="btn_guardar_cliente" disabled>Guardar</button>
+                        </x-slot>
+                        @endrole
+                    </x-sistema.cliente.datos>
+                    <x-sistema.cliente.contactos :$contactos>
+                        @role('ejecutivo')
+                        <x-slot:botonFooter>
+                            <button type="button" class="btn bg-gradient-secondary" onclick="saveContacto()" id="btn_guardar_contacto">Guardar</button>
+                        </x-slot>
+                        @endrole
+                    </x-sistema.cliente.contactos>
                     <x-sistema.cliente.comentarios :$comentarios>
                         @role('ejecutivo')
                         <x-slot:botonFooter>
@@ -47,9 +47,9 @@
                         </x-slot>
                         @endrole
                     </x-sistema.notificacion.create>
+                    <x-sistema.cliente.ventas></x-sistema.cliente.ventas>
                 </div>
             </div>
-            <x-sistema.cliente.ventas></x-sistema.cliente.ventas>
         </div>
         <div class="col-3 p-0">
             <x-sistema.cliente.movistars :$movistar>
