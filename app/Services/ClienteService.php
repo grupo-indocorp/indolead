@@ -469,4 +469,27 @@ class ClienteService
         $exportCliente->etapa_id = $value->etapa->id;
         $exportCliente->save();
     }
+
+    /**
+     * return array $clientes
+     */
+    public function gestionCliente()
+    {
+        $clientes = Cliente::
+            join('equipos', 'equipos.id', '=', 'clientes.equipo_id')
+            ->select(
+                'id',
+                'ruc',
+                'razon_social',
+                'fecha_gestion',
+            )
+            // ->with(['equipo:id,nombre'])
+            ->orderByDesc('fecha_gestion')
+            ->get();
+            // with(['user', 'equipo', 'sede', 'etapa', 'comentarios', 'movistars'])
+            // ->where($where)
+            // ->orWhere($orwhere)
+            // ->limit(1)
+        return $clientes;
+    }
 }

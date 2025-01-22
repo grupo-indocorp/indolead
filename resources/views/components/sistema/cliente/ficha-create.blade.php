@@ -4,10 +4,16 @@
 <x-sistema.modal title="Agregar Cliente" dialog_id="dialog">
     <div class="row p-1">
         <div class="col-9 p-0">
-            <x-sistema.cliente.datos></x-sistema.cliente.datos>
-            <x-sistema.cliente.contactos></x-sistema.cliente.contactos>
-            <x-sistema.cliente.comentarios></x-sistema.cliente.comentarios>
-            <x-sistema.cliente.ventas></x-sistema.cliente.ventas>
+            <div class="row p-0 m-2">
+                <div class="col-8 p-0">
+                    <x-sistema.cliente.datos></x-sistema.cliente.datos>
+                    <x-sistema.cliente.contactos></x-sistema.cliente.contactos>
+                    <x-sistema.cliente.comentarios></x-sistema.cliente.comentarios>
+                </div>
+                <div class="col-4 p-0">
+                    <x-sistema.cliente.ventas></x-sistema.cliente.ventas>
+                </div>
+            </div>
         </div>
         <div class="col-3 p-0">
             <x-sistema.cliente.movistars></x-sistema.cliente.movistars>
