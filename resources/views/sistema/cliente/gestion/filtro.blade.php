@@ -35,7 +35,7 @@
         <tbody>
             @foreach ($clientes as $value)
             @php
-                $total_lineas = ($value->movistars->last()->linea_claro??0) + ($value->movistars->last()->linea_entel??0) + ($value->movistars->last()->linea_bitel??0) + ($value->movistars->last()->linea_movistar??0);
+                $total_lineas = ($value->movistars->last()->linea_claro??0) + ($value->movistars->last()->linea_entel??0) + ($value->movistars->last()->linea_bitel??0);
                 $comentario = $value->comentarios->last();
                 $fecha_gestion = \Carbon\Carbon::parse($value->fecha_gestion)->startOfDay();
                 $dias = $fecha_gestion->diffInDays(\Carbon\Carbon::now()->startOfDay());

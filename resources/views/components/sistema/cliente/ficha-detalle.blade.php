@@ -13,9 +13,9 @@
 <x-sistema.modal title="Detalle Cliente" dialog_id="dialog" :$onclickCloseModal style="width: 90vw;">
     <input type="hidden" id="cliente_id" name="cliente_id" value="{{ $cliente->id }}">
     <div class="row p-1">
-        <div class="col-9 p-0">
+        <div class="col-10 p-0">
             <div class="row p-0 m-2">
-                <div class="col-8 p-0">
+                <div class="col-6 p-0">
                     <x-sistema.cliente.datos :$cliente>
                         @role('ejecutivo')
                         <x-slot:botonHeader>
@@ -39,7 +39,7 @@
                         @endrole
                     </x-sistema.cliente.comentarios>
                 </div>
-                <div class="col-4 p-0">
+                <div class="col-6 p-0">
                     <x-sistema.notificacion.create :$notificacion>
                         @role('ejecutivo')
                         <x-slot:botonFooter>
@@ -51,7 +51,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-3 p-0">
+        <div class="col-2 p-0">
             <x-sistema.cliente.movistars :$movistar>
                 @role('ejecutivo')
                 <x-slot:botonFooter>
