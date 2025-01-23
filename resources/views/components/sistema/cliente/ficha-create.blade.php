@@ -5,19 +5,31 @@
     <div class="row p-1">
         <div class="col-10 p-0">
             <div class="row p-0 m-2">
-                <div class="col-6 p-0">
-                    <x-sistema.cliente.datos></x-sistema.cliente.datos>
-                    <x-sistema.cliente.contactos></x-sistema.cliente.contactos>
-                    <x-sistema.cliente.comentarios></x-sistema.cliente.comentarios>
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-6 p-0">
+                            <x-sistema.cliente.datos></x-sistema.cliente.datos>
+                            <x-sistema.cliente.contactos></x-sistema.cliente.contactos>
+                        </div>
+                        <div class="col-6 p-0">
+                            <x-sistema.cliente.ventas></x-sistema.cliente.ventas>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-6 p-0">
-                    <x-sistema.cliente.ventas></x-sistema.cliente.ventas>
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-8">
+                            <x-sistema.cliente.comentarios></x-sistema.cliente.comentarios>
+                        </div>
+                        <div class="col-4">
+                            <x-sistema.cliente.etapas></x-sistema.cliente.etapas>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col-2 p-0">
             <x-sistema.cliente.movistars></x-sistema.cliente.movistars>
-            <x-sistema.cliente.etapas></x-sistema.cliente.etapas>
         </div>
     </div>
     <div class="flex justify-end mt-2 gap-2">
