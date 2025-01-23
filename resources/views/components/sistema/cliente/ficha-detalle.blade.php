@@ -13,45 +13,65 @@
 <x-sistema.modal title="Detalle Cliente" dialog_id="dialog" :$onclickCloseModal style="width: 90vw;">
     <input type="hidden" id="cliente_id" name="cliente_id" value="{{ $cliente->id }}">
     <div class="row p-1">
-        <div class="col-9 p-0">
-            <x-sistema.cliente.datos :$cliente>
-                @role('ejecutivo')
-                <x-slot:botonHeader>
-                    <button type="button" class="btn bg-gradient-secondary" onclick="editCliente()" id="btn_editar_cliente">Editar</button>
-                    <button type="button" class="btn bg-gradient-secondary" onclick="saveCliente()" id="btn_guardar_cliente" disabled>Guardar</button>
-                </x-slot>
-                @endrole
-            </x-sistema.cliente.datos>
-            <x-sistema.cliente.contactos :$contactos>
-                @role('ejecutivo')
-                <x-slot:botonFooter>
-                    <button type="button" class="btn bg-gradient-secondary" onclick="saveContacto()" id="btn_guardar_contacto">Guardar</button>
-                </x-slot>
-                @endrole
-            </x-sistema.cliente.contactos>
+        <div class="col-10 p-0">
             <div class="row p-0 m-2">
-                <div class="col-8 p-0">
-                    <x-sistema.cliente.comentarios :$comentarios>
-                        @role('ejecutivo')
-                        <x-slot:botonFooter>
-                            <button type="button" class="btn bg-gradient-secondary" onclick="saveComentario()">Agregar</button>
-                        </x-slot>
-                        @endrole
-                    </x-sistema.cliente.comentarios>
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-6 p-0">
+                            <x-sistema.cliente.datos :$cliente>
+                                @role('ejecutivo')
+                                <x-slot:botonHeader>
+                                    <button type="button" class="btn bg-gradient-secondary" onclick="editCliente()" id="btn_editar_cliente">Editar</button>
+                                    <button type="button" class="btn bg-gradient-secondary" onclick="saveCliente()" id="btn_guardar_cliente" disabled>Guardar</button>
+                                </x-slot>
+                                @endrole
+                            </x-sistema.cliente.datos>
+                            <x-sistema.cliente.contactos :$contactos>
+                                @role('ejecutivo')
+                                <x-slot:botonFooter>
+                                    <button type="button" class="btn bg-gradient-secondary" onclick="saveContacto()" id="btn_guardar_contacto">Guardar</button>
+                                </x-slot>
+                                @endrole
+                            </x-sistema.cliente.contactos>
+                        </div>
+                        <div class="col-6 p-0">
+                            <x-sistema.notificacion.create :$notificacion>
+                                @role('ejecutivo')
+                                <x-slot:botonFooter>
+                                    <button type="button" class="btn bg-gradient-secondary" onclick="saveNotificacion()">Agregar</button>
+                                </x-slot>
+                                @endrole
+                            </x-sistema.notificacion.create>
+                            <x-sistema.cliente.ventas></x-sistema.cliente.ventas>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-4 p-0">
-                    <x-sistema.notificacion.create :$notificacion>
-                        @role('ejecutivo')
-                        <x-slot:botonFooter>
-                            <button type="button" class="btn bg-gradient-secondary" onclick="saveNotificacion()">Agregar</button>
-                        </x-slot>
-                        @endrole
-                    </x-sistema.notificacion.create>
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-10">
+                            <x-sistema.cliente.comentarios :$comentarios>
+                                @role('ejecutivo')
+                                <x-slot:botonFooter>
+                                    <button type="button" class="btn bg-gradient-secondary" onclick="saveComentario()">Agregar</button>
+                                </x-slot>
+                                @endrole
+                            </x-sistema.cliente.comentarios>
+                        </div>
+                        <div class="col-2">
+                            <x-sistema.cliente.etapas>
+                                @role('ejecutivo')
+                                <x-slot:botonFooter>
+                                    <button type="button" class="btn bg-gradient-secondary" onclick="editEtapa()" id="btn_editar_etapa">Editar</button>
+                                    <button type="button" class="btn bg-gradient-secondary" onclick="saveEtapa()" id="btn_guardar_etapa" disabled>Guardar</button>
+                                </x-slot>
+                                @endrole
+                            </x-sistema.cliente.etapas>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <x-sistema.cliente.ventas></x-sistema.cliente.ventas>
         </div>
-        <div class="col-3 p-0">
+        <div class="col-2 p-0">
             <x-sistema.cliente.movistars :$movistar>
                 @role('ejecutivo')
                 <x-slot:botonFooter>
@@ -60,14 +80,6 @@
                 </x-slot>
                 @endrole
             </x-sistema.cliente.movistars>
-            <x-sistema.cliente.etapas>
-                @role('ejecutivo')
-                <x-slot:botonFooter>
-                    <button type="button" class="btn bg-gradient-secondary" onclick="editEtapa()" id="btn_editar_etapa">Editar</button>
-                    <button type="button" class="btn bg-gradient-secondary" onclick="saveEtapa()" id="btn_guardar_etapa" disabled>Guardar</button>
-                </x-slot>
-                @endrole
-            </x-sistema.cliente.etapas>
         </div>
     </div>
     <div class="flex justify-end">

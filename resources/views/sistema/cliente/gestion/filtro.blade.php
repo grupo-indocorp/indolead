@@ -24,7 +24,7 @@
 
                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Comentario</th>
                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Fecha de última Gestión</th>
-                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Total Líneas</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Total Líneas <br> en la Competencia</th>
                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Días sin Gestión</th>
 
                 @role(['sistema', 'gerente general', 'gerente comercial', 'asistente comercial', 'supervisor', 'capacitador', 'planificacion'])
@@ -35,7 +35,7 @@
         <tbody>
             @foreach ($clientes as $value)
             @php
-                $total_lineas = ($value->movistars->last()->linea_claro??0) + ($value->movistars->last()->linea_entel??0) + ($value->movistars->last()->linea_bitel??0) + ($value->movistars->last()->linea_movistar??0);
+                $total_lineas = ($value->movistars->last()->linea_claro??0) + ($value->movistars->last()->linea_entel??0) + ($value->movistars->last()->linea_bitel??0);
                 $comentario = $value->comentarios->last();
                 $fecha_gestion = \Carbon\Carbon::parse($value->fecha_gestion)->startOfDay();
                 $dias = $fecha_gestion->diffInDays(\Carbon\Carbon::now()->startOfDay());
