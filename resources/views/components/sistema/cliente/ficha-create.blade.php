@@ -18,10 +18,10 @@
                 </div>
                 <div class="col-12">
                     <div class="row">
-                        <div class="col-8">
+                        <div class="col-10">
                             <x-sistema.cliente.comentarios></x-sistema.cliente.comentarios>
                         </div>
-                        <div class="col-4">
+                        <div class="col-2">
                             <x-sistema.cliente.etapas></x-sistema.cliente.etapas>
                         </div>
                     </div>
