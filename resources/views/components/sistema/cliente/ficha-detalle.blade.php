@@ -48,7 +48,7 @@
                 </div>
                 <div class="col-12">
                     <div class="row">
-                        <div class="col-8">
+                        <div class="col-10">
                             <x-sistema.cliente.comentarios :$comentarios>
                                 @role('ejecutivo')
                                 <x-slot:botonFooter>
@@ -57,7 +57,7 @@
                                 @endrole
                             </x-sistema.cliente.comentarios>
                         </div>
-                        <div class="col-4">
+                        <div class="col-2">
                             <x-sistema.cliente.etapas>
                                 @role('ejecutivo')
                                 <x-slot:botonFooter>
