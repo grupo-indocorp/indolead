@@ -202,7 +202,7 @@
     function listComentario(comentarios) {
         let html = "";
         comentarios.forEach(function (comentario) {
-            html += `<div class="mb-4" id="${comentario.id}">
+            html += `<div class="mb-4 text-end" id="${comentario.id}">
                         <span class="text-slate-900 text-base font-semibold">${comentario.comentario}</span>
                         <div>
                             <span class="text-slate-500 text-xs uppercase me-2">
@@ -218,7 +218,8 @@
                                 ${comentario.detalle}
                             </span>
                         </div>
-                    </div>`;
+                    </div>
+                    <hr>`;
         })
         $('#comentarios').html(html);
     }
@@ -256,14 +257,15 @@
     function listNotificacion(notificacions) {
         let html = "";
         notificacions.forEach(function (notificacion) {
-            html += `<div class="mb-4" id="${notificacion.id}">
+            html += `<div class="mb-4 text-end" id="${notificacion.id}">
                         <span class="text-slate-900 text-base font-semibold">${notificacion.asunto}</span>
                         <div>
                             <span class="text-slate-500 text-sm">
                                 <i class="text-blue-400 fa-solid fa-calendar-days"></i> ${notificacion.fecha} ${notificacion.hora}
                             </span>
                         </div>
-                    </div>`;
+                    </div>
+                    <hr>`;
         })
         $('#notificacions').html(html);
     }

@@ -19,7 +19,7 @@
     <div class="flex-auto" id="comentarios">
         @if ($comentarios)
             @foreach ($comentarios as $comentario)
-                <div class="mb-4" id="{{ $comentario['id'] }}">
+                <div class="mb-4 text-end" id="{{ $comentario['id'] }}">
                     <span class="text-slate-900 text-base font-semibold">{{ $comentario['comentario'] }}</span>
                     <div>
                         <span class="text-slate-500 text-xs uppercase me-2">
@@ -36,6 +36,7 @@
                         </span>
                     </div>
                 </div>
+                <hr>
             @endforeach
         @endif
     </div>
