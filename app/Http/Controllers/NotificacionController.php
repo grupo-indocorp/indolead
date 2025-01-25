@@ -104,8 +104,8 @@ class NotificacionController extends Controller
                 $notificacions[] = [
                     'id' => $value->id,
                     'asunto' => $value->asunto,
-                    'fecha' => $value->fecha,
-                    'hora' => $value->hora,
+                    'fecha' => now()->parse($value->fecha)->format('d-m-Y'),
+                    'hora' => now()->parse($value->hora)->format(' h:i:s A'),
                 ];
             }
 
