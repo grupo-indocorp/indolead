@@ -37,9 +37,12 @@
     <div class="flex-auto" id="notificacions">
         @if ($notificacion)
             @foreach ($notificacion as $item)
-                <div class="mb-4 text-end" id="{{ $item->id }}">
+                <div class="mb-4" id="{{ $item->id }}">
                     <span class="text-slate-900 text-base font-semibold">{{ $item->asunto }}</span>
-                    <div>
+                    <div class="text-end">
+                        <span class="text-slate-500 text-xs uppercase me-2">
+                            <i class="text-blue-400 fa-solid fa-user"></i> {{ $item->user->name }}
+                        </span>
                         <span class="text-slate-500 text-sm">
                             <i class="text-blue-400 fa-solid fa-calendar-days"></i> {{  now()->parse($item->fecha)->format('d-m-Y') }} {{ now()->parse($item->hora)->format(' h:i:s A') }}
                         </span>
