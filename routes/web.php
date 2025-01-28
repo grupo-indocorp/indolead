@@ -16,6 +16,7 @@ use App\Http\Controllers\EquipoController;
 use App\Http\Controllers\EvaporacionController;
 use App\Http\Controllers\EvaporacionGestionController;
 use App\Http\Controllers\ExportController;
+use App\Http\Controllers\FacturaController;
 use App\Http\Controllers\FunnelController;
 use App\Http\Controllers\GestionClienteController;
 use App\Http\Controllers\HomeController;
@@ -28,6 +29,7 @@ use App\Http\Controllers\ReporteClienteController;
 use App\Http\Controllers\ReporteClienteNuevoController;
 use App\Http\Controllers\ReporteController;
 use App\Http\Controllers\RoleController;
+use App\Services\ClienteService;
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
 
@@ -70,6 +72,8 @@ Route::middleware([
         // 'evaporacion-gestion' => EvaporacionGestionController::class,
 
         'cuentas-financieras' => CuentafinancieraController::class,
+        'facturas' => FacturaController::class,
+
         // Configuraciones
         'configuracion' => ConfiguracionController::class,
         'configuracion-sistema' => ConfiguracionSistemaController::class,
@@ -82,10 +86,9 @@ Route::middleware([
     Route::get('clientes/export/', [GestionClienteController::class, 'export']);
     Route::post('clientes/import/', [GestionClienteController::class, 'import']);
 
-    // Actualizar datos de clientes a la nueva tabla export_cliente
-    Route::get('update-cuentafinanciera', [ConfiguracionController::class, 'updateCuentaFinanciera']);
-    // actualizar cuentafinanciera_id en la tabla evaporacions
-    Route::get('update-cuentafinanciera_id', [ConfiguracionController::class, 'updateCuentaFinancieraId']);
+    // Actualizar datos de clientes a la nueva tabla
+    Route::get('update-cuentafinanciera', [ConfiguracionController::class, 'updateCuentaFinanciera'])->name('update.cuentafinanciera');
+    Route::get('update-facturas', [ConfiguracionController::class, 'updateFactura'])->name('update.factura');
 
     // Export
     Route::get('export/secodi/funnel', [ExportController::class, 'secodiFunnel']);
@@ -93,6 +96,7 @@ Route::middleware([
 
     // Import
     Route::post('import/evaporacion', [ImportController::class, 'evaporacion'])->name('import.evaporacion');
+    // Route::get('gestioncliente', [ClienteService::class, 'gestionCliente']);
 });
 
 Livewire::setScriptRoute(function ($handle) {

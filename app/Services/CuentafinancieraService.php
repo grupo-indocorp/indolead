@@ -3,17 +3,39 @@
 namespace App\Services;
 
 use App\Models\Cuentafinanciera;
-use Illuminate\Support\Facades\DB;
 
 class CuentafinancieraService
 {
     /**
      * Muestra las cuentas financieras de evaporación
+     *
      * @return object $cuentafinanciera
      */
-    public function cuentafinancieraGet()
+    public function cuentafinancieraGet($filters)
     {
-        $cuentafinanciera = Cuentafinanciera::with(['cliente', 'user', 'user.equipos', 'evaporacions'])
+        $where = [];
+        if (isset($filters['user_id'])) {
+            $where[] = ['user_id', $filters['user_id']];
+        }
+        if (isset($filters['periodo'])) {
+            $where[] = ['periodo', 'like', '%' . $filters['periodo'] . '%'];
+        }
+
+        $cuentafinanciera = Cuentafinanciera::with([
+                'cliente',
+                'user',
+                'user.equipos',
+                'evaporacions',
+                'estadofactura',
+                // 'facturas' => function ($query) {
+                //     $query->orderByDesc('id')->limit(3);
+                // },
+                'facturas',
+                'facturas.estadofactura',
+                'facturas.facturadetalles',
+                'facturas.facturadetalles.estadoproducto',
+            ])
+            ->where($where)
             ->orderBy('cliente_id')
             ->paginate(50);
 
@@ -22,12 +44,15 @@ class CuentafinancieraService
 
     /**
      * Muestra la cuenta financiera y sus detalles
-     * @param string $cuentafinanciera_id
+     *
+     * @param  string  $cuentafinanciera_id
      * @return object $cuentafinanciera
      */
     public function cuentafinancieraDetalle($cuentafinanciera_id)
     {
-        $cuentafinanciera = Cuentafinanciera::with(['cliente', 'user', 'evaporacions'])->find($cuentafinanciera_id);
+        $cuentafinanciera = Cuentafinanciera::with(['cliente', 'user', 'evaporacions', 'estadofactura'])
+            ->find($cuentafinanciera_id);
+
         return $cuentafinanciera;
     }
 }

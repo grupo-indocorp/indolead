@@ -9,10 +9,71 @@
         </section>
     
         <section class="grid grid-cols-3 gap-2">
-            <x-sistema.card>
+            <x-sistema.card x-data="{
+                    editMode: false,
+                    isSaving: false,
+                    descuento: '{{ $cuentafinanciera->descuento }}',
+                    descuentoVigencia: '{{ $cuentafinanciera->descuento_vigencia }}',
+                    fechaDescuento: '{{ $cuentafinanciera->fecha_descuento }}',
+                    saveCuentafinanciera() {
+                        limpiarError();
+                        capturarToken();
+
+                        this.isSaving = true;
+                        let self = this;
+                        $.ajax({
+                            url: `{{ url('cuentas-financieras/'. $cuentafinanciera->id) }}`,
+                            method: 'PUT',
+                            data: {
+                                view: 'update-cuentafinanciera',
+                                descuento: self.descuento,
+                                descuento_vigencia: self.descuentoVigencia,
+                                fecha_descuento: self.fechaDescuento,
+                            },
+                            success: function(result) {
+                                // Salir del modo edición
+                                self.editMode = false;
+
+                                // Actualizar fecha_evaluacion de cuenta financiera
+                                cuentafinancieraShow('{{ $cuentafinanciera->id }}');
+                            },
+                            error: function(response) {
+                                mostrarError(response);
+                                alert('Hubo un error al guardar los cambios');
+                            },
+                            complete: function() {
+                                self.isSaving = false;
+                            }
+                        });
+                    }
+                }">
+                <div class="flex justify-between">
+                    <span></span>
+                    <div>
+                        <template x-if="!editMode">
+                            <span class="hover:cursor-pointer hover:text-slate-500"
+                                @click="editMode = true">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </span>
+                        </template>
+                        <template x-if="editMode">
+                            <span class="hover:cursor-pointer hover:text-slate-500"
+                                @click="if (!isSaving) { saveCuentafinanciera(); }"
+                                :disabled="isSaving">
+                                <i class="fa-solid fa-floppy-disk"></i>
+                            </span>
+                        </template>
+                        <template x-if="editMode">
+                            <span class="hover:cursor-pointer hover:text-slate-500"
+                                @click="editMode = false">
+                                <i class="fa-solid fa-xmark"></i>
+                            </span>
+                        </template>
+                    </div>
+                </div>
                 <div class="flex gap-2">
-                    <span class="text-base font-bold">CUENTA FINANCIERA:</span>
-                    <div class="form-group w-full">
+                    <b>Cuenta Financiera:</b>
+                    <div class="form-group w-[60%]">
                         <select class="form-control uppercase"
                             name="cuenta_financiera"
                             id="cuenta_financiera">
@@ -108,11 +169,12 @@
                 </div>
             </x-sistema.card>
         </section>
-    
-        <section class="grid grid-cols-3 gap-2" id="cuentafinancieraFacturas"></section>
+
+        {{-- facturas --}}
+        <section id="cuentafinancieraFacturas"></section>
 
         <x-sistema.card>
-            <section id="cuentafinancieraProductos"></section>
+            <section id="facturaDetalles"></section>
         </x-sistema.card>
     </section>
 </x-sistema.modal>
@@ -138,8 +200,6 @@
         $('#cuenta_financiera').on('change', function () {
             let cuentafinanciera_id = $(this).val();
             cuentafinancieraShow(cuentafinanciera_id);
-            cuentafinancieraProductos(cuentafinanciera_id);
-            cuentafinancieraFacturas(cuentafinanciera_id);
         });
 
         $('#cuenta_financiera').trigger('change');
@@ -153,21 +213,24 @@
             },
             success: function( result ) {
                 $('#cuentafinancieraShow').html(result);
+                cuentafinancieraFacturas(cuentafinanciera_id);
+                facturaDetalles(cuentafinanciera_id);
             },
             error: function( response ) {
                 console.log('error');
             }
         });
     }
-    function cuentafinancieraProductos(cuentafinanciera_id) {
+    function facturaDetalles(cuentafinanciera_id, factura_id=null) {
         $.ajax({
             url: `{{ url('cuentas-financieras/${cuentafinanciera_id}') }}`,
             method: "GET",
             data: {
-                view: 'show-productos',
+                view: 'show-factura-detalles',
+                factura_id: factura_id,
             },
             success: function( result ) {
-                $('#cuentafinancieraProductos').html(result);
+                $('#facturaDetalles').html(result);
             },
             error: function( response ) {
                 console.log('error');
