@@ -204,7 +204,7 @@
         comentarios.forEach(function (comentario) {
             html += `<div class="mb-4" id="${comentario.id}">
                         <span class="text-slate-900 text-base font-semibold">${comentario.comentario}</span>
-                        <div>
+                        <div class="text-end">
                             <span class="text-slate-500 text-xs uppercase me-2">
                                 <i class="text-blue-400 fa-solid fa-user"></i> ${comentario.usuario}
                             </span>
@@ -218,7 +218,8 @@
                                 ${comentario.detalle}
                             </span>
                         </div>
-                    </div>`;
+                    </div>
+                    <hr>`;
         })
         $('#comentarios').html(html);
     }
@@ -258,12 +259,13 @@
         notificacions.forEach(function (notificacion) {
             html += `<div class="mb-4" id="${notificacion.id}">
                         <span class="text-slate-900 text-base font-semibold">${notificacion.asunto}</span>
-                        <div>
+                        <div class="text-end">
                             <span class="text-slate-500 text-sm">
                                 <i class="text-blue-400 fa-solid fa-calendar-days"></i> ${notificacion.fecha} ${notificacion.hora}
                             </span>
                         </div>
-                    </div>`;
+                    </div>
+                    <hr>`;
         })
         $('#notificacions').html(html);
     }

@@ -21,7 +21,7 @@
             @foreach ($comentarios as $comentario)
                 <div class="mb-4" id="{{ $comentario['id'] }}">
                     <span class="text-slate-900 text-base font-semibold">{{ $comentario['comentario'] }}</span>
-                    <div>
+                    <div class="text-end">
                         <span class="text-slate-500 text-xs uppercase me-2">
                             <i class="text-blue-400 fa-solid fa-user"></i> {{ $comentario['usuario'] }}
                         </span>
@@ -36,6 +36,7 @@
                         </span>
                     </div>
                 </div>
+                <hr>
             @endforeach
         @endif
     </div>
