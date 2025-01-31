@@ -4,26 +4,26 @@
     'notificacion' => false,
 ])
 <x-sistema.card>
-    <div class="d-flex flex-row flex-wrap justify-content-between">
+    <div class="relative mb-3 d-flex flex-row flex-wrap justify-content-between">
         <x-sistema.titulo title="Agenda *" />
         <div class="flex flex-row gap-2">
             {{ $botonHeader }}
         </div>
     </div>
-    <div class="form-group">
-        <label for="notificaciontipo_id" class="form-control-label">Tipo de Agenda</label>
-        <select class="form-control" id="notificaciontipo_id" name="notificaciontipo_id">
+    <div class="relative mb-3">
+        <label for="notificaciontipo_id" class="absolute text-sm text-[#333333] duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-[#F1F5F9] px-2">Tipo de Agenda</label>
+        <select class="block px-2.5 pb-1.5 pt-1.5 w-full text-xs text-[#333333] bg-[#F1F5F9] rounded-lg border-1 border-[#D1D5DB] appearance-none" id="notificaciontipo_id" name="notificaciontipo_id">
             @foreach ($notificaciontipos as $value)
                 <option value="{{ $value->id }}">{{ $value->nombre }}</option>
             @endforeach
         </select>
     </div>
-    <div class="form-group">
-        <label for="mensaje" class="form-control-label">Mensaje</label>
+    <div class="relative mb-3">
+        <label for="mensaje" class="absolute text-sm text-gray-600 duration-300 transform -translate-y-4 scale-75 top-2 left-0 z-10 origin-[0] px-0.5 py-0.5 peer-focus:text-blue-600 peer-focus:text-sm peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-100 peer-focus:-translate-y-4 bg-[#F1F5F9]">Mensaje</label>
         <textarea class="form-control" rows="3" id="mensaje" name="mensaje"></textarea>
     </div>
-    <div class="form-group">
-        <label for="fecha" class="form-control-label">Fecha y Hora</label>
+    <div class="relative mb-1">
+        <label for="fecha" class="absolute text-sm text-gray-600 duration-300 transform -translate-y-4 scale-75 top-2 left-0 z-10 origin-[0] px-0.5 py-0.5 peer-focus:text-blue-600 peer-focus:text-sm peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-100 peer-focus:-translate-y-4 bg-[#F1F5F9]">Fecha y Hora</label>
         <div class="row">
             <div class="col">
                 <input class="form-control" type="date" value="{{ $fecha }}" id="fecha" name="fecha">
@@ -53,3 +53,5 @@
         @endif
     </div>
 </x-sistema.card>
+
+

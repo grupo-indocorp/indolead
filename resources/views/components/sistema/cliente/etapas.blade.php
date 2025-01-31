@@ -2,7 +2,7 @@
     'botonHeader' => '',
     'botonFooter' => '',
 ])
-<x-sistema.card class="m-2">
+<x-sistema.card class="m-0 p-0">
     <div class="d-flex flex-row flex-wrap justify-content-between">
         <x-sistema.titulo title="Etapa *" />
         <div class="flex flex-row gap-2">
@@ -10,7 +10,7 @@
         </div>
     </div>
     <div class="form-group">
-        <select class="form-control" id="etapa_id">
+        <select class="block px-2.5 pb-1.5 pt-1.5 w-full text-xs text-[#333333] bg-[#F1F5F9] rounded-lg border-1 border-[#D1D5DB] appearance-none" id="etapa_id">
             <option></option>
             @foreach ($etapas as $value)
                 <option value="{{ $value->id }}">{{ $value->nombre }}</option>
