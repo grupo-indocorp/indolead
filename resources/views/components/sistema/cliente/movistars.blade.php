@@ -17,7 +17,7 @@
                     <option value="{{ $value->id }}" class="text-xs text-[#333333]">{{ $value->nombre }}</option>
                 @endforeach
             </select>
-            <label for="estadowick_id" class="absolute text-sm text-[#333333] duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-[#F1F5F9] px-2 peer-focus:text-blue-600 peer-focus:text-lg">Estado Wick</label>        </div>
+            <label for="estadowick_id" class="absolute text-sm text-[#333333] duration-100 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-[#F1F5F9] px-2 peer-focus:text-blue-600">Estado Wick</label>        </div>
     </div>
     @endif
     @if ($config['datosAdicionales']['estadoDito'])
@@ -27,7 +27,7 @@
                     <option value="{{ $value->id }}">{{ $value->nombre }}</option>
                 @endforeach
             </select>
-            <label for="estadodito_id" class="absolute text-sm text-[#333333] duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-[#F1F5F9] px-2 peer-focus:text-blue-600 peer-focus:text-lg">Estado Dito</label>
+            <label for="estadodito_id" class="absolute text-sm text-[#333333] duration-100 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-[#F1F5F9] px-2 peer-focus:text-blue-600">Estado Dito</label>
         </div>
     @endif
     <div class="relative mb-3 d-flex flex-row flex-wrap justify-content-between">
@@ -67,7 +67,7 @@
                 <option value="{{ $value->id }}">{{ $value->nombre }}</option>
                 @endforeach
             </select>
-            <label for="clientetipo_id" class="absolute text-sm text-[#333333] duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-[#F1F5F9] px-2 peer-focus:text-blue-600 peer-focus:text-lg">Tipo Cliente</label>
+            <label for="clientetipo_id" class="absolute text-sm text-[#333333] duration-100 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-[#F1F5F9] px-2 peer-focus:text-blue-600">Tipo Cliente</label>
         </div>
     @endif
     @if ($config['datosAdicionales']['ejecutivoSalesforce'])
@@ -85,7 +85,7 @@
                 <option value="{{ $value->id }}">{{ $value->nombre }}</option>
                 @endforeach
             </select>
-            <label for="agencia_id" class="absolute text-sm text-[#333333] duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-[#F1F5F9] px-2 peer-focus:text-blue-600 peer-focus:text-lg">Agencia</label>
+            <label for="agencia_id" class="absolute text-sm text-[#333333] duration-100 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-[#F1F5F9] px-2 peer-focus:text-blue-600">Agencia</label>
         </div>
     @endif
     {{ $botonFooter }}
