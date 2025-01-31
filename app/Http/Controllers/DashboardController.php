@@ -8,74 +8,82 @@ use App\Models\Cliente;
 use App\Models\Equipo;
 use App\Models\Etapa;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class DashboardController extends Controller
 {
     public function index(Request $request, GraficoDeAnillo $chartBuilder, GraficoDeConversion $conversionChartBuilder)
     {
+        // Validar parámetros
+        $validator = Validator::make($request->all(), [
+            'equipo' => 'nullable|integer|exists:equipos,id',
+            'ejecutivo' => 'nullable|integer|exists:users,id',
+            'fecha' => 'nullable|date_format:m/Y' // Validar el formato de la fecha
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->route('dashboard')->withErrors($validator);
+        }
+
+        // Obtener parámetros
         $equipoSeleccionado = $request->input('equipo');
         $ejecutivoSeleccionado = $request->input('ejecutivo');
-        $mesSeleccionado = $request->input('mes');
 
-        // Obtener los equipos
+        // Validar coherencia equipo-ejecutivo
+        if ($equipoSeleccionado && $ejecutivoSeleccionado) {
+            $ejecutivoValido = User::where('id', $ejecutivoSeleccionado)
+                ->whereHas('equipos', fn($q) => $q->where('equipo_id', $equipoSeleccionado))
+                ->exists();
+
+            if (!$ejecutivoValido) {
+                $ejecutivoSeleccionado = null;
+                $request->merge(['ejecutivo' => null]);
+            }
+        }
+
+        // Obtener y parsear fecha
+        $fechaSeleccionada = null;
+        if ($request->filled('fecha')) {
+            $fechaSeleccionada = Carbon::createFromFormat('m/Y', $request->fecha)->startOfMonth();
+        }
+
+        // Obtener datos base
         $equipos = Equipo::all();
 
-        // Obtener ejecutivos según el equipo seleccionado
-        if ($equipoSeleccionado) {
-            $ejecutivos = User::whereHas('equipos', function ($query) use ($equipoSeleccionado) {
-                $query->where('equipo_id', $equipoSeleccionado);
-            })->get();
-        } else {
-            $ejecutivos = User::role('ejecutivo')->get();
-        }
+        // Obtener ejecutivos según equipo
+        $ejecutivos = $equipoSeleccionado 
+            ? User::whereHas('equipos', fn($q) => $q->where('equipo_id', $equipoSeleccionado))->get()
+            : collect();
 
-        $meses = [
-            1 => 'Enero', 2 => 'Febrero', 3 => 'Marzo', 4 => 'Abril',
-            5 => 'Mayo', 6 => 'Junio', 7 => 'Julio', 8 => 'Agosto',
-            9 => 'Septiembre', 10 => 'Octubre', 11 => 'Noviembre', 12 => 'Diciembre',
-        ];
+        // Construir query principal
+        $clientesQuery = Cliente::query()
+            ->when($equipoSeleccionado, fn($q) => $q->where('equipo_id', $equipoSeleccionado))
+            ->when($ejecutivoSeleccionado, fn($q) => $q->where('user_id', $ejecutivoSeleccionado))
+            ->when($fechaSeleccionada, fn($q) => $q->whereBetween('fecha_gestion', [
+                $fechaSeleccionada->startOfMonth()->toDateString(), // Primer día del mes
+                $fechaSeleccionada->endOfMonth()->toDateString()    // Último día del mes
+            ]));
 
-        // Filtrar clientes según los filtros seleccionados
-        $clientesQuery = Cliente::query();
-
-        if ($equipoSeleccionado) {
-            $clientesQuery->where('equipo_id', $equipoSeleccionado);
-        }
-
-        if ($ejecutivoSeleccionado) {
-            $clientesQuery->where('user_id', $ejecutivoSeleccionado);
-        }
-
-        if ($mesSeleccionado) {
-            $clientesQuery->whereMonth('fecha_gestion', $mesSeleccionado);
-        }
-
-        // Calcular el total de clientes según los filtros
+        // Calcular métricas
         $totalClientes = $clientesQuery->count();
-
-        // Obtener la etapa con id 5
-        $etapaCinco = Etapa::find(5);
-
-        // Calcular el conteo de clientes en la etapa con id 5
-        $clientesEnEtapaCinco = $clientesQuery->where('etapa_id', $etapaCinco->id)->count();
-
-        // Calcular la convertibilidad
+        $etapaCinco = Etapa::findOrFail(5);
+        $clientesEnEtapaCinco = $clientesQuery->clone()->where('etapa_id', $etapaCinco->id)->count();
         $convertibilidad = $totalClientes > 0 ? round(($clientesEnEtapaCinco / $totalClientes) * 100, 2) : 0;
 
-        // Generar los gráficos
-        $chart = $chartBuilder->build($request, $equipoSeleccionado);
-        $conversionChart = $conversionChartBuilder->build($request, $equipoSeleccionado);
+        // Generar gráficos
+        $chart = $chartBuilder->build($clientesQuery->clone());
+        $conversionChart = $conversionChartBuilder->build($clientesQuery->clone());
 
         return view('sistema.dashboard.index', [
             'chart' => $chart,
             'conversionChart' => $conversionChart,
             'equipos' => $equipos,
             'ejecutivos' => $ejecutivos,
-            'meses' => $meses,
             'equipoSeleccionado' => $equipoSeleccionado,
             'ejecutivoSeleccionado' => $ejecutivoSeleccionado,
-            'mesSeleccionado' => $mesSeleccionado,
+            'fechaSeleccionada' => $fechaSeleccionada,
             'totalClientes' => $totalClientes,
             'clientesEnEtapaCinco' => $clientesEnEtapaCinco,
             'etapaCinco' => $etapaCinco,
