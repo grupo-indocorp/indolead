@@ -72,7 +72,7 @@
                     }
 
                     // Comentarios
-                    $comentarios = $cliente->comentarios()->latest()->take(5)->get();
+                    $comentarios = $cliente->comentarios()->where('user_id', $cliente->user_id)->latest()->take(5)->get();
                     $comentariosArray = $comentarios->toArray();
                     $textoPredeterminado = "";
                     while (count($comentariosArray) < 5) {
