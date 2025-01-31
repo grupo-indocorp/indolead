@@ -10,7 +10,7 @@
         </div>
     </div>
     <div class="form-group">
-        <select class="block px-2.5 pb-1.5 pt-1.5 w-full text-xs text-[#333333] bg-[#F1F5F9] rounded-lg border-1 border-[#D1D5DB] appearance-none" id="etapa_id">
+        <select class="block px-2.5 pb-1.5 pt-1.5 w-full text-xs text-[#333333] bg-[#F1F5F9] rounded-lg border-1 border-[#D1D5DB] appearance-none peer" id="etapa_id">
             <option></option>
             @foreach ($etapas as $value)
                 <option value="{{ $value->id }}">{{ $value->nombre }}</option>
