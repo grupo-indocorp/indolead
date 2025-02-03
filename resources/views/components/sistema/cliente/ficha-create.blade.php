@@ -7,11 +7,11 @@
             <div class="row p-0 m-2 mt-0">
                 <div class="col-12">
                     <div class="row">
-                        <div class="col-5 p-0">
+                        <div class="col-6 p-0">
                             <x-sistema.cliente.datos></x-sistema.cliente.datos>
                             <x-sistema.cliente.contactos></x-sistema.cliente.contactos>
                         </div>
-                        <div class="col-7 p-0">
+                        <div class="col-6 p-0">
                             <x-sistema.cliente.ventas></x-sistema.cliente.ventas>
                         </div>
                     </div>

@@ -14,7 +14,6 @@
     <input type="hidden" id="cliente_id" name="cliente_id" value="{{ $cliente->id }}">
     <div class="row p-1">
         <div class="col-10 p-0">
-            <div class="row p-0 m-2">
                 <div class="col-12">
                     <div class="row">
                         <div class="col-6 p-0">
@@ -33,43 +32,20 @@
                                 </x-slot>
                                 @endrole
                             </x-sistema.cliente.contactos>
-                        </div>
-                        <div class="col-6 p-0">
-                            <x-sistema.notificacion.create :$notificacion>
-                                @role('ejecutivo')
-                                <x-slot:botonFooter>
-                                    <button type="button" class="btn bg-gradient-secondary" onclick="saveNotificacion()">Agregar</button>
-                                </x-slot>
-                                @endrole
-                            </x-sistema.notificacion.create>
-                            <x-sistema.cliente.ventas></x-sistema.cliente.ventas>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="row">
-                        <div class="col-10">
-                            <x-sistema.cliente.comentarios :$comentarios>
-                                @role('ejecutivo')
-                                <x-slot:botonFooter>
-                                    <button type="button" class="btn bg-gradient-secondary" onclick="saveComentario()">Agregar</button>
-                                </x-slot>
-                                @endrole
-                            </x-sistema.cliente.comentarios>
-                        </div>
-                        <div class="col-2">
                             <x-sistema.cliente.etapas>
                                 @role('ejecutivo')
-                                <x-slot:botonFooter>
+                                <x-slot:botonHeader>
                                     <button type="button" class="btn bg-gradient-secondary" onclick="editEtapa()" id="btn_editar_etapa">Editar</button>
                                     <button type="button" class="btn bg-gradient-secondary" onclick="saveEtapa()" id="btn_guardar_etapa" disabled>Guardar</button>
                                 </x-slot>
                                 @endrole
                             </x-sistema.cliente.etapas>
                         </div>
+                        <div class="col-6 p-0">
+                            <x-sistema.cliente.ventas></x-sistema.cliente.ventas>
+                        </div>
                     </div>
-                </div>
-            </div>
+                </div>                
         </div>
         <div class="col-2 p-0">
             <x-sistema.cliente.movistars :$movistar>
@@ -81,6 +57,28 @@
                 @endrole
             </x-sistema.cliente.movistars>
         </div>
+        <div class="col-12">
+                    <div class="row">
+                        <div class="col-7">
+                            <x-sistema.cliente.comentarios :$comentarios>
+                                @role('ejecutivo')
+                                <x-slot:botonFooter>
+                                    <button type="button" class="btn bg-gradient-secondary" onclick="saveComentario()">Agregar</button>
+                                </x-slot>
+                                @endrole
+                            </x-sistema.cliente.comentarios>
+                        </div>
+                        <div class="col-5">
+                            <x-sistema.notificacion.create :$notificacion>
+                                @role('ejecutivo')
+                                <x-slot:botonFooter>
+                                    <button type="button" class="btn bg-gradient-secondary" onclick="saveNotificacion()">Agregar</button>
+                                </x-slot>
+                                @endrole
+                            </x-sistema.notificacion.create>
+                        </div>
+                    </div>
+                </div>
     </div>
     <div class="flex justify-end">
         <button type="button" class="btn bg-gradient-primary m-0" onclick="{{ $onclickCloseModal }}">Cerrar</button>
