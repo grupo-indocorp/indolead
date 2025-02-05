@@ -20,9 +20,13 @@
                             <x-sistema.cliente.datos :$cliente>
                                 @role('ejecutivo')
                                 <x-slot:botonHeader>
-                                    <button type="button" class="btn bg-gradient-secondary" onclick="editCliente()" id="btn_editar_cliente">Editar</button>
-                                    <button type="button" class="btn bg-gradient-secondary" onclick="saveCliente()" id="btn_guardar_cliente" disabled>Guardar</button>
-                                </x-slot>
+  <button type="button" class="btn bg-gray-600 hover:bg-orange-500 text-gray-800" style="font-size: 10px; padding: 0px 1px;" onclick="editCliente()" id="btn_editar_cliente">
+    <i class="fas fa-edit text-gray-800"></i>
+  </button>
+  <button type="button" class="btn bg-gray-600 hover:bg-green-500 text-gray-800" style="font-size: 10px; padding: 0px 1px;" onclick="saveCliente()" id="btn_guardar_cliente" disabled>
+    <i class="fas fa-save text-gray-800"></i>
+  </button>
+</x-slot>                             
                                 @endrole
                             </x-sistema.cliente.datos>
                             <x-sistema.cliente.contactos :$contactos>
