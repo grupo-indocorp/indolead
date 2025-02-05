@@ -11,11 +11,16 @@
         </div>
     </div>
     @role('ejecutivo')
-    <div class="form-group">
-        <textarea class="form-control" rows="3" id="comentario" name="comentario"></textarea>
-    </div>
+        <div class="form-group">
+            <textarea class="form-control" rows="3" id="comentario" name="comentario"></textarea>
+        </div>
     @endrole
+
+    {{-- Aquí se renderiza el contenido adicional que inyectamos (por ejemplo, el componente etapas) --}}
+    {{ $slot }}
+
     {{ $botonFooter }}
+
     <div class="flex-auto" id="comentarios">
         @if ($comentarios)
             @foreach ($comentarios as $comentario)

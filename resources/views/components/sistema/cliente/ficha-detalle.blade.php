@@ -20,30 +20,36 @@
                             <x-sistema.cliente.datos :$cliente>
                                 @role('ejecutivo')
                                 <x-slot:botonHeader>
-  <button type="button" class="btn bg-gray-600 hover:bg-orange-500 text-gray-800" style="font-size: 10px; padding: 0px 1px;" onclick="editCliente()" id="btn_editar_cliente">
-    <i class="fas fa-edit text-gray-800"></i>
-  </button>
-  <button type="button" class="btn bg-gray-600 hover:bg-green-500 text-gray-800" style="font-size: 10px; padding: 0px 1px;" onclick="saveCliente()" id="btn_guardar_cliente" disabled>
-    <i class="fas fa-save text-gray-800"></i>
-  </button>
-</x-slot>                             
+                                <button type="button" class="btn bg-gradient-secondary" style="font-size: 15px; padding: 2px 5px;" onclick="editCliente()" id="btn_editar_cliente">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button type="button" class="btn bg-gradient-secondary" style="font-size: 15px; padding: 2px 5px;" onclick="saveCliente()" id="btn_guardar_cliente" disabled>
+                                    <i class="fas fa-save"></i>
+                                </button>
+                                </x-slot>                             
                                 @endrole
                             </x-sistema.cliente.datos>
                             <x-sistema.cliente.contactos :$contactos>
                                 @role('ejecutivo')
                                 <x-slot:botonFooter>
-                                    <button type="button" class="btn bg-gradient-secondary" onclick="saveContacto()" id="btn_guardar_contacto">Guardar</button>
+                                    <button type="button" class="btn bg-gradient-secondary" style="font-size: 15px; padding: 2px 5px;"  onclick="saveContacto()" id="btn_guardar_contacto">
+                                    <i class="fas fa-save"></i>
+                                    </button>
                                 </x-slot>
                                 @endrole
                             </x-sistema.cliente.contactos>
-                            <x-sistema.cliente.etapas>
+                            {{-- <x-sistema.cliente.etapas>
                                 @role('ejecutivo')
                                 <x-slot:botonHeader>
-                                    <button type="button" class="btn bg-gradient-secondary" onclick="editEtapa()" id="btn_editar_etapa">Editar</button>
-                                    <button type="button" class="btn bg-gradient-secondary" onclick="saveEtapa()" id="btn_guardar_etapa" disabled>Guardar</button>
+                                    <button type="button" class="btn bg-gradient-secondary" style="font-size: 15px; padding: 2px 5px;" onclick="editEtapa()" id="btn_editar_etapa">
+                                        <i class="fas fa-save"></i>
+                                    </button>
+                                    <button type="button" class="btn bg-gradient-secondary" style="font-size: 15px; padding: 2px 5px;" onclick="saveEtapa()" id="btn_guardar_etapa" disabled>
+                                        <i class="fas fa-save"></i>
+                                    </button>
                                 </x-slot>
                                 @endrole
-                            </x-sistema.cliente.etapas>
+                            </x-sistema.cliente.etapas> --}}
                         </div>
                         <div class="col-6 p-0">
                             <x-sistema.cliente.ventas></x-sistema.cliente.ventas>
@@ -55,34 +61,56 @@
             <x-sistema.cliente.movistars :$movistar>
                 @role('ejecutivo')
                 <x-slot:botonFooter>
-                    <button type="button" class="btn bg-gradient-secondary" onclick="editMovistar()" id="btn_editar_movistar">Editar</button>
-                    <button type="button" class="btn bg-gradient-secondary" onclick="saveMovistar()" id="btn_guardar_movistar" disabled>Guardar</button>
+                    <button type="button" class="btn bg-gradient-secondary" style="font-size: 15px; padding: 2px 5px;" onclick="editMovistar()" id="btn_editar_movistar">
+                        <i class="fas fa-save"></i>
+                    </button>
+                    <button type="button" class="btn bg-gradient-secondary" style="font-size: 15px; padding: 2px 5px;" onclick="saveMovistar()" id="btn_guardar_movistar" disabled>
+                        <i class="fas fa-save"></i>
+                    </button>
                 </x-slot>
                 @endrole
             </x-sistema.cliente.movistars>
         </div>
         <div class="col-12">
-                    <div class="row">
-                        <div class="col-7">
-                            <x-sistema.cliente.comentarios :$comentarios>
-                                @role('ejecutivo')
-                                <x-slot:botonFooter>
-                                    <button type="button" class="btn bg-gradient-secondary" onclick="saveComentario()">Agregar</button>
+            <div class="row">
+                <div class="col-7">
+                    <x-sistema.cliente.comentarios :$comentarios>
+                        <x-sistema.cliente.etapas :etapas="$etapas ?? []">
+                            @role('ejecutivo')
+                                <x-slot:botonHeader>
+                                    <button type="button" class="btn bg-gradient-secondary" style="font-size: 15px; padding: 2px 5px;" onclick="editEtapa()" id="btn_editar_etapa">
+                                        <i class="fas fa-save"></i>
+                                    </button>
+                                    <button type="button" class="btn bg-gradient-secondary" style="font-size: 15px; padding: 2px 5px;" onclick="saveEtapa()" id="btn_guardar_etapa" disabled>
+                                        <i class="fas fa-save"></i>
+                                    </button>
                                 </x-slot>
-                                @endrole
-                            </x-sistema.cliente.comentarios>
-                        </div>
-                        <div class="col-5">
-                            <x-sistema.notificacion.create :$notificacion>
-                                @role('ejecutivo')
-                                <x-slot:botonFooter>
-                                    <button type="button" class="btn bg-gradient-secondary" onclick="saveNotificacion()">Agregar</button>
-                                </x-slot>
-                                @endrole
-                            </x-sistema.notificacion.create>
-                        </div>
-                    </div>
+                            @endrole
+                        </x-sistema.cliente.etapas>
+                        
+                        @role('ejecutivo')
+                            <x-slot:botonHeader>
+                                <button type="button" class="btn bg-gradient-secondary" style="font-size: 15px; padding: 2px 5px;" onclick="saveComentario()">
+                                    <i class="fas fa-save"></i>
+                                </button>
+                            </x-slot>
+                        @endrole
+                    </x-sistema.cliente.comentarios>
                 </div>
+                <div class="col-5">
+                    <x-sistema.notificacion.create :$notificacion>
+                        @role('ejecutivo')
+                            <x-slot:botonFooter>
+                                <button type="button" class="btn bg-gradient-secondary" style="font-size: 15px; padding: 2px 5px;" onclick="saveNotificacion()">
+                                    <i class="fas fa-save"></i>
+                                </button>
+                            </x-slot>
+                        @endrole
+                    </x-sistema.notificacion.create>
+                </div>
+            </div>
+        </div>
+        
     </div>
     <div class="flex justify-end">
         <button type="button" class="btn bg-gradient-primary m-0" onclick="{{ $onclickCloseModal }}">Cerrar</button>
