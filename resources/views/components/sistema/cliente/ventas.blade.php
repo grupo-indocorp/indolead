@@ -121,7 +121,7 @@
         $('#producto_table tbody tr#'+num).remove();
         totalVenta();
     }
-    // Listar la ultima Venta
+    // Listar la ultima Vent
     ultimaVenta();
     $('#producto_id').prop('disabled', false);
     function ultimaVenta() {
@@ -163,10 +163,10 @@
                             </td>
                             <td></td>
                         </tr>`);
-                    headerRef.append(`<button class="btn btn-icon btn-2 btn-secondary" type="button" onclick="editarVenta(${venta_id})">
+                    headerRef.append(`<button class="btn btn-icon btn-2 btn-secondary" type="button" style="font-size: 10px; padding: 4px 10px;" onclick="editarVenta(${venta_id})">
                             <i class="fa-solid fa-edit"></i>
                         </button>
-                        <button class="btn btn-icon btn-2 btn-warning" type="button" onclick="nuevaVenta(${venta_id})">
+                        <button class="btn btn-icon btn-2 btn-warning" type="button" style="font-size: 10px; padding: 4px 10px;" onclick="nuevaVenta(${venta_id})">
                             <i class="fa-solid fa-plus"></i>
                         </button>`);
                 } else {

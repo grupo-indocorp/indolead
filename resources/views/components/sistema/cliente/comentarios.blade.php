@@ -10,14 +10,14 @@
             {{ $botonHeader }}
         </div>
     </div>
+
+    {{-- Aquí sse renderiza el contenido adicional que inyectamos (por ejemplo, el componente etapas) --}}
     @role('ejecutivo')
-        <div class="form-group">
-            <textarea class="form-control" rows="3" id="comentario" name="comentario"></textarea>
+        <div class="form-group" style="display: flex; flex-direction: row;">
+            <textarea class="form-control" rows="3" id="comentario" name="comentario" style="width: 70%;"></textarea>
+            <div style="width: 30%; padding: 10px;">{{ $slot }}</div>
         </div>
     @endrole
-
-    {{-- Aquí se renderiza el contenido adicional que inyectamos (por ejemplo, el componente etapas) --}}
-    {{ $slot }}
 
     {{ $botonFooter }}
 

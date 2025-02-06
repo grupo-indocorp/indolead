@@ -38,7 +38,7 @@
                                 </x-slot>
                                 @endrole
                             </x-sistema.cliente.contactos>
-                            {{-- <x-sistema.cliente.etapas>
+                            {{-- <x-sistema.cliente.etapas.>
                                 @role('ejecutivo')
                                 <x-slot:botonHeader>
                                     <button type="button" class="btn bg-gradient-secondary" style="font-size: 15px; padding: 2px 5px;" onclick="editEtapa()" id="btn_editar_etapa">
@@ -75,19 +75,18 @@
             <div class="row">
                 <div class="col-7">
                     <x-sistema.cliente.comentarios :$comentarios>
-                        <x-sistema.cliente.etapas :etapas="$etapas ?? []">
-                            @role('ejecutivo')
-                                <x-slot:botonHeader>
-                                    <button type="button" class="btn bg-gradient-secondary" style="font-size: 15px; padding: 2px 5px;" onclick="editEtapa()" id="btn_editar_etapa">
-                                        <i class="fas fa-save"></i>
-                                    </button>
-                                    <button type="button" class="btn bg-gradient-secondary" style="font-size: 15px; padding: 2px 5px;" onclick="saveEtapa()" id="btn_guardar_etapa" disabled>
-                                        <i class="fas fa-save"></i>
-                                    </button>
-                                </x-slot>
-                            @endrole
-                        </x-sistema.cliente.etapas>
-                        
+                            <x-sistema.cliente.etapas :etapas="$etapas ?? []">
+                                @role('ejecutivo')
+                                    <x-slot:botonHeader>
+                                        <button type="button" class="btn bg-gradient-secondary" style="font-size: 15px; padding: 2px 5px;" onclick="editEtapa()" id="btn_editar_etapa">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button type="button" class="btn bg-gradient-secondary" style="font-size: 15px; padding: 2px 5px;" onclick="saveEtapa()" id="btn_guardar_etapa" disabled>
+                                            <i class="fas fa-save"></i>
+                                        </button>
+                                    </x-slot>
+                                @endrole
+                            </x-sistema.cliente.etapas>
                         @role('ejecutivo')
                             <x-slot:botonHeader>
                                 <button type="button" class="btn bg-gradient-secondary" style="font-size: 15px; padding: 2px 5px;" onclick="saveComentario()">
@@ -100,7 +99,7 @@
                 <div class="col-5">
                     <x-sistema.notificacion.create :$notificacion>
                         @role('ejecutivo')
-                            <x-slot:botonFooter>
+                            <x-slot:botonHeader>
                                 <button type="button" class="btn bg-gradient-secondary" style="font-size: 15px; padding: 2px 5px;" onclick="saveNotificacion()">
                                     <i class="fas fa-save"></i>
                                 </button>
