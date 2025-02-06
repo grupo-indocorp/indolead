@@ -121,7 +121,7 @@
         $('#producto_table tbody tr#'+num).remove();
         totalVenta();
     }
-    // Listar la ultima Vent
+    // Listar la ultima Venta
     ultimaVenta();
     $('#producto_id').prop('disabled', false);
     function ultimaVenta() {

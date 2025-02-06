@@ -11,15 +11,16 @@
         </div>
     </div>
 
-    {{-- Aquí sse renderiza el contenido adicional que inyectamos (por ejemplo, el componente etapas) --}}
+    {{-- Se añadio el SLOT, para el sobreposicionamiento de etapas dentro del componente de comentario --}}
     @role('ejecutivo')
-        <div class="form-group" style="display: flex; flex-direction: row;">
+        <div class="relative mb-3" style="display: flex; flex-direction: row;">
             <textarea class="form-control" rows="3" id="comentario" name="comentario" style="width: 70%;"></textarea>
             <div style="width: 30%; padding: 10px;">{{ $slot }}</div>
         </div>
     @endrole
 
     {{ $botonFooter }}
+
 
     <div class="flex-auto" id="comentarios">
         @if ($comentarios)

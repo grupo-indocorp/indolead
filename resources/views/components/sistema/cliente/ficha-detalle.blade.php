@@ -38,7 +38,7 @@
                                 </x-slot>
                                 @endrole
                             </x-sistema.cliente.contactos>
-                            {{-- <x-sistema.cliente.etapas.>
+                            {{-- <x-sistema.cliente.etapas>
                                 @role('ejecutivo')
                                 <x-slot:botonHeader>
                                     <button type="button" class="btn bg-gradient-secondary" style="font-size: 15px; padding: 2px 5px;" onclick="editEtapa()" id="btn_editar_etapa">
@@ -62,7 +62,7 @@
                 @role('ejecutivo')
                 <x-slot:botonFooter>
                     <button type="button" class="btn bg-gradient-secondary" style="font-size: 15px; padding: 2px 5px;" onclick="editMovistar()" id="btn_editar_movistar">
-                        <i class="fas fa-save"></i>
+                        <i class="fas fa-edit"></i>
                     </button>
                     <button type="button" class="btn bg-gradient-secondary" style="font-size: 15px; padding: 2px 5px;" onclick="saveMovistar()" id="btn_guardar_movistar" disabled>
                         <i class="fas fa-save"></i>
@@ -89,7 +89,7 @@
                             </x-sistema.cliente.etapas>
                         @role('ejecutivo')
                             <x-slot:botonHeader>
-                                <button type="button" class="btn bg-gradient-secondary" style="font-size: 15px; padding: 2px 5px;" onclick="saveComentario()">
+                                <button type="button" class="btn bg-gradient-primary" style="font-size: 15px; padding: 2px 5px;" onclick="saveComentario()">
                                     <i class="fas fa-save"></i>
                                 </button>
                             </x-slot>
