@@ -154,7 +154,7 @@
                                 </td> --}}
                                 <td>{{ $item->periodo }}</td>
                                 {{-- <td></td> --}}
-                                <td>
+                                <td class="flex flex-col">
                                     @if (!is_null($factura1))
                                         @if ($factura1->estadofactura->id_name === 'pagado')
                                             <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-green-50 text-green-500 border border-green-500">
