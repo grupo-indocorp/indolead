@@ -2,12 +2,9 @@
 
 namespace App\Charts;
 
-use App\Models\Cliente;
 use App\Models\Etapa;
-use App\Models\User;
 use ArielMejiaDev\LarapexCharts\LarapexChart;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Database\Eloquent\Builder;
 
 class GraficoDeAnillo
 {
@@ -18,109 +15,79 @@ class GraficoDeAnillo
         $this->chart = $chart;
     }
 
-    public function build(Request $request, $equipoSeleccionado = null): \ArielMejiaDev\LarapexCharts\DonutChart
+    public function build(Builder $clientesQuery): \ArielMejiaDev\LarapexCharts\DonutChart
     {
-        // Obtener todos los ejecutivos
-        $ejecutivos = User::role('ejecutivo')->get();
+        // Obtener todas las etapas en orden de la base de datos
+        $etapas = Etapa::orderBy('id')->get();
 
-        // Filtrar por equipo si se ha seleccionado uno
-        $ejecutivo = $request->input('ejecutivo');
-        $mes = $request->input('mes');
-        $clientesQuery = Cliente::query();
+        // Preparar arrays para los datos del gráfico
+        $etapasNombres = [];
+        $etapasCounts = [];
+        $etapasColores = [];
 
-        if ($equipoSeleccionado) {
-            $clientesQuery->where('equipo_id', $equipoSeleccionado);
+        foreach ($etapas as $etapa) {
+            // Contar clientes para cada etapa
+            $count = $clientesQuery->clone()
+                ->where('etapa_id', $etapa->id)
+                ->count();
+
+            if ($count > 0) {
+                $etapasNombres[] = $etapa->nombre;
+                $etapasCounts[] = $count;
+                $etapasColores[] = $etapa->color;
+            }
         }
 
-        if ($ejecutivo) {
-            $clientesQuery->where('user_id', $ejecutivo);
-        }
-
-        if ($mes) {
-            $clientesQuery->whereMonth('fecha_gestion', $mes);
-        }
-
-        // Contar datos agrupados por etapa para el gráfico
-        $clientesPorEtapaCount = $clientesQuery->selectRaw('etapa_id, COUNT(*) as count')
-            ->groupBy('etapa_id')
-            ->pluck('count', 'etapa_id');
-
-        Log::info('Clientes por Etapa', ['data' => $clientesPorEtapaCount]);
-
-        $etapasData = Etapa::whereIn('id', $clientesPorEtapaCount->keys())->get();
-        $etapasNombres = $etapasData->pluck('nombre')->toArray();
-        $etapasCounts = $clientesPorEtapaCount->values()->toArray();
-        $etapasColores = $etapasData->pluck('color')->toArray();
         $totalClientes = array_sum($etapasCounts);
 
+        // Crear etiquetas con porcentajes
         $chartLabels = [];
         foreach ($etapasNombres as $index => $nombre) {
-            $chartLabels[] = $nombre.' ('.$etapasCounts[$index].')';
+            $porcentaje = $totalClientes > 0 
+                ? round(($etapasCounts[$index] / $totalClientes) * 100, 2)
+                : 0;
+            
+            $chartLabels[] = "$nombre ({$etapasCounts[$index]} - $porcentaje%)";
         }
 
-        $chart = $this->chart->donutChart()
-            ->setTitle('Cantidad de Clientes por Etapa')
-            ->setSubtitle('Cantidad de clientes en cada etapa')
+        return $this->chart->donutChart()
+            ->setTitle('Distribución de Clientes por Etapas')
+            ->setSubtitle('Total de clientes: ' . $totalClientes)
             ->addData($etapasCounts)
             ->setLabels($chartLabels)
             ->setColors($etapasColores)
             ->setOptions([
                 'dataLabels' => [
                     'enabled' => true,
-                    'formatter' => function ($val, $opts) {
-                        return round($val).'%';
-                    },
+                    'formatter' => 'function(val) { return Math.round(val) + "%" }',
                 ],
                 'plotOptions' => [
                     'pie' => [
                         'donut' => [
                             'labels' => [
                                 'show' => true,
-                                'name' => [
-                                    'show' => true,
-                                ],
-                                'value' => [
-                                    'show' => true,
-                                    'formatter' => function ($val, $opts) {
-                                        return $opts->w.globals.seriesTotals[$opts->dataPointIndex];
-                                    },
-                                ],
                                 'total' => [
                                     'show' => true,
                                     'label' => 'Total',
-                                    'formatter' => function () use ($totalClientes) {
-                                        return $totalClientes;
-                                    },
-                                ],
-                            ],
-                        ],
-                    ],
+                                    'formatter' => 'function() { return ' . $totalClientes . ' }'
+                                ]
+                            ]
+                        ]
+                    ]
                 ],
                 'tooltip' => [
-                    'enabled' => true,
-                    'theme' => 'dark',
                     'y' => [
-                        'formatter' => function ($val, $opts) use ($etapasNombres, $etapasCounts) {
-                            $index = $opts->dataPointIndex;
-                            $nombre = $etapasNombres[$index];
-                            $conteo = $etapasCounts[$index];
-                            $percentage = round(($conteo / array_sum($etapasCounts)) * 100, 2);
-
-                            return $conteo.' clientes ('.$percentage.'%)';
-                        },
-                    ],
+                        'formatter' => 'function(val, opts) { 
+                            return val + " clientes (" + Math.round(opts.percent) + "%)"
+                        }',
+                    ]
                 ],
                 'legend' => [
-                    'show' => true,
                     'position' => 'bottom',
-                    'formatter' => function ($seriesName, $opts) use ($etapasCounts) {
-                        $index = $opts->dataPointIndex;
-
-                        return $seriesName.': '.$etapasCounts[$index];
-                    },
-                ],
+                    'formatter' => 'function(seriesName, opts) { 
+                        return seriesName + ": " + opts.w.globals.series[opts.seriesIndex] 
+                    }'
+                ]
             ]);
-
-        return $chart;
     }
 }
