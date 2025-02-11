@@ -84,6 +84,9 @@ Route::middleware([
     Route::get('/files/{id}/download', [FileController::class, 'download'])
     ->name('files.download');
 
+    Route::get('/documentos', [FileViewController::class, 'index'])->name('files.view');
+    Route::get('/documentos/{file}/descargar', [FileViewController::class, 'download'])->name('files.download');
+
     // Exportación e importación de clientes
     Route::get('clientes/export/', [GestionClienteController::class, 'export']);
     Route::post('clientes/import/', [GestionClienteController::class, 'import']);

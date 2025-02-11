@@ -50,4 +50,22 @@ class File extends Model
 
         return $bytes . ' bytes';
     }
+
+    protected $guarded = [];
+    
+    // Query Scopes
+    public function scopeVisibleToUser($query)
+    {
+        return $query->where('is_public', true)
+            ->orWhere('user_id', auth()->id());
+    }
+
+    public function scopeWithFilters($query, $request)
+    {
+        return $query->when($request->category, function($q) use ($request) {
+            $q->where('category_id', $request->category);
+        })->when($request->search, function($q) use ($request) {
+            $q->where('name', 'LIKE', "%{$request->search}%");
+        });
+    }
 }
