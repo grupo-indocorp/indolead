@@ -1,0 +1,53 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class File extends Model
+{
+    use HasFactory;
+
+    /**
+     * Los campos que se pueden asignar en masa.
+     *
+     * @var array<string>
+     */
+    protected $fillable = [
+        'name',         // Nombre del archivo
+        'path',         // Ruta del archivo en el servidor
+        'uploaded_by',  // ID del usuario que subió el archivo
+        'description',  // Descripción del archivo
+        'format',       // Formato del archivo (extensión)
+        'size',         // Tamaño del archivo
+        'category',     // Categoría del archivo
+    ];
+
+    /**
+     * Obtener el usuario que subió el archivo.
+     */
+    public function uploadedBy()
+    {
+        return $this->belongsTo(User::class, 'uploaded_by');
+    }
+    public function getExtensionAttribute()
+    {
+        return strtoupper(pathinfo($this->nombre, PATHINFO_EXTENSION));
+    }
+
+    public function getSizeFormattedAttribute()
+    {
+        $bytes = $this->size;
+
+        if ($bytes >= 1073741824) {
+            return number_format($bytes / 1073741824, 2) . ' GB';
+        } elseif ($bytes >= 1048576) {
+            return number_format($bytes / 1048576, 2) . ' MB';
+        } elseif ($bytes >= 1024) {
+            return number_format($bytes / 1024, 2) . ' KB';
+        }
+
+        return $bytes . ' bytes';
+    }
+}

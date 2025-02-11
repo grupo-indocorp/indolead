@@ -14,52 +14,57 @@ class RoleSeeder extends Seeder
     public function run(): void
     {
         // área de sistemas
-        $sistema = Role::create(['name' => 'sistema']);
+        $sistema = Role::firstOrCreate(['name' => 'sistema']);
 
         // área comercial
-        $gerente_general = Role::create(['name' => 'gerente general']);
-        $gerente_comercial = Role::create(['name' => 'gerente comercial']);
-        $asistente_comercial = Role::create(['name' => 'asistente comercial']);
-        $jefe_comercial = Role::create(['name' => 'jefe comercial']);
-        $backoffice = Role::create(['name' => 'backoffice']);
-        $calidad_comercial = Role::create(['name' => 'calidad comercial']);
-        $supervisor = Role::create(['name' => 'supervisor']);
-        $ejecutivo = Role::create(['name' => 'ejecutivo']);
+        $gerente_general = Role::firstOrCreate(['name' => 'gerente general']);
+        $gerente_comercial = Role::firstOrCreate(['name' => 'gerente comercial']);
+        $asistente_comercial = Role::firstOrCreate(['name' => 'asistente comercial']);
+        $jefe_comercial = Role::firstOrCreate(['name' => 'jefe comercial']);
+        $backoffice = Role::firstOrCreate(['name' => 'backoffice']);
+        $calidad_comercial = Role::firstOrCreate(['name' => 'calidad comercial']);
+        $supervisor = Role::firstOrCreate(['name' => 'supervisor']);
+        $ejecutivo = Role::firstOrCreate(['name' => 'ejecutivo']);
 
         // área administrativa
-        $administrador = Role::create(['name' => 'administrador']);
-        $asistente_administrador = Role::create(['name' => 'asistente administrador']);
-        $recursos_humanos = Role::create(['name' => 'recursos humanos']);
-        $asistente_recursos_humanos = Role::create(['name' => 'asistente recursos humanos']);
-        $capacitador = Role::create(['name' => 'capacitador']);
-        $planificacion = Role::create(['name' => 'planificacion']);
-        $soporte_comercial = Role::create(['name' => 'soporte comercial']);
-        $soporte_sistemas = Role::create(['name' => 'soporte sistemas']);
-        $delivery = Role::create(['name' => 'delivery']);
-        $finanzas = Role::create(['name' => 'finanzas']);
+        $administrador = Role::firstOrCreate(['name' => 'administrador']);
+        $asistente_administrador = Role::firstOrCreate(['name' => 'asistente administrador']);
+        $recursos_humanos = Role::firstOrCreate(['name' => 'recursos humanos']);
+        $asistente_recursos_humanos = Role::firstOrCreate(['name' => 'asistente recursos humanos']);
+        $capacitador = Role::firstOrCreate(['name' => 'capacitador']);
+        $planificacion = Role::firstOrCreate(['name' => 'planificacion']);
+        $soporte_comercial = Role::firstOrCreate(['name' => 'soporte comercial']);
+        $soporte_sistemas = Role::firstOrCreate(['name' => 'soporte sistemas']);
+        $delivery = Role::firstOrCreate(['name' => 'delivery']);
+        $finanzas = Role::firstOrCreate(['name' => 'finanzas']);
 
-        Permission::create(['name' => 'sistema.dashboard']);
-        Permission::create(['name' => 'sistema.cliente']);
-        Permission::create(['name' => 'sistema.funnel']);
-        Permission::create(['name' => 'sistema.gestion_cliente']);
-        Permission::create(['name' => 'sistema.gestion_cliente.buscar']);
-        Permission::create(['name' => 'sistema.gestion_cliente.agregar']);
-        Permission::create(['name' => 'sistema.gestion_cliente.asignar']);
-        Permission::create(['name' => 'sistema.gestion_cliente.exportar']);
-        Permission::create(['name' => 'sistema.gestion_cliente.importar']);
-        Permission::create(['name' => 'sistema.lista_usuario']);
-        Permission::create(['name' => 'sistema.equipo']);
-        Permission::create(['name' => 'sistema.role']);
-        Permission::create(['name' => 'sistema.configuracion']);
-        Permission::create(['name' => 'sistema.notificacion']);
-        Permission::create(['name' => 'sistema.buscar']);
-        Permission::create(['name' => 'sistema.reporte']);
-        Permission::create(['name' => 'sistema.reporte.cliente']);
-        Permission::create(['name' => 'sistema.evaporacion']);
-        Permission::create(['name' => 'sistema.evaporacion.subir']);
-        Permission::create(['name' => 'sistema.evaporacion-gestion']);
+        // Crear permisos usando firstOrCreate para evitar duplicados
+        Permission::firstOrCreate(['name' => 'sistema.dashboard']);
+        Permission::firstOrCreate(['name' => 'sistema.cliente']);
+        Permission::firstOrCreate(['name' => 'sistema.funnel']);
+        Permission::firstOrCreate(['name' => 'sistema.gestion_cliente']);
+        Permission::firstOrCreate(['name' => 'sistema.gestion_cliente.buscar']);
+        Permission::firstOrCreate(['name' => 'sistema.gestion_cliente.agregar']);
+        Permission::firstOrCreate(['name' => 'sistema.gestion_cliente.asignar']);
+        Permission::firstOrCreate(['name' => 'sistema.gestion_cliente.exportar']);
+        Permission::firstOrCreate(['name' => 'sistema.gestion_cliente.importar']);
+        Permission::firstOrCreate(['name' => 'sistema.lista_usuario']);
+        Permission::firstOrCreate(['name' => 'sistema.equipo']);
+        Permission::firstOrCreate(['name' => 'sistema.role']);
+        Permission::firstOrCreate(['name' => 'sistema.configuracion']);
+        Permission::firstOrCreate(['name' => 'sistema.notificacion']);
+        Permission::firstOrCreate(['name' => 'sistema.buscar']);
+        Permission::firstOrCreate(['name' => 'sistema.reporte']);
+        Permission::firstOrCreate(['name' => 'sistema.reporte.cliente']);
+        Permission::firstOrCreate(['name' => 'sistema.evaporacion']);
+        Permission::firstOrCreate(['name' => 'sistema.evaporacion.subir']);
+        Permission::firstOrCreate(['name' => 'sistema.evaporacion-gestion']);
+        Permission::firstOrCreate(['name' => 'sistema.files']); // Nuevo permiso para gestión de archivos
 
+        // Asignar todos los permisos al rol 'sistema'
         $sistema->syncPermissions(Permission::all());
+
+        // Asignar permisos específicos a otros roles
         $gerente_general->syncPermissions([
             'sistema.cliente',
         ]);
@@ -71,6 +76,7 @@ class RoleSeeder extends Seeder
             'sistema.notificacion',
             'sistema.reporte',
             'sistema.reporte.cliente',
+            'sistema.files', // Asignar permiso de gestión de archivos
         ]);
         $asistente_comercial->syncPermissions([
             'sistema.cliente',
@@ -90,6 +96,7 @@ class RoleSeeder extends Seeder
             'sistema.gestion_cliente.exportar',
             'sistema.notificacion',
             'sistema.gestion_cliente.asignar',
+            'sistema.files', // Asignar permiso de gestión de archivos
         ]);
         $ejecutivo->syncPermissions([
             'sistema.cliente',

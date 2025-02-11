@@ -117,4 +117,8 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Equipo::class)->withPivot('id')->withTimestamps();
     }
+    public function files()
+    {
+        return $this->hasMany(File::class, 'uploaded_by');
+    }
 }
