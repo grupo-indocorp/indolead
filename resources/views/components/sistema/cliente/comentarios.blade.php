@@ -13,14 +13,25 @@
 
     {{-- Se añadio el SLOT, para el sobreposicionamiento de etapas dentro del componente de comentario --}}
     @role('ejecutivo')
-        <div class="relative mb-3" style="display: flex; flex-direction: row;">
-            <textarea class="form-control" rows="3" id="comentario" name="comentario" style="width: 70%;"></textarea>
-            <div style="width: 30%; padding: 10px;">{{ $slot }}</div>
+    <div class="relative mb-3">
+        <div style="display: flex; flex-direction: row;">
+                <div style="width: 150%;">
+                <textarea class="form-control" rows="3" id="comentario" name="comentario" style="width: 100%;">
+                </textarea>
+                @error('comentario')
+                    <div class="text-danger" style="margin-top: 5px;">
+                        {{ $message }}
+                    </div>
+                @enderror
+            </div>
+                <div style="width: 70%; padding: 5px;">
+                {{ $slot }}
+            </div>
         </div>
+    </div>
     @endrole
 
     {{ $botonFooter }}
-
 
     <div class="flex-auto" id="comentarios">
         @if ($comentarios)

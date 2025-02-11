@@ -73,7 +73,7 @@
         </div>
         <div class="col-12">
             <div class="row">
-                <div class="col-7">
+                <div class="col-7 p-0">
                     <x-sistema.cliente.comentarios :$comentarios>
                             <x-sistema.cliente.etapas :etapas="$etapas ?? []">
                                 @role('ejecutivo')

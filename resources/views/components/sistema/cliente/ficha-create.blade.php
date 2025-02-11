@@ -19,10 +19,13 @@
                 <div class="col-12 p-0">
                     <div class="row">
                         <div class="col-10 p-0">
-                            <x-sistema.cliente.comentarios></x-sistema.cliente.comentarios>
-                        </div>
-                        <div class="col-2 p-0">
-                            <x-sistema.cliente.etapas></x-sistema.cliente.etapas>
+                            <x-sistema.cliente.comentarios>
+                                <div class="row m-1">
+                                    <div class="col-10 p-0">
+                                        <x-sistema.cliente.etapas></x-sistema.cliente.etapas>
+                                    </div>
+                                </div>
+                            </x-sistema.cliente.comentarios>
                         </div>
                     </div>
                 </div>
