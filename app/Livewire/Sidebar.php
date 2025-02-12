@@ -81,6 +81,13 @@ class Sidebar extends Component
                 'url' => 'configuracion',
                 'can' => 'sistema.configuracion',
             ],
+            // Agregar la opción "Gestión de Archivos"
+            [
+                'icon' => 'fa-file', // Ícono de FontAwesome para archivos
+                'nombre' => 'Gestión de Archivos',
+                'url' => 'files', // Ruta definida en web.php
+                'can' => 'sistema.files', // Permiso necesario (ajusta según tu sistema de permisos)
+            ],
         ];
 
         return view('livewire.sidebar', compact('links'));

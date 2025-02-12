@@ -17,6 +17,7 @@ use App\Http\Controllers\EvaporacionController;
 use App\Http\Controllers\EvaporacionGestionController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\FacturaController;
+use App\Http\Controllers\FileController; // Importa el FileController
 use App\Http\Controllers\FunnelController;
 use App\Http\Controllers\GestionClienteController;
 use App\Http\Controllers\HomeController;
@@ -28,7 +29,6 @@ use App\Http\Controllers\ReporteClienteController;
 use App\Http\Controllers\ReporteClienteNuevoController;
 use App\Http\Controllers\ReporteController;
 use App\Http\Controllers\RoleController;
-use App\Services\ClienteService;
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
 
@@ -37,20 +37,25 @@ Route::get('/components', function () {
     return view('components');
 });
 
+// Ruta de inicio
 Route::get('/', [HomeController::class, 'home']);
 
+// Redirigir registro a la página de inicio
 Route::get('/register', function () {
     return redirect('/');
 });
 
+// Rutas protegidas por autenticación
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
+    // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    // Rutas de recursos
     Route::resources([
-        // 'gestion_cliente' => GestionClienteController::class,
         'lista_usuario' => ListaUsuarioController::class,
         'equipo' => EquipoController::class,
         'funnel' => FunnelController::class,
@@ -60,18 +65,11 @@ Route::middleware([
         'reporte_cliente' => ReporteClienteController::class,
         'reporte_cliente_nuevo' => ReporteClienteNuevoController::class,
         'producto' => ProductoController::class,
-        // Cliente
         'cliente' => ClienteController::class,
         'cliente-consultor' => ClienteConsultorController::class,
         'cliente-gestion' => ClienteGestionController::class,
-        // evaporacion
-        // 'evaporacion' => EvaporacionController::class,
-        // 'evaporacion-gestion' => EvaporacionGestionController::class,
-
         'cuentas-financieras' => CuentafinancieraController::class,
         'facturas' => FacturaController::class,
-
-        // Configuraciones
         'configuracion' => ConfiguracionController::class,
         'configuracion-sistema' => ConfiguracionSistemaController::class,
         'configuracion-etapa' => ConfiguracionEtapaController::class,
@@ -79,23 +77,36 @@ Route::middleware([
         'configuracion-producto' => ConfiguracionProductoController::class,
         'configuracion-excel' => ConfiguracionExcelController::class,
         'configuracion-ficha-cliente' => ConfiguracionFichaClienteController::class,
+        'files' => FileController::class, // Ruta para la gestión de archivos
     ]);
+
+    // Ruta adicional para la descarga de archivos
+    Route::get('/files/{id}/download', [FileController::class, 'download'])
+    ->name('files.download');
+
+    Route::get('/documentos', [FileViewController::class, 'index'])->name('files.view');
+    Route::get('/documentos/{file}/descargar', [FileViewController::class, 'download'])->name('files.download');
+
+    // Exportación e importación de clientes
     Route::get('clientes/export/', [GestionClienteController::class, 'export']);
     Route::post('clientes/import/', [GestionClienteController::class, 'import']);
 
-    // Actualizar datos de clientes a la nueva tabla
-    Route::get('update-cuentafinanciera', [ConfiguracionController::class, 'updateCuentaFinanciera'])->name('update.cuentafinanciera');
-    Route::get('update-facturas', [ConfiguracionController::class, 'updateFactura'])->name('update.factura');
+    // Actualización de datos de clientes
+    Route::get('update-cuentafinanciera', [ConfiguracionController::class, 'updateCuentaFinanciera'])
+        ->name('update.cuentafinanciera');
+    Route::get('update-facturas', [ConfiguracionController::class, 'updateFactura'])
+        ->name('update.factura');
 
-    // Export
+    // Exportación de datos
     Route::get('export/secodi/funnel', [ExportController::class, 'secodiFunnel']);
     Route::get('export/indotech/funnel', [ExportController::class, 'indotechFunnel']);
 
-    // Import
-    Route::post('import/evaporacion', [ImportController::class, 'evaporacion'])->name('import.evaporacion');
-    // Route::get('gestioncliente', [ClienteService::class, 'gestionCliente']);
+    // Importación de datos
+    Route::post('import/evaporacion', [ImportController::class, 'evaporacion'])
+        ->name('import.evaporacion');
 });
 
+// Configuración de Livewire
 Livewire::setScriptRoute(function ($handle) {
     return Route::get('/indotech/vendor/livewire/livewire/dist/livewire.js', $handle);
 });

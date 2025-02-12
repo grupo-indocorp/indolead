@@ -7,6 +7,19 @@ use Illuminate\Support\Facades\Storage;
 
 class Helpers
 {
+    public static function formatSizeUnits($bytes)
+    {
+        if ($bytes >= 1073741824) {
+            return number_format($bytes / 1073741824, 2) . ' GB';
+        } elseif ($bytes >= 1048576) {
+            return number_format($bytes / 1048576, 2) . ' MB';
+        } elseif ($bytes >= 1024) {
+            return number_format($bytes / 1024, 2) . ' KB';
+        } else {
+            return $bytes . ' bytes';
+        }
+    }
+
     public static function NotificacionRecordatorio()
     {
         $user = auth()->user();
@@ -151,7 +164,7 @@ class Helpers
     {
         $where = [];
         if (isset($filtro->filtro_ruc)) {
-            $where[] = ['ruc', 'LIKE', $filtro->filtro_ruc.'%'];
+            $where[] = ['ruc', 'LIKE', $filtro->filtro_ruc . '%'];
         }
         if ($filtro->filtro_etapa_id != 0) {
             $where[] = ['etapa_id', $filtro->filtro_etapa_id];
@@ -178,12 +191,13 @@ class Helpers
             }
         }
         if (isset($filtro->filtro_fecha_desde)) {
-            $where[] = ['fecha_ultimo_contacto', '>=', $filtro->filtro_fecha_desde.' 00:00:00'];
+            $where[] = ['fecha_ultimo_contacto', '>=', $filtro->filtro_fecha_desde . ' 00:00:00'];
         }
         if (isset($filtro->filtro_fecha_hasta)) {
-            $where[] = ['fecha_ultimo_contacto', '<=', $filtro->filtro_fecha_hasta.' 23:59:59'];
+            $where[] = ['fecha_ultimo_contacto', '<=', $filtro->filtro_fecha_hasta . ' 23:59:59'];
         }
 
         return $where;
     }
 }
+

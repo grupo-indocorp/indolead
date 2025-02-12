@@ -1,4 +1,4 @@
-<x-sistema.modal :title="$role->name">
+<x-sistema.modal class="w-auto max-w-md" :title="$role->name">
     <form action="{{ route('role.update', $role->id) }}" method="post" class="m-0">
         @csrf
         @method('put')
