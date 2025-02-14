@@ -4,28 +4,28 @@
     'cliente' => '',
 ])
 <x-sistema.card class="m-2">
-    <div class="d-flex flex-row flex-wrap justify-content-between">
+    <div class=" relative mb-3 d-flex flex-row flex-wrap justify-content-between">
         <x-sistema.titulo title="Datos Del Cliente" />
         <div class="flex flex-row gap-2">
             {{ $botonHeader }}
         </div>
     </div>
-    <div class="form-group">
-        <label for="ruc" class="form-control-label">Ruc *</label>
+    <div class="relative mb-3">
         @if ($cliente != '')
-            <input class="form-control" type="text" id="ruc" name="ruc" value="{{ $cliente->ruc ?? '' }}" disabled>
+        <input class="block px-2.5 pb-1.5 pt-0 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" type="text" id="ruc" name="ruc" placeholder="" value="{{ $cliente->ruc ?? '' }}" readonly>
         @else
-            <input class="form-control" type="text" id="ruc" name="ruc" value="" onchange="validarRuc(this)">
+        <input class="block px-2.5 pb-1.5 pt-0 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" type="text" id="ruc" name="ruc" placeholder="" onchange="validarRuc(this)">
         @endif
+        <label for="ruc" class="absolute text-sm text-gray-600 duration-300 transform -translate-y-4 scale-75 top-2 left-0 z-10 origin-[0] px-0.5 py-0 peer-focus:text-blue-600 peer-focus:text-sm peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-100 peer-focus:-translate-y-4 bg-[#F1F5F9]">Ruc *</label>
     </div>
-    <div class="form-group">
-        <label for="razon_social" class="form-control-label">Razón Social *</label>
-        <input class="form-control" type="text" id="razon_social" name="razon_social" value="{{ $cliente->razon_social ?? '' }}" @php echo ($cliente != '' ? 'disabled' : ''); @endphp>
-    </div>
-    <div class="form-group">
-        <label for="ciudad" class="form-control-label">Ciudad *</label>
-        <input class="form-control" type="text" id="ciudad" name="ciudad" value="{{ $cliente->ciudad ?? '' }}" @php echo ($cliente != '' ? 'disabled' : ''); @endphp>
-    </div>
+    <div class="relative mb-3">
+      <input class="block px-2.5 pb-1.5 pt-0 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" type="text" id="razon_social" name="razon_social" value="{{ $cliente->razon_social ?? '' }}" @php echo ($cliente != '' ? 'disabled' : ''); @endphp placeholder=" " />
+      <label for="razon_social" class="absolute text-sm text-gray-600 duration-300 transform -translate-y-4 scale-75 top-2 left-0 z-10 origin-[0] px-0.5 py-0 peer-focus:text-blue-600 peer-focus:text-sm peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-100 peer-focus:-translate-y-4 bg-[#F1F5F9]">Razón Social *</label>
+  </div>    
+    <div class="relative mb-2">
+        <input class="block px-2.5 pb-1.5 pt-0 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" type="text" id="ciudad" name="ciudad" value="{{ $cliente->ciudad ?? '' }}" @php echo ($cliente != '' ? 'disabled' : ''); @endphp placeholder=" " />
+        <label for="ciudad" class="absolute text-sm text-gray-600 duration-300 transform -translate-y-4 scale-75 top-2 left-0 z-10 origin-[0] px-0.5 py-0 peer-focus:text-blue-600 peer-focus:text-sm peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-100 peer-focus:-translate-y-4 bg-[#F1F5F9]">Ciudad *</label>
+    </div> 
     {{ $botonFooter }}
 </x-sistema.card>
 <script>

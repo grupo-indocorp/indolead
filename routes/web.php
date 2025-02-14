@@ -21,6 +21,7 @@ use App\Http\Controllers\FunnelController;
 use App\Http\Controllers\GestionClienteController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ImportController;
+use App\Http\Controllers\InventarioController;
 use App\Http\Controllers\ListaUsuarioController;
 use App\Http\Controllers\NotificacionController;
 use App\Http\Controllers\ProductoController;
@@ -60,6 +61,8 @@ Route::middleware([
         'reporte_cliente' => ReporteClienteController::class,
         'reporte_cliente_nuevo' => ReporteClienteNuevoController::class,
         'producto' => ProductoController::class,
+        //inventario
+        'inventario' => InventarioController::class,
         // Cliente
         'cliente' => ClienteController::class,
         'cliente-consultor' => ClienteConsultorController::class,

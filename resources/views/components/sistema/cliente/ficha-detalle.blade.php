@@ -1,5 +1,5 @@
 @props([
-    'data'=>'',
+    'data' => '',
     'onclickCloseModal' => 'closeModal()',
 ])
 @php
@@ -10,86 +10,100 @@
     $ventas = $data['ventas'];
     $notificacion = $data['notificacion'];
 @endphp
-<x-sistema.modal title="Detalle Cliente" dialog_id="dialog" :$onclickCloseModal style="width: 90vw;">
+<x-sistema.modal title="Detalle Cliente" dialog_id="dialog" :$onclickCloseModal class="w-[95vw] max-w-5xl p-2"> 
     <input type="hidden" id="cliente_id" name="cliente_id" value="{{ $cliente->id }}">
-    <div class="row p-1">
-        <div class="col-10 p-0">
-            <div class="row p-0 m-2">
-                <div class="col-12">
-                    <div class="row">
-                        <div class="col-6 p-0">
-                            <x-sistema.cliente.datos :$cliente>
-                                @role('ejecutivo')
-                                <x-slot:botonHeader>
-                                    <button type="button" class="btn bg-gradient-secondary" onclick="editCliente()" id="btn_editar_cliente">Editar</button>
-                                    <button type="button" class="btn bg-gradient-secondary" onclick="saveCliente()" id="btn_guardar_cliente" disabled>Guardar</button>
-                                </x-slot>
-                                @endrole
-                            </x-sistema.cliente.datos>
-                            <x-sistema.cliente.contactos :$contactos>
-                                @role('ejecutivo')
-                                <x-slot:botonFooter>
-                                    <button type="button" class="btn bg-gradient-secondary" onclick="saveContacto()" id="btn_guardar_contacto">Guardar</button>
-                                </x-slot>
-                                @endrole
-                            </x-sistema.cliente.contactos>
-                        </div>
-                        <div class="col-6 p-0">
-                            <x-sistema.notificacion.create :$notificacion>
-                                @role('ejecutivo')
-                                <x-slot:botonFooter>
-                                    <button type="button" class="btn bg-gradient-secondary" onclick="saveNotificacion()">Agregar</button>
-                                </x-slot>
-                                @endrole
-                            </x-sistema.notificacion.create>
-                            <x-sistema.cliente.ventas></x-sistema.cliente.ventas>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="row">
-                        <div class="col-10">
-                            <x-sistema.cliente.comentarios :$comentarios>
-                                @role('ejecutivo')
-                                <x-slot:botonFooter>
-                                    <button type="button" class="btn bg-gradient-secondary" onclick="saveComentario()">Agregar</button>
-                                </x-slot>
-                                @endrole
-                            </x-sistema.cliente.comentarios>
-                        </div>
-                        <div class="col-2">
-                            <x-sistema.cliente.etapas>
-                                @role('ejecutivo')
-                                <x-slot:botonFooter>
-                                    <button type="button" class="btn bg-gradient-secondary" onclick="editEtapa()" id="btn_editar_etapa">Editar</button>
-                                    <button type="button" class="btn bg-gradient-secondary" onclick="saveEtapa()" id="btn_guardar_etapa" disabled>Guardar</button>
-                                </x-slot>
-                                @endrole
-                            </x-sistema.cliente.etapas>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <div class="grid grid-cols-12 p-0">
+        <div class="col-span-6">
+            <x-sistema.cliente.datos :$cliente>
+                @role('ejecutivo')
+                    <x-slot:botonHeader>
+                        <button type="button" class="btn bg-gradient-secondary text-sm px-2 py-1" onclick="editCliente()"
+                            id="btn_editar_cliente">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button type="button" class="btn bg-gradient-secondary text-sm px-2 py-1" onclick="saveCliente()"
+                            id="btn_guardar_cliente" disabled>
+                            <i class="fas fa-save"></i>
+                        </button>
+                    </x-slot>
+                @endrole
+            </x-sistema.cliente.datos>
+            <x-sistema.cliente.contactos :$contactos>
+                @role('ejecutivo')
+                    <x-slot:botonFooter>
+                        <button type="button" class="btn bg-gradient-secondary text-sm px-2 py-1" onclick="saveContacto()"
+                            id="btn_guardar_contacto">
+                            <i class="fas fa-save"></i>
+                        </button>
+                    </x-slot>
+                @endrole
+            </x-sistema.cliente.contactos>
         </div>
-        <div class="col-2 p-0">
+        <div class="col-span-6 space-y-4">
             <x-sistema.cliente.movistars :$movistar>
                 @role('ejecutivo')
-                <x-slot:botonFooter>
-                    <button type="button" class="btn bg-gradient-secondary" onclick="editMovistar()" id="btn_editar_movistar">Editar</button>
-                    <button type="button" class="btn bg-gradient-secondary" onclick="saveMovistar()" id="btn_guardar_movistar" disabled>Guardar</button>
-                </x-slot>
+                    <x-slot:botonFooter>
+                        <button type="button" class="btn bg-gradient-secondary text-sm px-2 py-1" onclick="editMovistar()"
+                            id="btn_editar_movistar">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button type="button" class="btn bg-gradient-secondary text-sm px-2 py-1" onclick="saveMovistar()"
+                            id="btn_guardar_movistar" disabled>
+                            <i class="fas fa-save"></i>
+                        </button>
+                    </x-slot>
                 @endrole
             </x-sistema.cliente.movistars>
+            <x-sistema.cliente.ventas />
+        </div>
+        <div class="col-span-7">
+            <x-sistema.cliente.comentarios :$comentarios>
+                <x-sistema.cliente.etapas :etapas="$etapas ?? []">
+                    @role('ejecutivo')
+                        <x-slot:botonHeader>
+                            <button type="button" class="btn bg-gradient-secondary text-sm px-2 py-1" onclick="editEtapa()"
+                                id="btn_editar_etapa">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button type="button" class="btn bg-gradient-secondary text-sm px-2 py-1" onclick="saveEtapa()"
+                                id="btn_guardar_etapa" disabled>
+                                <i class="fas fa-save"></i>
+                            </button>
+                        </x-slot>
+                    @endrole
+                </x-sistema.cliente.etapas>
+                @role('ejecutivo')
+                    <x-slot:botonHeader>
+                        <button type="button" class="btn bg-gradient-primary text-sm px-2 py-1" onclick="saveComentario()">
+                            <i class="fas fa-save"></i>
+                        </button>
+                    </x-slot>
+                @endrole
+            </x-sistema.cliente.comentarios>
+        </div>
+        <div class="col-span-5">
+            <x-sistema.notificacion.create :$notificacion>
+                @role('ejecutivo')
+                    <x-slot:botonHeader>
+                        <button type="button" class="btn bg-gradient-secondary text-sm px-2 py-1"
+                            onclick="saveNotificacion()">
+                            <i class="fas fa-save"></i>
+                        </button>
+                    </x-slot>
+                @endrole
+            </x-sistema.notificacion.create>
         </div>
     </div>
-    <div class="flex justify-end">
-        <button type="button" class="btn bg-gradient-primary m-0" onclick="{{ $onclickCloseModal }}">Cerrar</button>
+    <div class="flex justify-end mt-2">
+        <button type="button" class="btn bg-gradient-primary" onclick="{{ $onclickCloseModal }}">Cerrar</button>
     </div>
 </x-sistema.modal>
+
 <script>
     function editCliente() {
         $('#ruc, #razon_social, #ciudad, #btn_guardar_cliente').prop('disabled', false)
     }
+
     function saveCliente() {
         let cliente_id = $('#cliente_id').val();
         $.ajaxSetup({
@@ -106,18 +120,20 @@
                 razon_social: $('#razon_social').val(),
                 ciudad: $('#ciudad').val(),
             },
-            success: function( result ) {
+            success: function(result) {
                 $('#ruc, #razon_social, #ciudad, #btn_guardar_cliente').prop('disabled', true);
             },
-            error: function( response ) {
+            error: function(response) {
                 mostrarError(response);
             }
         });
     }
+
     function saveContacto() {
         const dialog = document.querySelector("#dialog");
         dialog.querySelectorAll('.is-invalid, .invalid-feedback').forEach(element => {
-            element.classList.contains('is-invalid') ? element.classList.remove('is-invalid') : element.remove();
+            element.classList.contains('is-invalid') ? element.classList.remove('is-invalid') : element
+                .remove();
         });
         let cliente_id = $('#cliente_id').val();
         $.ajaxSetup({
@@ -136,7 +152,7 @@
                 cargo: $('#cargo').val(),
                 correo: $('#correo').val(),
             },
-            success: function( result ) {
+            success: function(result) {
                 $('#nombre').val('');
                 $('#dni').val('');
                 $('#celular').val('');
@@ -144,14 +160,15 @@
                 $('#correo').val('');
                 listContactos(result);
             },
-            error: function( response ) {
+            error: function(response) {
                 mostrarError(response);
             }
         });
     }
+
     function listContactos(contactos) {
         let html = "";
-        contactos.forEach(function (contacto) {
+        contactos.forEach(function(contacto) {
             html += `<tr id="${contacto.id}">
                         <td class="align-middle text-uppercase text-sm">
                             <span class="text-secondary text-xs font-weight-normal">${contacto.dni}</span>
@@ -172,10 +189,12 @@
         })
         $('#contactos').html(html);
     }
+
     function saveComentario() {
         const dialog = document.querySelector("#dialog");
         dialog.querySelectorAll('.is-invalid, .invalid-feedback').forEach(element => {
-            element.classList.contains('is-invalid') ? element.classList.remove('is-invalid') : element.remove();
+            element.classList.contains('is-invalid') ? element.classList.remove('is-invalid') : element
+                .remove();
         });
         let cliente_id = $('#cliente_id').val();
         $.ajaxSetup({
@@ -190,18 +209,19 @@
                 view: 'update-comentario',
                 comentario: $('#comentario').val(),
             },
-            success: function( result ) {
+            success: function(result) {
                 $('#comentario').val('');
                 listComentario(result);
             },
-            error: function( response ) {
+            error: function(response) {
                 mostrarError(response);
             }
         });
     }
+
     function listComentario(comentarios) {
         let html = "";
-        comentarios.forEach(function (comentario) {
+        comentarios.forEach(function(comentario) {
             html += `<div class="mb-4" id="${comentario.id}">
                         <span class="text-slate-900 text-base font-semibold">${comentario.comentario}</span>
                         <div class="text-end">
@@ -223,11 +243,13 @@
         })
         $('#comentarios').html(html);
     }
+
     function saveNotificacion() {
         let cliente_id = $('#cliente_id').val();
         const dialog = document.querySelector("#dialog");
         dialog.querySelectorAll('.is-invalid, .invalid-feedback').forEach(element => {
-            element.classList.contains('is-invalid') ? element.classList.remove('is-invalid') : element.remove();
+            element.classList.contains('is-invalid') ? element.classList.remove('is-invalid') : element
+                .remove();
         });
         $.ajaxSetup({
             headers: {
@@ -245,18 +267,19 @@
                 hora: $('#hora').val(),
                 cliente_id: cliente_id,
             },
-            success: function( result ) {
+            success: function(result) {
                 $('#mensaje, #fecha, #hora').val('');
                 listNotificacion(result);
             },
-            error: function( response ) {
+            error: function(response) {
                 mostrarError(response);
             }
         });
     }
+
     function listNotificacion(notificacions) {
         let html = "";
-        notificacions.forEach(function (notificacion) {
+        notificacions.forEach(function(notificacion) {
             html += `<div class="mb-4" id="${notificacion.id}">
                         <span class="text-slate-900 text-base font-semibold">${notificacion.asunto}</span>
                         <div class="text-end">
@@ -269,29 +292,37 @@
         })
         $('#notificacions').html(html);
     }
+
     function editMovistar() {
-        $('#estadowick_id, #estadodito_id, #linea_claro, #linea_entel, #linea_bitel, #linea_movistar, #clientetipo_id, #ejecutivo_salesforce, #agencia_id, #btn_guardar_movistar').prop('disabled', false)
+        $('#estadowick_id, #estadodito_id, #linea_claro, #linea_entel, #linea_bitel, #linea_movistar, #clientetipo_id, #ejecutivo_salesforce, #agencia_id, #btn_guardar_movistar')
+            .prop('disabled', false)
     }
     selectEstadoWick({{ $data['cliente']->movistars->last()->estadowick_id ?? 0 }});
+
     function selectEstadoWick(estadowick_id) {
         $(`#estadowick_id option[value='${estadowick_id}']`).attr('selected', 'selected');
     }
     selectEstadoDito({{ $data['cliente']->movistars->last()->estadodito_id ?? 0 }});
+
     function selectEstadoDito(estadodito_id) {
         $(`#estadodito_id option[value='${estadodito_id}']`).attr('selected', 'selected');
     }
     selectClientetipo({{ $data['cliente']->movistars->last()->clientetipo_id ?? 0 }});
+
     function selectClientetipo(clientetipo_id) {
         $(`#clientetipo_id option[value='${clientetipo_id}']`).attr('selected', 'selected');
     }
     selectAgencia({{ $data['cliente']->movistars->last()->agencia_id ?? 0 }});
+
     function selectAgencia(agencia_id) {
         $(`#agencia_id option[value='${agencia_id}']`).attr('selected', 'selected');
     }
+
     function saveMovistar() {
         const dialog = document.querySelector("#dialog");
         dialog.querySelectorAll('.is-invalid, .invalid-feedback').forEach(element => {
-            element.classList.contains('is-invalid') ? element.classList.remove('is-invalid') : element.remove();
+            element.classList.contains('is-invalid') ? element.classList.remove('is-invalid') : element
+                .remove();
         });
         let cliente_id = $('#cliente_id').val();
         $.ajaxSetup({
@@ -315,26 +346,31 @@
                 ejecutivo_salesforce: $('#ejecutivo_salesforce').val() ?? '',
                 agencia_id: $('#agencia_id').val() ?? 1,
             },
-            success: function( result ) {
-                $('#estadowick_id, #estadodito_id, #linea_claro, #linea_entel, #linea_bitel, #linea_movistar, #clientetipo_id, #ejecutivo_salesforce, #agencia_id, #btn_guardar_movistar').prop('disabled', true)
+            success: function(result) {
+                $('#estadowick_id, #estadodito_id, #linea_claro, #linea_entel, #linea_bitel, #linea_movistar, #clientetipo_id, #ejecutivo_salesforce, #agencia_id, #btn_guardar_movistar')
+                    .prop('disabled', true)
             },
-            error: function( response ) {
+            error: function(response) {
                 mostrarError(response);
             }
         });
     }
     selectEtapa({{ $data['cliente']->etapas->last()->id }});
+
     function selectEtapa(etapa_id) {
         $(`#etapa_id option[value='${etapa_id}']`).attr('selected', 'selected');
         $('#etapa_id, #btn_guardar_etapa').prop('disabled', true)
     }
+
     function editEtapa() {
         $('#etapa_id, #btn_guardar_etapa').prop('disabled', false)
     }
+
     function saveEtapa() {
         const dialog = document.querySelector("#dialog");
         dialog.querySelectorAll('.is-invalid, .invalid-feedback').forEach(element => {
-            element.classList.contains('is-invalid') ? element.classList.remove('is-invalid') : element.remove();
+            element.classList.contains('is-invalid') ? element.classList.remove('is-invalid') : element
+                .remove();
         });
         let cliente_id = $('#cliente_id').val();
         $.ajaxSetup({
@@ -350,16 +386,17 @@
                 etapa_id: $("#etapa_id option:selected").val(),
                 comentario: $('#comentario').val(),
             },
-            success: function( result ) {
+            success: function(result) {
                 $('#comentario').val('');
                 listComentario(result);
                 $('#etapa_id, #btn_guardar_etapa').prop('disabled', true)
             },
-            error: function( response ) {
+            error: function(response) {
                 mostrarError(response);
             }
         });
     }
+
     function editCargo() {
         $('#tbodyCargo tr').each(function() {
             $(this).find('#cargo_producto_nombre').prop('disabled', false);
@@ -368,6 +405,7 @@
         });
         $('#btn_guardar_cargo').prop('disabled', false);
     }
+
     function saveCargo() {
         let cliente_id = $('#cliente_id').val();
         let dataCargo = [];
@@ -391,7 +429,7 @@
                 view: 'update-cargo',
                 dataCargo: dataCargo,
             },
-            success: function( result ) {
+            success: function(result) {
                 $('#tbodyCargo tr').each(function() {
                     $(this).find('#cargo_producto_nombre').prop('disabled', true);
                     $(this).find('#cargo_cantidad').prop('disabled', true);
@@ -399,17 +437,18 @@
                 });
                 $('#btn_guardar_cargo').prop('disabled', true);
             },
-            error: function( response ) {
-            }
+            error: function(response) {}
         });
     }
+
     function mostrarError(response) {
         let errors = response.responseJSON;
-        if(errors) {
+        if (errors) {
             let firstErrorKey = null;
-            $.each(errors.errors, function(key, value){
-                $('#dialog #'+key).addClass('is-invalid');
-                $('#dialog #'+key).after('<span class="invalid-feedback" role="alert"><strong>'+ value +'</strong></span>');
+            $.each(errors.errors, function(key, value) {
+                $('#dialog #' + key).addClass('is-invalid');
+                $('#dialog #' + key).after('<span class="invalid-feedback" role="alert"><strong>' + value +
+                    '</strong></span>');
                 if (!firstErrorKey) {
                     firstErrorKey = key;
                 }
