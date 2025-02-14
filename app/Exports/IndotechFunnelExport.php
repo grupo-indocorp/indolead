@@ -21,15 +21,17 @@ class IndotechFunnelExport
     {
         $where = Helpers::filtroExportCliente(json_decode($this->filtro), $this->user);
 
-        // Subconsulta para obtener el último registro por RUC
+        // Subconsulta con filtros
         $subquery = Exportcliente::query()
-            ->selectRaw('MAX(id) as id') // Selecciona el ID máximo (último registro)
-            ->where($where)
-            ->groupBy('ruc'); // Agrupa por RUC
+            ->selectRaw('MAX(id) as id') // Último registro por RUC
+            ->where($where) // Aplicar filtros (sede, equipo, ejecutivo, fechas, etc.)
+            ->groupBy('ruc');
 
-        // Consulta principal que une la subconsulta con la tabla principal
+        // Consulta principal con filtros y subconsulta
         return Exportcliente::query()
-            ->whereIn('id', $subquery); // Filtra solo los últimos registros por RUC
+            ->whereIn('id', $subquery) // Filtra por los IDs de la subconsulta
+            ->where($where) // Aplicar filtros nuevamente (opcional, dependiendo de la lógica de Helpers)
+            ->orderBy('ruc'); // Ordenar por RUC (opcional)
     }
 
     public function headings(): array
@@ -103,26 +105,37 @@ class IndotechFunnelExport
     }
 
     public function exportToCsv(): StreamedResponse
-    {
-        $headers = $this->headings();
+{
+    $headers = $this->headings();
 
-        $callback = function () use ($headers) {
-            $file = fopen('php://output', 'w');
-            fputcsv($file, $headers);
+    $callback = function () use ($headers) {
+        // Crear el archivo con soporte para UTF-8 y BOM
+        $file = fopen('php://output', 'w');
 
-            // Usar la consulta modificada
-            $this->query()->chunk(1000, function ($clientes) use ($file) {
-                foreach ($clientes as $cliente) {
-                    fputcsv($file, $this->map($cliente));
-                }
-            });
+        // Agregar el BOM (Byte Order Mark) para UTF-8
+        fwrite($file, "\xEF\xBB\xBF");
 
-            fclose($file);
-        };
+        // Escribir las cabeceras
+        fputcsv($file, $headers);
 
-        return response()->stream($callback, 200, [
-            'Content-Type' => 'text/csv',
-            'Content-Disposition' => 'attachment; filename="IndotechFunnelExport.csv"',
-        ]);
-    }
+        // Escribir los datos
+        $this->query()->chunk(1000, function ($clientes) use ($file) {
+            foreach ($clientes as $cliente) {
+                $row = $this->map($cliente);
+                // Convertir cada campo a UTF-8 si es necesario
+                $row = array_map(function ($value) {
+                    return mb_convert_encoding($value, 'UTF-8', 'UTF-8');
+                }, $row);
+                fputcsv($file, $row);
+            }
+        });
+
+        fclose($file);
+    };
+
+    return response()->stream($callback, 200, [
+        'Content-Type' => 'text/csv; charset=UTF-8', // Especificar UTF-8
+        'Content-Disposition' => 'attachment; filename="IndotechFunnelExport.csv"',
+    ]);
+}
 }
