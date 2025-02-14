@@ -11,13 +11,22 @@
         </div>
     </div>
     <div class="relative mb-3">
-        <label for="notificaciontipo_id" class="absolute text-sm text-[#333333] duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-[#F1F5F9] px-2">Tipo de Agenda</label>
-        <select class="block px-2.5 pb-1.5 pt-1.5 w-full text-xs text-[#333333] bg-[#F1F5F9] rounded-lg border-1 border-[#D1D5DB] appearance-none" id="notificaciontipo_id" name="notificaciontipo_id">
+        <label for="notificaciontipo_id" class="absolute text-sm text-[#333333] duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-[#F1F5F9] px-2">
+            Tipo de Agenda
+        </label>
+        <select
+            id="notificaciontipo_id"
+            name="notificaciontipo_id"
+            class="inline-block px-4 pb-1.5 pt-1.5 text-xs text-[#333333] bg-[#F1F5F9] rounded-lg border border-[#D1D5DDB] appearance-none"
+            style="text-align: left; text-align-last: left;"
+        >
             @foreach ($notificaciontipos as $value)
                 <option value="{{ $value->id }}">{{ $value->nombre }}</option>
             @endforeach
         </select>
     </div>
+    
+    
     <div class="relative mb-3">
         <label for="mensaje" class="absolute text-sm text-gray-600 duration-300 transform -translate-y-4 scale-75 top-2 left-0 z-10 origin-[0] px-0.5 py-0.5 peer-focus:text-blue-600 peer-focus:text-sm peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-100 peer-focus:-translate-y-4 bg-[#F1F5F9]">Mensaje</label>
         <textarea class="form-control" rows="3" id="mensaje" name="mensaje"></textarea>

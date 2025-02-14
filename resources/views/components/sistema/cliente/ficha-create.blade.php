@@ -2,42 +2,28 @@
     'onclickCloseModal' => 'closeModal()',
 ])
 <x-sistema.modal title="Agregar Cliente" dialog_id="dialog">
-    <div class="row p-1">
-        <div class="col-10 p-0">
-            <div class="row p-0 m-2 mt-0">
-                <div class="col-12">
-                    <div class="row">
-                        <div class="col-6 p-0">
-                            <x-sistema.cliente.datos></x-sistema.cliente.datos>
-                            <x-sistema.cliente.contactos></x-sistema.cliente.contactos>
-                        </div>
-                        <div class="col-6 p-0">
-                            <x-sistema.cliente.ventas></x-sistema.cliente.ventas>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 p-0">
-                    <div class="row">
-                        <div class="col-10 p-0">
-                            <x-sistema.cliente.comentarios>
-                                <div class="row m-1">
-                                    <div class="col-10 p-0">
-                                        <x-sistema.cliente.etapas></x-sistema.cliente.etapas>
-                                    </div>
-                                </div>
-                            </x-sistema.cliente.comentarios>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <div class="grid grid-cols-12 P-0">
+        <div class="col-span-6">
+            <x-sistema.cliente.datos />
+            <x-sistema.cliente.contactos />
         </div>
-        <div class="col-2 p-0">
-            <x-sistema.cliente.movistars></x-sistema.cliente.movistars>
+        <div class="col-span-6 space-y-4">
+            <x-sistema.cliente.movistars />
+            <x-sistema.cliente.ventas />
+        </div>
+        <div class="col-span-12 mt-2">
+            <x-sistema.cliente.comentarios>
+                <x-sistema.cliente.etapas />
+            </x-sistema.cliente.comentarios>
         </div>
     </div>
     <div class="flex justify-end mt-2 gap-2">
-        <x-ui.button class="bg-slate-700" type="button" onclick="{{ $onclickCloseModal }}">Cancelar</x-ui.button>
-        <x-ui.button type="button" onclick="submitCliente(this)">Agregar</x-ui.button>
+        <x-ui.button class="bg-slate-700" type="button" onclick="{{ $onclickCloseModal }}">
+            Cancelar
+        </x-ui.button>
+        <x-ui.button type="button" onclick="submitCliente(this)">
+            Agregar
+        </x-ui.button>
     </div>
 </x-sistema.modal>
 <script>
@@ -45,14 +31,14 @@
         limpiarError();
         capturarToken();
         let dataCargo = [];
-        $.each($('#producto_table tbody tr'), function (index, tr) {
+        $.each($('#producto_table tbody tr'), function(index, tr) {
             dataCargo.push({
-                producto_id: $('#producto_id'+tr.id).val(),
-                producto_nombre: $('#producto_nombre'+tr.id).val(),
-                detalle: $('#detalle'+tr.id).val(),
-                cantidad: $('#cantidad'+tr.id).val(),
-                precio: $('#precio'+tr.id).val(),
-                total: $('#cargofijo'+tr.id).val(),
+                producto_id: $('#producto_id' + tr.id).val(),
+                producto_nombre: $('#producto_nombre' + tr.id).val(),
+                detalle: $('#detalle' + tr.id).val(),
+                cantidad: $('#cantidad' + tr.id).val(),
+                precio: $('#precio' + tr.id).val(),
+                total: $('#cargofijo' + tr.id).val(),
             });
         });
         $.ajax({
@@ -90,18 +76,18 @@
             beforeSend: function() {
                 button.disabled = true;
             },
-            success: function (response) {
+            success: function(response) {
                 if (response.redirect) {
                     location.reload();
                 } else {
                     alert('Posiblemente ya ha registrado el cliente, actualizar la página');
                 }
             },
-            error: function (response) {
+            error: function(response) {
                 mostrarError(response)
                 button.disabled = false;
             }
         });
-        
+
     }
 </script>
