@@ -20,8 +20,8 @@ class ExportController extends Controller
     {
         $filtro = request('filtro');
         $user = auth()->user();
-        $nameExport = 'Indotech.xlsx';
 
-        return (new IndotechFunnelExport($filtro, $user))->download($nameExport);
+        $export = new IndotechFunnelExport($filtro, $user);
+        return $export->exportToCsv();
     }
 }

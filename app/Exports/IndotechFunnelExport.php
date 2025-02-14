@@ -4,17 +4,11 @@ namespace App\Exports;
 
 use App\Helpers\Helpers;
 use App\Models\Exportcliente;
-use Maatwebsite\Excel\Concerns\Exportable;
-use Maatwebsite\Excel\Concerns\FromQuery;
-use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\WithMapping;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
-class IndotechFunnelExport implements FromQuery, WithHeadings, WithMapping
+class IndotechFunnelExport
 {
-    use Exportable;
-
     protected $filtro;
-
     protected $user;
 
     public function __construct($filtro, $user)
@@ -27,7 +21,15 @@ class IndotechFunnelExport implements FromQuery, WithHeadings, WithMapping
     {
         $where = Helpers::filtroExportCliente(json_decode($this->filtro), $this->user);
 
-        return Exportcliente::query()->where($where);
+        // Subconsulta para obtener el último registro por RUC
+        $subquery = Exportcliente::query()
+            ->selectRaw('MAX(id) as id') // Selecciona el ID máximo (último registro)
+            ->where($where)
+            ->groupBy('ruc'); // Agrupa por RUC
+
+        // Consulta principal que une la subconsulta con la tabla principal
+        return Exportcliente::query()
+            ->whereIn('id', $subquery); // Filtra solo los últimos registros por RUC
     }
 
     public function headings(): array
@@ -98,5 +100,29 @@ class IndotechFunnelExport implements FromQuery, WithHeadings, WithMapping
             $cliente->cliente_tipo,
             $cliente->agencia,
         ];
+    }
+
+    public function exportToCsv(): StreamedResponse
+    {
+        $headers = $this->headings();
+
+        $callback = function () use ($headers) {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, $headers);
+
+            // Usar la consulta modificada
+            $this->query()->chunk(1000, function ($clientes) use ($file) {
+                foreach ($clientes as $cliente) {
+                    fputcsv($file, $this->map($cliente));
+                }
+            });
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="IndotechFunnelExport.csv"',
+        ]);
     }
 }
