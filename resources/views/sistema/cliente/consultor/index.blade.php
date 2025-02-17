@@ -14,13 +14,13 @@
                 <table class="table align-items-center mb-0">
                     <thead>
                         <tr>
-                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">RUC</th>
-                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Razón Social</th>
-                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">EECC</th>
-                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Fecha de última Gestión</th>
-                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Etapa</th>
-                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Días sin Gestión</th>
-                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Solicitar</th>
+                            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-10">RUC</th>
+                            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-10">Razón Social</th>
+                            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-10">EECC</th>
+                            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-10">Fecha de última Gestión</th>
+                            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-10">Etapa</th>
+                            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-10">Días sin Gestión</th>
+                            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-10">Solicitar</th>
                         </tr>
                     </thead>
                     <tbody>

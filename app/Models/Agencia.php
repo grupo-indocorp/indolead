@@ -9,7 +9,7 @@ class Agencia extends Model
 {
     use HasFactory;
 
-    //Relación uno a muchos
+    // Relación uno a muchos
     public function movistars()
     {
         return $this->hasMany(Movistar::class);

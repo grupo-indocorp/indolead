@@ -1,12 +1,20 @@
 @php $sistema = App\Models\Sistema::first(); @endphp
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@if (isset($sistema)) {{ $sistema->nombre }} @else {{ config('app.name', 'Laravel') }} @endif</title>
-    <link rel="icon" @if (isset($sistema)) href="{{ Storage::url($sistema->icono) }}" @else href="{{ asset('img/logo.png') }}" @endif >
+    <title>
+        @if (isset($sistema))
+            {{ $sistema->nombre }}
+        @else
+            {{ config('app.name', 'Laravel') }}
+        @endif
+    </title>
+    <link rel="icon"
+        @if (isset($sistema)) href="{{ Storage::url($sistema->icono) }}" @else href="{{ asset('img/logo.png') }}" @endif>
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <!-- Styles -->
@@ -20,15 +28,17 @@
     <link rel="stylesheet" href="https://d3vimg.github.io/fontawesone/css/all.min.css">
     <link href="{{ asset('assets/css/nucleo-svg.css') }}" rel="stylesheet" />
     <!-- CSS Files -->
-    <link id="pagestyle" href="{{ asset('assets/css/soft-ui-dashboard.css?v=1.0.3') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/css/soft-ui-dashboard.css?v=1.0.3') }}" rel="stylesheet" />
+
     {{-- jQuery --}}
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    {{-- Datatable.net --}}
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <link href="{{ asset('DataTables/datatables.css') }}" rel="stylesheet" />
     <script src="{{ asset('DataTables/datatables.js') }}"></script>
     {{-- Select2 --}}
     <link href="{{ asset('Select2/dist/css/select2.min.css') }}" rel="stylesheet" />
     <script src="{{ asset('Select2/dist/js/select2.min.js') }}"></script>
+
 </head>
 
 <body class="flex bg-gray-400">
@@ -52,10 +62,11 @@
     {{-- Contenerdor nuevo de modal --}}
     <div id="contenedorModal"></div>
 
-    @if(session()->has('success'))
-    <div x-data="{ show: true}" x-init="setTimeout(() => show = false, 4000)" x-show="show" class="position-fixed bg-success rounded right-3 text-sm py-2 px-4">
-        <p class="m-0">{{ session('success')}}</p>
-    </div>
+    @if (session()->has('success'))
+        <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 4000)" x-show="show"
+            class="position-fixed bg-success rounded right-3 text-sm py-2 px-4">
+            <p class="m-0">{{ session('success') }}</p>
+        </div>
     @endif
 
     {{-- Contenedor de Frases --}}
@@ -94,4 +105,5 @@
 
     @yield('script')
 </body>
+
 </html>

@@ -1,4 +1,4 @@
-<x-sistema.modal class="w-[70vh]" title="Agregar Rol">
+<x-sistema.modal class="w-auto max-w-md" title="Agregar Rol">
     {{-- Nombre del rol --}}
     <div class="form-group">
         <x-ui.label for="name">{{ __('Rol') }}</x-ui.label>

@@ -13,7 +13,7 @@ class Cliente extends Model
 
     protected $guarded = [];
 
-    //Relación uno a muchos
+    // Relación uno a muchos
     public function comentarios()
     {
         return $this->hasMany(Comentario::class);

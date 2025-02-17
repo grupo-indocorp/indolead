@@ -4,15 +4,10 @@ namespace App\Exports;
 
 use App\Helpers\Helpers;
 use App\Models\Exportcliente;
-use Maatwebsite\Excel\Concerns\Exportable;
-use Maatwebsite\Excel\Concerns\FromQuery;
-use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\WithMapping;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
-class IndotechFunnelExport implements FromQuery, WithHeadings, WithMapping
+class IndotechFunnelExport
 {
-    use Exportable;
-
     protected $filtro;
 
     protected $user;
@@ -27,7 +22,17 @@ class IndotechFunnelExport implements FromQuery, WithHeadings, WithMapping
     {
         $where = Helpers::filtroExportCliente(json_decode($this->filtro), $this->user);
 
-        return Exportcliente::query()->where($where);
+        // Subconsulta con filtros
+        $subquery = Exportcliente::query()
+            ->selectRaw('MAX(id) as id') // Último registro por RUC
+            ->where($where) // Aplicar filtros (sede, equipo, ejecutivo, fechas, etc.)
+            ->groupBy('ruc');
+
+        // Consulta principal con filtros y subconsulta
+        return Exportcliente::query()
+            ->whereIn('id', $subquery) // Filtra por los IDs de la subconsulta
+            ->where($where) // Aplicar filtros nuevamente (opcional, dependiendo de la lógica de Helpers)
+            ->orderBy('ruc'); // Ordenar por RUC (opcional)
     }
 
     public function headings(): array
@@ -98,5 +103,40 @@ class IndotechFunnelExport implements FromQuery, WithHeadings, WithMapping
             $cliente->cliente_tipo,
             $cliente->agencia,
         ];
+    }
+
+    public function exportToCsv(): StreamedResponse
+    {
+        $headers = $this->headings();
+
+        $callback = function () use ($headers) {
+            // Crear el archivo con soporte para UTF-8 y BOM
+            $file = fopen('php://output', 'w');
+
+            // Agregar el BOM (Byte Order Mark) para UTF-8
+            fwrite($file, "\xEF\xBB\xBF");
+
+            // Escribir las cabeceras
+            fputcsv($file, $headers);
+
+            // Escribir los datos
+            $this->query()->chunk(1000, function ($clientes) use ($file) {
+                foreach ($clientes as $cliente) {
+                    $row = $this->map($cliente);
+                    // Convertir cada campo a UTF-8 si es necesario
+                    $row = array_map(function ($value) {
+                        return mb_convert_encoding($value, 'UTF-8', 'UTF-8');
+                    }, $row);
+                    fputcsv($file, $row);
+                }
+            });
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, [
+            'Content-Type' => 'text/csv; charset=UTF-8', // Especificar UTF-8
+            'Content-Disposition' => 'attachment; filename="IndotechFunnelExport.csv"',
+        ]);
     }
 }

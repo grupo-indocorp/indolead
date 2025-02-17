@@ -475,8 +475,7 @@ class ClienteService
      */
     public function gestionCliente()
     {
-        $clientes = Cliente::
-            join('equipos', 'equipos.id', '=', 'clientes.equipo_id')
+        $clientes = Cliente::join('equipos', 'equipos.id', '=', 'clientes.equipo_id')
             ->select(
                 'id',
                 'ruc',
@@ -486,10 +485,11 @@ class ClienteService
             // ->with(['equipo:id,nombre'])
             ->orderByDesc('fecha_gestion')
             ->get();
-            // with(['user', 'equipo', 'sede', 'etapa', 'comentarios', 'movistars'])
-            // ->where($where)
-            // ->orWhere($orwhere)
-            // ->limit(1)
+
+        // with(['user', 'equipo', 'sede', 'etapa', 'comentarios', 'movistars'])
+        // ->where($where)
+        // ->orWhere($orwhere)
+        // ->limit(1)
         return $clientes;
     }
 }

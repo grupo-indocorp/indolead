@@ -6,7 +6,7 @@
             <div class="p-4 pb-0">
                 <div class="d-flex flex-row justify-content-between">
                     <div>
-                        <x-sistema.titulo title="Gestión de Clientes"/>
+                        <x-sistema.titulo title="Gestión de Clientes" />
                     </div>
                     <div>
                         @can('sistema.gestion_cliente.agregar')
@@ -54,17 +54,17 @@
                         success: function(data) {
                             let opt_equipo = '<option></option>';
                             let opt_user = '<option></option>';
-                            data.equipos.map(function (item) {
+                            data.equipos.map(function(item) {
                                 opt_equipo += `<option value="${item.id}">${item.nombre}</option>`;
                             })
-                            data.users.map(function (item) {
+                            data.users.map(function(item) {
                                 opt_user += `<option value="${item.id}">${item.name}</option>`;
                             })
                             $('#filtro_equipo_id').html(opt_equipo);
                             $('#filtro_user_id').html(opt_user);
                             filtroAutomatico();
                         },
-                        error: function( response ) {
+                        error: function(response) {
                             console.log('error');
                         }
                     });
@@ -83,13 +83,13 @@
                         },
                         success: function(data) {
                             let opt_user = '<option></option>';
-                            data.users.map(function (item) {
+                            data.users.map(function(item) {
                                 opt_user += `<option value="${item.id}">${item.name}</option>`;
                             })
                             $('#filtro_user_id').html(opt_user);
                             filtroAutomatico();
                         },
-                        error: function( response ) {
+                        error: function(response) {
                             console.log('error');
                         }
                     });
@@ -103,18 +103,19 @@
                         },
                         success: function(data) {
                             let opt_user = '<option></option>';
-                            data.users.map(function (item) {
+                            data.users.map(function(item) {
                                 opt_user += `<option value="${item.id}">${item.name}</option>`;
                             })
                             $('#filtro_user_id').html(opt_user);
                             filtroAutomatico();
                         },
-                        error: function( response ) {
+                        error: function(response) {
                             console.log('error');
                         }
                     });
                 }
             });
+
             function filtroAutomatico() {
                 let filtro_etapa_id = $('#filtro_etapa_id').val();
                 let filtro_sede_id = $('#filtro_sede_id').val();
@@ -123,8 +124,10 @@
                 let filtro_fecha_desde = $('#filtro_fecha_desde').val();
                 let filtro_fecha_hasta = $('#filtro_fecha_hasta').val();
                 let filtro_ruc = $('#filtro_ruc').val();
-                window.location.href = `/cliente-gestion?filtro_etapa_id=${filtro_etapa_id}&filtro_sede_id=${filtro_sede_id}&filtro_equipo_id=${filtro_equipo_id}&filtro_user_id=${filtro_user_id}&filtro_fecha_desde=${filtro_fecha_desde}&filtro_fecha_hasta=${filtro_fecha_hasta}&filtro_ruc=${filtro_ruc}`;
+                window.location.href =
+                    `/cliente-gestion?filtro_etapa_id=${filtro_etapa_id}&filtro_sede_id=${filtro_sede_id}&filtro_equipo_id=${filtro_equipo_id}&filtro_user_id=${filtro_user_id}&filtro_fecha_desde=${filtro_fecha_desde}&filtro_fecha_hasta=${filtro_fecha_hasta}&filtro_ruc=${filtro_ruc}`;
             }
+
             function detalleCliente(cliente_id) {
                 $.ajax({
                     url: `{{ url('cliente-gestion/${cliente_id}/edit') }}`,
@@ -132,30 +135,37 @@
                     data: {
                         view: 'edit-detalle'
                     },
-                    success: function( result ) {
+                    success: function(result) {
                         $('#contModal').html(result);
                         openModal();
                     },
-                    error: function( response ) {
+                    error: function(response) {
                         console.log('error');
                     }
                 });
             }
+
             function closeFicha() {
                 closeModal();
                 location.reload();
             }
-            function selectFiltroEtapa(etapa_id=0) {
-                $('#contenedor_filtro_etapas button').each(function () {
+
+            function selectFiltroEtapa(etapa_id = 0) {
+                $('#contenedor_filtro_etapas button').each(function() {
                     let btn_id = $(this).attr('id');
-                    $('#'+btn_id).css("opacity", 1);
+                    $('#' + btn_id).css("opacity", 1);
                 })
-                $('#etapa_'+etapa_id).css("opacity", 0.7);
+                $('#etapa_' + etapa_id).css("opacity", 0.7);
                 $('#filtro_etapa_id').val(etapa_id);
                 filtroAutomatico();
             }
             let filtro_etapa_id = $('#filtro_etapa_id').val();
-            $('#etapa_'+filtro_etapa_id).css({'color':'#fff', 'zoom':'1.1', 'font-size':'1.2rem'});
+            $('#etapa_' + filtro_etapa_id).css({
+                'color': '#fff',
+                'zoom': '1.1',
+                'font-size': '1.2rem'
+            });
+
             function agregarCliente() {
                 $.ajax({
                     url: `{{ url('cliente/create') }}`,
@@ -163,11 +173,11 @@
                     data: {
                         view: 'create'
                     },
-                    success: function( result ) {
+                    success: function(result) {
                         $('#contModal').html(result);
                         openModal();
                     },
-                    error: function( response ) {
+                    error: function(response) {
                         console.log('error');
                     }
                 });
@@ -175,7 +185,7 @@
             /**
              * Seleccionar clientes
              * */
-             document.getElementById('selectAllClients').addEventListener('change', function(e) {
+            document.getElementById('selectAllClients').addEventListener('change', function(e) {
                 let checkboxes = document.querySelectorAll('tbody .form-check-input');
                 checkboxes.forEach(function(checkbox) {
                     checkbox.checked = e.target.checked;
@@ -204,19 +214,41 @@
                             $('#contModal').html(result);
                             openModal();
                         },
-                        error: function( response ) {
+                        error: function(response) {
                             console.log('error');
                         }
                     });
                 }
             })
+
             function exportCliente() {
                 let filtro = $('#data_filtro').val();
-                window.location.href = "/clientes/export?filtro="+filtro;
+                window.location.href = "/clientes/export?filtro=" + filtro;
             }
+
             function exportFunnel(empresa) {
                 let filtro = $('#data_filtro').val();
-                window.location.href = `/export/${empresa}/funnel?filtro=${filtro}`;
+
+                $.ajax({
+                    url: `/export/${empresa}/funnel?filtro=${filtro}`,
+                    method: "GET",
+                    xhrFields: {
+                        responseType: 'blob' // Indicar que la respuesta es un archivo binario
+                    },
+                    success: function(data) {
+                        // Crear un enlace temporal para descargar el archivo
+                        let blob = new Blob([data], {
+                            type: 'text/csv'
+                        });
+                        let link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = 'IndotechFunnelExport.csv';
+                        link.click();
+                    },
+                    error: function(response) {
+                        console.log('Error al descargar el archivo');
+                    }
+                });
             }
         </script>
     @endsection

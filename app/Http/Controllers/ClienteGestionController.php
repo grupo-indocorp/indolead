@@ -146,7 +146,7 @@ class ClienteGestionController extends Controller
             // Conteo de Clientes Gestionados por Ejecutivo
             $cltGestionados = Cliente::where('user_id', $user->id)->whereDate('fecha_gestion', Carbon::today())->get();
             foreach ($cltGestionados as $value) {
-                if ($value->etiqueta_id != 2) { //asignado
+                if ($value->etiqueta_id != 2) { // asignado
                     $countClienteGestionado++;
                 }
             }

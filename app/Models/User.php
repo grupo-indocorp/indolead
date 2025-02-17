@@ -75,7 +75,7 @@ class User extends Authenticatable
         return $this->hasOne(Equipo::class);
     }
 
-    //Relación uno a muchos
+    // Relación uno a muchos
     public function comentarios()
     {
         return $this->hasMany(Comentario::class);
@@ -116,5 +116,10 @@ class User extends Authenticatable
     public function equipos()
     {
         return $this->belongsToMany(Equipo::class)->withPivot('id')->withTimestamps();
+    }
+
+    public function files()
+    {
+        return $this->hasMany(File::class, 'uploaded_by');
     }
 }
