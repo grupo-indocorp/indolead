@@ -4,69 +4,33 @@ namespace App\Http\Controllers;
 
 use App\Models\File;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class FileViewController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Muestra la lista de archivos para visualización.
      */
-    public function index(Request $request)
+    public function index()
     {
-        $files = File::visibleToUser()
-            ->withFilters($request)
-            ->paginate(12);
+        // Obtener todos los archivos con la relación 'uploadedBy'
+        $files = File::with('uploadedBy')->get();
 
-        return view('files.view-index', [
-            'files' => $files,
-            'categories' => Category::all()
-        ]);
+        // Retornar la vista con los archivos
+        return view('sistema.archivos.view', compact('files'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Descarga un archivo específico.
      */
-    public function create()
+    public function download($id)
     {
-        //
-    }
+        $file = File::findOrFail($id);
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        if (!Storage::disk('local')->exists($file->path)) {
+            abort(404, "Archivo no encontrado");
+        }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(File $file)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(File $file)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, File $file)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(File $file)
-    {
-        //
+        return Storage::disk('local')->download($file->path, $file->name);
     }
 }

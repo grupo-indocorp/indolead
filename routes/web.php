@@ -31,6 +31,7 @@ use App\Http\Controllers\ReporteController;
 use App\Http\Controllers\RoleController;
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
+use App\Http\Controllers\FileViewController; // Importa el FileViewController
 
 // Ruta para la página de componentes
 Route::get('/components', function () {
@@ -78,14 +79,16 @@ Route::middleware([
         'configuracion-excel' => ConfiguracionExcelController::class,
         'configuracion-ficha-cliente' => ConfiguracionFichaClienteController::class,
         'files' => FileController::class, // Ruta para la gestión de archivos
+        'files-view' => FileViewController::class, // Ruta para la visualización de archivos
     ]);
 
     // Ruta adicional para la descarga de archivos
     Route::get('/files/{id}/download', [FileController::class, 'download'])
-    ->name('files.download');
+        ->name('files.download');
 
+    // Ruta para la visualización de archivos
     Route::get('/documentos', [FileViewController::class, 'index'])->name('files.view');
-    Route::get('/documentos/{file}/descargar', [FileViewController::class, 'download'])->name('files.download');
+
 
     // Exportación e importación de clientes
     Route::get('clientes/export/', [GestionClienteController::class, 'export']);

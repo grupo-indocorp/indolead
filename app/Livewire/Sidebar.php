@@ -88,6 +88,12 @@ class Sidebar extends Component
                 'url' => 'files', // Ruta definida en web.php
                 'can' => 'sistema.files', // Permiso necesario (ajusta según tu sistema de permisos)
             ],
+            [
+                'icon' => 'fa-file', // Ícono de FontAwesome para archivos
+                'nombre' => 'Vista de Archivos',
+                'url' => 'documentos', // Ruta definida en web.php
+                'can' => 'sistema.vista', // Permiso necesario (ajusta según tu sistema de permisos)
+            ],
         ];
 
         return view('livewire.sidebar', compact('links'));
