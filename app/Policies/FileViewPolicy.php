@@ -4,12 +4,9 @@ namespace App\Policies;
 
 use App\Models\File;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class FileViewPolicy
 {
-   
-
     /**
      * Determine whether the user can view the model.
      */

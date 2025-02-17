@@ -22,6 +22,7 @@ class ExportController extends Controller
         $user = auth()->user();
 
         $export = new IndotechFunnelExport($filtro, $user);
+
         return $export->exportToCsv();
     }
 }

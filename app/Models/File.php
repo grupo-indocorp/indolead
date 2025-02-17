@@ -31,6 +31,7 @@ class File extends Model
     {
         return $this->belongsTo(User::class, 'uploaded_by');
     }
+
     public function getExtensionAttribute()
     {
         return strtoupper(pathinfo($this->nombre, PATHINFO_EXTENSION));
@@ -41,18 +42,18 @@ class File extends Model
         $bytes = $this->size;
 
         if ($bytes >= 1073741824) {
-            return number_format($bytes / 1073741824, 2) . ' GB';
+            return number_format($bytes / 1073741824, 2).' GB';
         } elseif ($bytes >= 1048576) {
-            return number_format($bytes / 1048576, 2) . ' MB';
+            return number_format($bytes / 1048576, 2).' MB';
         } elseif ($bytes >= 1024) {
-            return number_format($bytes / 1024, 2) . ' KB';
+            return number_format($bytes / 1024, 2).' KB';
         }
 
-        return $bytes . ' bytes';
+        return $bytes.' bytes';
     }
 
     protected $guarded = [];
-    
+
     // Query Scopes
     public function scopeVisibleToUser($query)
     {
@@ -62,9 +63,9 @@ class File extends Model
 
     public function scopeWithFilters($query, $request)
     {
-        return $query->when($request->category, function($q) use ($request) {
+        return $query->when($request->category, function ($q) use ($request) {
             $q->where('category_id', $request->category);
-        })->when($request->search, function($q) use ($request) {
+        })->when($request->search, function ($q) use ($request) {
             $q->where('name', 'LIKE', "%{$request->search}%");
         });
     }

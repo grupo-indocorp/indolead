@@ -13,11 +13,10 @@ use App\Http\Controllers\ConfiguracionSistemaController;
 use App\Http\Controllers\CuentafinancieraController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EquipoController;
-use App\Http\Controllers\EvaporacionController;
-use App\Http\Controllers\EvaporacionGestionController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\FacturaController;
 use App\Http\Controllers\FileController; // Importa el FileController
+use App\Http\Controllers\FileViewController;
 use App\Http\Controllers\FunnelController;
 use App\Http\Controllers\GestionClienteController;
 use App\Http\Controllers\HomeController;
@@ -30,8 +29,7 @@ use App\Http\Controllers\ReporteClienteNuevoController;
 use App\Http\Controllers\ReporteController;
 use App\Http\Controllers\RoleController;
 use Illuminate\Support\Facades\Route;
-use Livewire\Livewire;
-use App\Http\Controllers\FileViewController; // Importa el FileViewController
+use Livewire\Livewire; // Importa el FileViewController
 
 // Ruta para la página de componentes
 Route::get('/components', function () {
@@ -88,7 +86,6 @@ Route::middleware([
 
     // Ruta para la visualización de archivos
     Route::get('/documentos', [FileViewController::class, 'index'])->name('files.view');
-
 
     // Exportación e importación de clientes
     Route::get('clientes/export/', [GestionClienteController::class, 'export']);

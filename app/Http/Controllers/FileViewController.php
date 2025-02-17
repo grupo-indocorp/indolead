@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\File;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class FileViewController extends Controller
@@ -27,8 +26,8 @@ class FileViewController extends Controller
     {
         $file = File::findOrFail($id);
 
-        if (!Storage::disk('local')->exists($file->path)) {
-            abort(404, "Archivo no encontrado");
+        if (! Storage::disk('local')->exists($file->path)) {
+            abort(404, 'Archivo no encontrado');
         }
 
         return Storage::disk('local')->download($file->path, $file->name);

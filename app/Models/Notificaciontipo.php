@@ -9,7 +9,7 @@ class Notificaciontipo extends Model
 {
     use HasFactory;
 
-    //Relación uno a muchos
+    // Relación uno a muchos
     public function notificacions()
     {
         return $this->hasMany(Notificacion::class);

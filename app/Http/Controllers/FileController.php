@@ -45,7 +45,7 @@ class FileController extends Controller
         $path = $uploadedFile->store('uploads'); // Almacena el archivo en la carpeta "storage/app/uploads"
 
         // Guardar la información en la base de datos
-        $file = new File();
+        $file = new File;
         $file->name = $uploadedFile->getClientOriginalName();
         $file->path = $path;
         $file->uploaded_by = auth()->id(); // Asume que el usuario está autenticado
@@ -66,8 +66,8 @@ class FileController extends Controller
     {
         $file = File::findOrFail($id);
 
-        if (!Storage::disk('local')->exists($file->path)) {
-            abort(404, "Archivo no encontrado");
+        if (! Storage::disk('local')->exists($file->path)) {
+            abort(404, 'Archivo no encontrado');
         }
 
         return Storage::disk('local')->download($file->path, $file->name);
@@ -76,6 +76,7 @@ class FileController extends Controller
     public function edit($id)
     {
         $file = File::findOrFail($id);
+
         return view('sistema.archivos.edit', compact('file'));
     }
 
@@ -125,7 +126,7 @@ class FileController extends Controller
             return response()->json(['success' => true]);
         } catch (\Exception $e) {
             return response()->json([
-                'error' => 'Error al eliminar el archivo: ' . $e->getMessage()
+                'error' => 'Error al eliminar el archivo: '.$e->getMessage(),
             ], 500);
         }
     }

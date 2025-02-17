@@ -9,7 +9,7 @@ class Categoria extends Model
 {
     use HasFactory;
 
-    //Relación uno a muchos
+    // Relación uno a muchos
     public function productos()
     {
         return $this->hasMany(Producto::class);

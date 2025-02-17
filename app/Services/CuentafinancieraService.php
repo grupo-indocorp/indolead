@@ -18,23 +18,23 @@ class CuentafinancieraService
             $where[] = ['user_id', $filters['user_id']];
         }
         if (isset($filters['periodo'])) {
-            $where[] = ['periodo', 'like', '%' . $filters['periodo'] . '%'];
+            $where[] = ['periodo', 'like', '%'.$filters['periodo'].'%'];
         }
 
         $cuentafinanciera = Cuentafinanciera::with([
-                'cliente',
-                'user',
-                'user.equipos',
-                'evaporacions',
-                'estadofactura',
-                // 'facturas' => function ($query) {
-                //     $query->orderByDesc('id')->limit(3);
-                // },
-                'facturas',
-                'facturas.estadofactura',
-                'facturas.facturadetalles',
-                'facturas.facturadetalles.estadoproducto',
-            ])
+            'cliente',
+            'user',
+            'user.equipos',
+            'evaporacions',
+            'estadofactura',
+            // 'facturas' => function ($query) {
+            //     $query->orderByDesc('id')->limit(3);
+            // },
+            'facturas',
+            'facturas.estadofactura',
+            'facturas.facturadetalles',
+            'facturas.facturadetalles.estadoproducto',
+        ])
             ->where($where)
             ->orderBy('cliente_id')
             ->paginate(50);

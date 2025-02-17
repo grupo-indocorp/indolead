@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 class IndotechFunnelExport
 {
     protected $filtro;
+
     protected $user;
 
     public function __construct($filtro, $user)
@@ -105,37 +106,37 @@ class IndotechFunnelExport
     }
 
     public function exportToCsv(): StreamedResponse
-{
-    $headers = $this->headings();
+    {
+        $headers = $this->headings();
 
-    $callback = function () use ($headers) {
-        // Crear el archivo con soporte para UTF-8 y BOM
-        $file = fopen('php://output', 'w');
+        $callback = function () use ($headers) {
+            // Crear el archivo con soporte para UTF-8 y BOM
+            $file = fopen('php://output', 'w');
 
-        // Agregar el BOM (Byte Order Mark) para UTF-8
-        fwrite($file, "\xEF\xBB\xBF");
+            // Agregar el BOM (Byte Order Mark) para UTF-8
+            fwrite($file, "\xEF\xBB\xBF");
 
-        // Escribir las cabeceras
-        fputcsv($file, $headers);
+            // Escribir las cabeceras
+            fputcsv($file, $headers);
 
-        // Escribir los datos
-        $this->query()->chunk(1000, function ($clientes) use ($file) {
-            foreach ($clientes as $cliente) {
-                $row = $this->map($cliente);
-                // Convertir cada campo a UTF-8 si es necesario
-                $row = array_map(function ($value) {
-                    return mb_convert_encoding($value, 'UTF-8', 'UTF-8');
-                }, $row);
-                fputcsv($file, $row);
-            }
-        });
+            // Escribir los datos
+            $this->query()->chunk(1000, function ($clientes) use ($file) {
+                foreach ($clientes as $cliente) {
+                    $row = $this->map($cliente);
+                    // Convertir cada campo a UTF-8 si es necesario
+                    $row = array_map(function ($value) {
+                        return mb_convert_encoding($value, 'UTF-8', 'UTF-8');
+                    }, $row);
+                    fputcsv($file, $row);
+                }
+            });
 
-        fclose($file);
-    };
+            fclose($file);
+        };
 
-    return response()->stream($callback, 200, [
-        'Content-Type' => 'text/csv; charset=UTF-8', // Especificar UTF-8
-        'Content-Disposition' => 'attachment; filename="IndotechFunnelExport.csv"',
-    ]);
-}
+        return response()->stream($callback, 200, [
+            'Content-Type' => 'text/csv; charset=UTF-8', // Especificar UTF-8
+            'Content-Disposition' => 'attachment; filename="IndotechFunnelExport.csv"',
+        ]);
+    }
 }

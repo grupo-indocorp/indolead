@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('size'); // Tamaño del archivo
             $table->string('category')->nullable(); // Categoría del archivo
             $table->timestamps();
-    
+
             // Clave foránea para relacionar con la tabla de usuarios
             $table->foreign('uploaded_by')->references('id')->on('users')->onDelete('cascade');
         });

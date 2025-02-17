@@ -9,7 +9,7 @@ class Sede extends Model
 {
     use HasFactory;
 
-    //Relación uno a muchos
+    // Relación uno a muchos
     public function equipos()
     {
         return $this->hasMany(Equipo::class);

@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Estadoproducto;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class EstadoproductoSeeder extends Seeder
@@ -41,12 +40,6 @@ class EstadoproductoSeeder extends Seeder
             'id_name' => 'suspendido_apc',
             'name' => 'suspendido apc',
         ]);
-        
-        
-        
-        
-        
-        
-        
+
     }
 }

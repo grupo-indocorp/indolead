@@ -9,7 +9,7 @@ class Etapa extends Model
 {
     use HasFactory;
 
-    //Relación uno a muchos
+    // Relación uno a muchos
     public function clientesSolo() // cambiar a clientes
     {
         return $this->hasMany(Cliente::class);
