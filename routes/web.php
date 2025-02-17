@@ -81,8 +81,7 @@ Route::middleware([
     ]);
 
     // Ruta adicional para la descarga de archivos
-    Route::get('/files/{id}/download', [FileController::class, 'download'])
-        ->name('files.download');
+    Route::get('/files/{id}/download', [FileController::class, 'download'])->name('files.download');
 
     // Ruta para la visualización de archivos
     Route::get('/documentos', [FileViewController::class, 'index'])->name('files.view');
@@ -92,18 +91,15 @@ Route::middleware([
     Route::post('clientes/import/', [GestionClienteController::class, 'import']);
 
     // Actualización de datos de clientes
-    Route::get('update-cuentafinanciera', [ConfiguracionController::class, 'updateCuentaFinanciera'])
-        ->name('update.cuentafinanciera');
-    Route::get('update-facturas', [ConfiguracionController::class, 'updateFactura'])
-        ->name('update.factura');
+    Route::get('update-cuentafinanciera', [ConfiguracionController::class, 'updateCuentaFinanciera'])->name('update.cuentafinanciera');
+    Route::get('update-facturas', [ConfiguracionController::class, 'updateFactura'])->name('update.factura');
 
     // Exportación de datos
     Route::get('export/secodi/funnel', [ExportController::class, 'secodiFunnel']);
     Route::get('export/indotech/funnel', [ExportController::class, 'indotechFunnel']);
 
     // Importación de datos
-    Route::post('import/evaporacion', [ImportController::class, 'evaporacion'])
-        ->name('import.evaporacion');
+    Route::post('import/evaporacion', [ImportController::class, 'evaporacion'])->name('import.evaporacion');
 });
 
 // Configuración de Livewire
