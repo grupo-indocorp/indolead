@@ -20,7 +20,7 @@ class DashboardController extends Controller
         $validator = Validator::make($request->all(), [
             'equipo' => 'nullable|integer|exists:equipos,id',
             'ejecutivo' => 'nullable|integer|exists:users,id',
-            'fecha' => 'nullable|date_format:m/Y' // Validar el formato de la fecha
+            'fecha' => 'nullable|date_format:m/Y', // Validar el formato de la fecha
         ]);
 
         if ($validator->fails()) {
@@ -34,10 +34,10 @@ class DashboardController extends Controller
         // Validar coherencia equipo-ejecutivo
         if ($equipoSeleccionado && $ejecutivoSeleccionado) {
             $ejecutivoValido = User::where('id', $ejecutivoSeleccionado)
-                ->whereHas('equipos', fn($q) => $q->where('equipo_id', $equipoSeleccionado))
+                ->whereHas('equipos', fn ($q) => $q->where('equipo_id', $equipoSeleccionado))
                 ->exists();
 
-            if (!$ejecutivoValido) {
+            if (! $ejecutivoValido) {
                 $ejecutivoSeleccionado = null;
                 $request->merge(['ejecutivo' => null]);
             }
@@ -53,17 +53,17 @@ class DashboardController extends Controller
         $equipos = Equipo::all();
 
         // Obtener ejecutivos según equipo
-        $ejecutivos = $equipoSeleccionado 
-            ? User::whereHas('equipos', fn($q) => $q->where('equipo_id', $equipoSeleccionado))->get()
+        $ejecutivos = $equipoSeleccionado
+            ? User::whereHas('equipos', fn ($q) => $q->where('equipo_id', $equipoSeleccionado))->get()
             : collect();
 
         // Construir query principal
         $clientesQuery = Cliente::query()
-            ->when($equipoSeleccionado, fn($q) => $q->where('equipo_id', $equipoSeleccionado))
-            ->when($ejecutivoSeleccionado, fn($q) => $q->where('user_id', $ejecutivoSeleccionado))
-            ->when($fechaSeleccionada, fn($q) => $q->whereBetween('fecha_gestion', [
+            ->when($equipoSeleccionado, fn ($q) => $q->where('equipo_id', $equipoSeleccionado))
+            ->when($ejecutivoSeleccionado, fn ($q) => $q->where('user_id', $ejecutivoSeleccionado))
+            ->when($fechaSeleccionada, fn ($q) => $q->whereBetween('fecha_gestion', [
                 $fechaSeleccionada->startOfMonth()->toDateString(), // Primer día del mes
-                $fechaSeleccionada->endOfMonth()->toDateString()    // Último día del mes
+                $fechaSeleccionada->endOfMonth()->toDateString(),    // Último día del mes
             ]));
 
         // Calcular métricas

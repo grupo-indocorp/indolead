@@ -104,7 +104,7 @@ class CuentafinancieraController extends Controller
                 'estadofacturas',
             ));
         } elseif ($view === 'show-factura-detalles') {
-            if (!is_null(request('factura_id'))) {
+            if (! is_null(request('factura_id'))) {
                 $factura = Factura::find(request('factura_id'));
             } else {
                 $cuentafinanciera = Cuentafinanciera::with(['facturas'])->find($id);
@@ -121,7 +121,7 @@ class CuentafinancieraController extends Controller
                 'facturadetalles',
                 'estadoproductos',
             ));
-        }  elseif ($view === 'show-select-equipo') {
+        } elseif ($view === 'show-select-equipo') {
             $equipo = Equipo::find($id);
             $users = $equipo->users;
 
@@ -226,7 +226,7 @@ class CuentafinancieraController extends Controller
             foreach ($productosEvaporacion as $key => $value) {
                 $estadoProducto = Estadoproducto::where('name', $value->estado_linea)->first();
 
-                $facturadetalle = new Facturadetalle();
+                $facturadetalle = new Facturadetalle;
                 $facturadetalle->numero_servicio = $value->numero_servicio;
                 $facturadetalle->orden_pedido = $value->orden_pedido;
                 $facturadetalle->producto = $value->producto;

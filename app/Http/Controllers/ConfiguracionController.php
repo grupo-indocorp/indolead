@@ -7,6 +7,7 @@ use App\Models\Cuentafinanciera;
 use App\Models\Estadofactura;
 use App\Models\Evaporacion;
 use App\Models\Factura;
+use App\Models\Facturadetalle;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -87,6 +88,8 @@ class ConfiguracionController extends Controller
             ]);
         }
 
+        $this->updateFactura();
+
         return redirect()->route('cuentas-financieras.index')->with('success', 'Archivo importado exitosamente.');
     }
 
@@ -95,46 +98,54 @@ class ConfiguracionController extends Controller
         $facturasEvaporacion = Evaporacion::orderByDesc('id')
             ->get()
             ->groupBy('cuentafinanciera_id')
-            ->map(fn (Collection $group) => $group->first());
+            ->map(function (Collection $group) {
+                return [
+                    'total_monto_facturado1' => $group->sum(fn ($item) => (float) $item->monto_facturado1),
+                    'total_monto_facturado2' => $group->sum(fn ($item) => (float) $item->monto_facturado2),
+                    'total_monto_facturado3' => $group->sum(fn ($item) => (float) $item->monto_facturado3),
+                    'first' => $group->first(),
+                ];
+            });
 
         foreach ($facturasEvaporacion as $key => $value) {
-            $estado1 = Estadofactura::where('name', strtolower($value->estado_facturacion1))->first();
-            if (! is_null($estado1) && ! is_null($value->cuentafinanciera_id)) {
+            $estado1 = Estadofactura::where('name', strtolower($value['first']->estado_facturacion1))->first();
+            if (! is_null($estado1) && ! is_null($value['first']->cuentafinanciera_id)) {
                 $factura1 = new Factura;
-                $factura1->fecha_emision = $value->fecha_emision1;
-                $factura1->fecha_vencimiento = $value->fecha_vencimiento1;
-                $factura1->monto = $value->monto_facturado1;
-                $factura1->deuda = $value->deuda1;
+                $factura1->fecha_emision = $value['first']->fecha_emision1;
+                $factura1->fecha_vencimiento = $value['first']->fecha_vencimiento1;
+                $factura1->monto = $value['total_monto_facturado1'];
+                $factura1->deuda = $value['first']->deuda1;
                 $factura1->estadofactura_id = $estado1->id;
-                $factura1->cuentafinanciera_id = $value->cuentafinanciera_id;
+                $factura1->cuentafinanciera_id = $value['first']->cuentafinanciera_id;
                 $factura1->save();
             }
 
-            $estado2 = Estadofactura::where('name', strtolower($value->estado_facturacion2))->first();
-            if (! is_null($estado2) && ! is_null($value->cuentafinanciera_id)) {
+            $estado2 = Estadofactura::where('name', strtolower($value['first']->estado_facturacion2))->first();
+            if (! is_null($estado2) && ! is_null($value['first']->cuentafinanciera_id)) {
                 $factura2 = new Factura;
-                $factura2->fecha_emision = $value->fecha_emision2;
-                $factura2->fecha_vencimiento = $value->fecha_vencimiento2;
-                $factura2->monto = $value->monto_facturado2;
-                $factura2->deuda = $value->deuda2;
+                $factura2->fecha_emision = $value['first']->fecha_emision2;
+                $factura2->fecha_vencimiento = $value['first']->fecha_vencimiento2;
+                $factura2->monto = $value['total_monto_facturado2'];
+                $factura2->deuda = $value['first']->deuda2;
                 $factura2->estadofactura_id = $estado2->id;
-                $factura2->cuentafinanciera_id = $value->cuentafinanciera_id;
+                $factura2->cuentafinanciera_id = $value['first']->cuentafinanciera_id;
                 $factura2->save();
             }
 
-            $estado3 = Estadofactura::where('name', strtolower($value->estado_facturacion3))->first();
-            if (! is_null($estado3) && ! is_null($value->cuentafinanciera_id)) {
+            $estado3 = Estadofactura::where('name', strtolower($value['first']->estado_facturacion3))->first();
+            if (! is_null($estado3) && ! is_null($value['first']->cuentafinanciera_id)) {
                 $factura3 = new Factura;
-                $factura3->fecha_emision = $value->fecha_emision3;
-                $factura3->fecha_vencimiento = $value->fecha_vencimiento3;
-                $factura3->monto = $value->monto_facturado3;
-                $factura3->deuda = $value->deuda3;
+                $factura3->fecha_emision = $value['first']->fecha_emision3;
+                $factura3->fecha_vencimiento = $value['first']->fecha_vencimiento3;
+                $factura3->monto = $value['total_monto_facturado3'];
+                $factura3->deuda = $value['first']->deuda3;
                 $factura3->estadofactura_id = $estado3->id;
-                $factura3->cuentafinanciera_id = $value->cuentafinanciera_id;
+                $factura3->cuentafinanciera_id = $value['first']->cuentafinanciera_id;
                 $factura3->save();
             }
         }
-        dd('update-factura');
+
+        return true;
     }
 
     /**

@@ -39,25 +39,25 @@ class GraficoDeConversion
                             'name' => [
                                 'show' => true,
                                 'fontSize' => '16px',
-                                'offsetY' => 20
+                                'offsetY' => 20,
                             ],
                             'value' => [
                                 'show' => true,
                                 'fontSize' => '24px',
-                                'formatter' => 'function(val) { return val + "%" }'
-                            ]
-                        ]
-                    ]
+                                'formatter' => 'function(val) { return val + "%" }',
+                            ],
+                        ],
+                    ],
                 ],
                 'tooltip' => [
                     'y' => [
                         'formatter' => 'function(value) { return value + "%" }',
-                    ]
+                    ],
                 ],
                 'legend' => [
                     'show' => true,
-                    'position' => 'bottom'
-                ]
+                    'position' => 'bottom',
+                ],
             ]);
     }
 }

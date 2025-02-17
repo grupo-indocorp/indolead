@@ -167,10 +167,10 @@ class SimplesearchPlugin extends Plugin
             }
         }
 
-        //Drop unpublished and unroutable pages
+        // Drop unpublished and unroutable pages
         $this->collection->published()->routable();
 
-        //Check if user has permission to view page
+        // Check if user has permission to view page
         if ($this->grav['config']->get('plugins.login.enabled')) {
             $this->collection = $this->checkForPermissions($this->collection);
         }
