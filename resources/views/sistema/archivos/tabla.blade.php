@@ -2,28 +2,67 @@
     <table class="table align-items-center mb-0">
         <thead>
             <tr>
-                <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-10"></th>
-                <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-10">Nombre</th>
-                <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-10">Descripción</th>
-                <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-10">Formato</th>
-                <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-10">Tamaño</th>
+                <!-- Orden -->
+                <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-10">#</th>
+                
+                <!-- Carpeta -->
+                <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-10">Carpeta</th>
+                
+                <!-- Categoría -->
                 <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-10">Categoría</th>
+                
+                <!-- Subido por -->
                 <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-10">Subido Por</th>
+                
+                <!-- Nombre -->
+                <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-10">Nombre</th>
+                
+                <!-- Descripción -->
+                <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-10">Descripción</th>
+                
+                <!-- Formato -->
+                <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-10">Formato</th>
+                
+                <!-- Tamaño -->
+                <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-10">Tamaño</th>
+                
+                <!-- Fecha de Actualización -->
                 <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-10">Fecha de Actualización</th>
-                <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-10"></th>
+                
+                <!-- Acciones -->
+                <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-10">Acciones</th>
             </tr>
         </thead>
         <tbody>
             @forelse($files as $index => $file)
                 <tr>
-                    <!-- Índice -->
+                    <!-- Orden -->
                     <td class="text-center text-xs font-weight-bold mb-0">{{ $index + 1 }}</td>
                     
+                    <!-- Carpeta -->
+                    <td class="text-center text-xs font-weight-bold mb-0">
+                        {{ $file->folder->name ?? 'Sin carpeta' }}
+                    </td>
+                    
+                    <!-- Categoría -->
+                    <td class="text-center text-xs font-weight-bold mb-0">
+                        {{ $file->category ?? 'Sin categoría' }}
+                    </td>
+                    
+                    <!-- Subido por -->
+                    <td class="text-center text-xs font-weight-bold mb-0">
+                        {{ $file->uploadedBy->name ?? 'Usuario desconocido' }}
+                    </td>
+                    
                     <!-- Nombre -->
-                    <td class="text-center text-xs font-weight-bold mb-0">{{ Str::limit($file->name, 20) }}</td>
+                    <td class="text-center text-xs font-weight-bold mb-0">
+                        {{ Str::limit($file->name, 25) }}
+                    </td>
                     
                     <!-- Descripción -->
-                    <td class="text-center text-xs font-weight-bold mb-0">{{ $file->description ?? 'Sin descripción' }}</td>
+                    <td class="text-center text-xs font-weight-bold mb-0">
+                        {{ Str::limit($file->description, 35) ?? 'Sin descripción' }}
+                    </td>
                     
                     <!-- Formato -->
                     <td class="text-center text-xs font-weight-bold mb-0">
@@ -32,19 +71,17 @@
                         </span>
                     </td>
                     
-                    <!-- Tamaño formateado -->
-                    <td class="text-center text-xs font-weight-bold mb-0">{{ \App\Helpers\Helpers::formatSizeUnits($file->size) }}</td>
+                    <!-- Tamaño -->
+                    <td class="text-center text-xs font-weight-bold mb-0">
+                        {{ \App\Helpers\Helpers::formatSizeUnits($file->size) }}
+                    </td>
                     
-                    <!-- Categoría -->
-                    <td class="text-center text-xs font-weight-bold mb-0">{{ $file->category ?? 'Sin categoría' }}</td>
+                    <!-- Fecha de Actualización -->
+                    <td class="text-center text-xs font-weight-bold mb-0">
+                        {{ $file->updated_at->format('d/m/Y H:i') }}
+                    </td>
                     
-                    <!-- Subido por -->
-                    <td class="text-center text-xs font-weight-bold mb-0">{{ $file->uploadedBy->name ?? 'Usuario desconocido' }}</td>
-                    
-                    <!-- Fecha de subida -->
-                    <td class="text-center text-xs font-weight-bold mb-0">{{ $file->created_at->format('d/m/Y') }}</td>
-                    
-                    <!-- Acciones con iconos -->
+                    <!-- Acciones -->
                     <td class="text-center text-xs font-weight-bold mb-0">
                         <div class="d-flex justify-content-center gap-3">
                             <!-- Editar -->
@@ -66,9 +103,9 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="9" class="text-center">No hay archivos disponibles.</td>
+                    <td colspan="10" class="text-center">No hay archivos disponibles.</td>
                 </tr>
             @endforelse
         </tbody>
     </table>
-</x-sistema.card-contenedor>
+</x-sistema.tabla-contenedor>

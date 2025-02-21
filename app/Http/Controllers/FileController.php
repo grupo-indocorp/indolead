@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\File;
+use App\Models\Folder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -13,11 +14,10 @@ class FileController extends Controller
      */
     public function index()
     {
-        // Obtener todos los archivos con la relación 'uploadedBy'
-        $files = File::with('uploadedBy')->get();
-
-        // Retornar la vista con los archivos
+        // Carga ambas relaciones: uploadedBy y folder
+        $files = File::with(['uploadedBy', 'folder'])->get();
         return view('sistema.archivos.index', compact('files'));
+        
     }
 
     /**
@@ -25,7 +25,8 @@ class FileController extends Controller
      */
     public function create()
     {
-        return view('sistema.archivos.create'); // No extiende el layout
+        $folders = Folder::all();
+        return view('sistema.archivos.create', compact('folders'));
     }
 
     /**
@@ -33,29 +34,27 @@ class FileController extends Controller
      */
     public function store(Request $request)
     {
-        // Validar la solicitud
         $request->validate([
-            'file' => 'required|file|max:10240', // Máximo 10 MB
+            'file' => 'required|file|max:1048576', // 1GB
             'description' => 'nullable|string|max:255',
             'category' => 'nullable|string|max:100',
+            'folder_id' => 'nullable|exists:folders,id',
         ]);
 
-        // Subir el archivo
         $uploadedFile = $request->file('file');
-        $path = $uploadedFile->store('uploads'); // Almacena el archivo en la carpeta "storage/app/uploads"
+        $path = $uploadedFile->store('uploads');
 
-        // Guardar la información en la base de datos
-        $file = new File();
-        $file->name = $uploadedFile->getClientOriginalName();
-        $file->path = $path;
-        $file->uploaded_by = auth()->id(); // Asume que el usuario está autenticado
-        $file->description = $request->input('description');
-        $file->format = $uploadedFile->getClientOriginalExtension();
-        $file->size = $uploadedFile->getSize();
-        $file->category = $request->input('category');
-        $file->save();
+        File::create([
+            'name' => $uploadedFile->getClientOriginalName(),
+            'path' => $path,
+            'uploaded_by' => auth()->id(),
+            'description' => $request->description,
+            'format' => $uploadedFile->getClientOriginalExtension(),
+            'size' => $uploadedFile->getSize(),
+            'category' => $request->category,
+            'folder_id' => $request->folder_id
+        ]);
 
-        // Redirigir con un mensaje de éxito
         return redirect()->route('files.index')->with('success', 'Archivo subido correctamente.');
     }
 
@@ -73,12 +72,19 @@ class FileController extends Controller
         return Storage::disk('local')->download($file->path, $file->name);
     }
 
+    /**
+     * Muestra el formulario de edición.
+     */
     public function edit($id)
     {
         $file = File::findOrFail($id);
-        return view('sistema.archivos.edit', compact('file'));
+        $folders = Folder::all(); // Cargar carpetas para el dropdown
+        return view('sistema.archivos.edit', compact('file', 'folders'));
     }
 
+    /**
+     * Actualiza un archivo existente.
+     */
     public function update(Request $request, $id)
     {
         $file = File::findOrFail($id);
@@ -87,29 +93,32 @@ class FileController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:255',
             'category' => 'nullable|string|max:100',
-            'new_file' => 'nullable|file|max:10240', // Opcional: permitir actualizar el archivo
+            'folder_id' => 'nullable|exists:folders,id',
+            'new_file' => 'nullable|file|max:10240',
         ]);
 
-        // Actualizar archivo físico (si se proporciona uno nuevo)
+        // Actualizar archivo físico si se proporciona uno nuevo
         if ($request->hasFile('new_file')) {
-            Storage::delete($file->path); // Eliminar archivo antiguo
+            Storage::delete($file->path);
             $path = $request->file('new_file')->store('uploads');
             $file->path = $path;
             $file->format = $request->file('new_file')->getClientOriginalExtension();
             $file->size = $request->file('new_file')->getSize();
         }
 
-        // Actualizar metadatos
-        $file->name = $request->input('name');
-        $file->description = $request->input('description');
-        $file->category = $request->input('category');
-        $file->save();
+        // Actualizar metadatos (incluyendo folder_id)
+        $file->update([
+            'name' => $request->name,
+            'description' => $request->description,
+            'category' => $request->category,
+            'folder_id' => $request->folder_id
+        ]);
 
         return response()->json(['success' => 'Archivo actualizado correctamente.']);
     }
 
     /**
-     * Elimina un archivo específico.
+     * Elimina un archivo.
      */
     public function destroy($id)
     {

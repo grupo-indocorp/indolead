@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Folder;
 
 class FileViewController extends Controller
 {
@@ -15,9 +16,14 @@ class FileViewController extends Controller
     {
         // Obtener todos los archivos con la relación 'uploadedBy'
         $files = File::with('uploadedBy')->get();
+        // Obtener todas las carpetas (si tienes un modelo Folder)
+        $folders = Folder::with('files')->get();
+        
 
         // Retornar la vista con los archivos
-        return view('sistema.archivos.view', compact('files'));
+        
+        return view('sistema.archivos.view', compact('files', 'folders'));
+        
     }
 
     /**
