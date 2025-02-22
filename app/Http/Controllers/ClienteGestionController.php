@@ -394,7 +394,7 @@ class ClienteGestionController extends Controller
             $comentario->etiqueta_id = 4; // etiqueta_id, 4=gestionado;
             $comentario->save();
 
-            $data_comentarios = $cliente->comentarios()->where('user_id', auth()->user()->id)->orderBy('comentarios.id', 'desc')->limit(5)->get();
+            $data_comentarios = $cliente->comentarios()->where('user_id', auth()->user()->id)->orderBy('comentarios.id', 'desc')->get();
             $comentarios = [];
             foreach ($data_comentarios as $value) {
                 $comentarios[] = [

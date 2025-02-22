@@ -29,7 +29,9 @@ use App\Http\Controllers\ReporteClienteNuevoController;
 use App\Http\Controllers\ReporteController;
 use App\Http\Controllers\RoleController;
 use Illuminate\Support\Facades\Route;
-use Livewire\Livewire; // Importa el FileViewController
+use Livewire\Livewire;
+use App\Http\Controllers\FileViewController; // Importa el FileViewController
+use App\Http\Controllers\FolderController; // Importa el FolderController
 
 // Ruta para la página de componentes
 Route::get('/components', function () {
@@ -99,7 +101,18 @@ Route::middleware([
     Route::get('export/indotech/funnel', [ExportController::class, 'indotechFunnel']);
 
     // Importación de datos
-    Route::post('import/evaporacion', [ImportController::class, 'evaporacion'])->name('import.evaporacion');
+    Route::post('import/evaporacion', [ImportController::class, 'evaporacion'])
+        ->name('import.evaporacion');
+
+    // Archivos
+    Route::resource('files', FileController::class);
+
+    // Carpetas
+    Route::prefix('folders')->group(function () {
+        Route::get('create', [FolderController::class, 'create'])->name('folders.create');
+        Route::post('', [FolderController::class, 'store'])->name('folders.store');
+        Route::delete('{folder}', [FolderController::class, 'destroy'])->name('folders.destroy');
+    });
 });
 
 // Configuración de Livewire

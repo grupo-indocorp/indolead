@@ -3,7 +3,7 @@
     'botonFooter' => '',
     'ventas' => false,
 ])
-<x-sistema.card class="m-2">
+<x-sistema.card class="m-2 mx-0">
     <div class="d-flex flex-row flex-wrap justify-content-between">
         <x-sistema.titulo title="Productos en Negociación" />
         @role('ejecutivo')

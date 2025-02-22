@@ -3,7 +3,7 @@
     'botonFooter' => '',
     'movistar' => '',
 ])
-<x-sistema.card class="m-2">
+<x-sistema.card class="m-4 mb-2 mx-0">
     <div class="d-flex flex-row flex-wrap justify-content-between">
         <x-sistema.titulo title="Datos Adicionales" />
         <div class="flex flex-row gap-2">

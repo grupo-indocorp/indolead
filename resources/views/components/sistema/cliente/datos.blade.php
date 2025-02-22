@@ -3,7 +3,7 @@
     'botonFooter' => '',
     'cliente' => '',
 ])
-<x-sistema.card class="m-2">
+<x-sistema.card class="m-2 mb-4">
     <div class="d-flex flex-row flex-wrap justify-content-between">
         <x-sistema.titulo title="Datos Del Cliente" />
         <div class="flex flex-row gap-2">

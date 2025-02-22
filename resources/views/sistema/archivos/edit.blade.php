@@ -9,6 +9,18 @@
                 @csrf
                 @method('PUT')
                 <div class="modal-body">
+                    <!-- Selector de carpeta -->
+                    <div class="form-group mb-4">
+                        <label for="folder_id">Carpeta</label>
+                        <select name="folder_id" id="folder_id" class="form-control">
+                            <option value="">Sin carpeta</option>
+                            @foreach($folders as $folder)
+                                <option value="{{ $folder->id }}" {{ $file->folder_id == $folder->id ? 'selected' : '' }}>
+                                    {{ $folder->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
                     <div class="mb-3">
                         <label for="name" class="form-label">Nombre del Archivo</label>
                         <input type="text" class="form-control" id="name" name="name" value="{{ $file->name }}" required>
