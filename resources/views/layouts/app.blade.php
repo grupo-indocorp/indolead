@@ -102,6 +102,8 @@
     {{-- Funciones globales --}}
     <script src="{{ asset('js/indotech.js') }}" defer></script>
     <script src="{{ asset('js/main.js') }}" defer></script>
+    <script src="{{ asset('assets/js/core/popper.min.js') }}"></script>
+    <script src="{{ asset('assets/js/core/bootstrap.min.js') }}"></script>
 
     @yield('script')
 </body>

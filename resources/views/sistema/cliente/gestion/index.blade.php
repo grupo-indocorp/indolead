@@ -124,8 +124,9 @@
                 let filtro_fecha_desde = $('#filtro_fecha_desde').val();
                 let filtro_fecha_hasta = $('#filtro_fecha_hasta').val();
                 let filtro_ruc = $('#filtro_ruc').val();
+                let paginate = $('#paginate').val();
                 window.location.href =
-                    `/cliente-gestion?filtro_etapa_id=${filtro_etapa_id}&filtro_sede_id=${filtro_sede_id}&filtro_equipo_id=${filtro_equipo_id}&filtro_user_id=${filtro_user_id}&filtro_fecha_desde=${filtro_fecha_desde}&filtro_fecha_hasta=${filtro_fecha_hasta}&filtro_ruc=${filtro_ruc}`;
+                    `/cliente-gestion?filtro_etapa_id=${filtro_etapa_id}&filtro_sede_id=${filtro_sede_id}&filtro_equipo_id=${filtro_equipo_id}&filtro_user_id=${filtro_user_id}&filtro_fecha_desde=${filtro_fecha_desde}&filtro_fecha_hasta=${filtro_fecha_hasta}&filtro_ruc=${filtro_ruc}&paginate=${paginate}`;
             }
 
             function detalleCliente(cliente_id) {

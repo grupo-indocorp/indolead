@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Folder;
+use App\Models\User;
 
 class File extends Model
 {
@@ -22,6 +24,7 @@ class File extends Model
         'format',       // Formato del archivo (extensión)
         'size',         // Tamaño del archivo
         'category',     // Categoría del archivo
+        'folder_id',    // ID de la carpeta a la que pertenece el archivo
     ];
 
     /**
@@ -31,12 +34,18 @@ class File extends Model
     {
         return $this->belongsTo(User::class, 'uploaded_by');
     }
+    
+    // Relación con la carpeta
+    public function folder()
+    {
+        return $this->belongsTo(Folder::class, 'folder_id');
+    }
 
     public function getExtensionAttribute()
     {
         return strtoupper(pathinfo($this->nombre, PATHINFO_EXTENSION));
     }
-
+    
     public function getSizeFormattedAttribute()
     {
         $bytes = $this->size;

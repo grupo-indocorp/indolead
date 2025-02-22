@@ -123,6 +123,7 @@
         'filtro_user_id'=>$filtro['filtro_user_id'],
         'filtro_sede_id'=>$filtro['filtro_sede_id'],
         'filtro_fecha_desde'=>$filtro['filtro_fecha_desde'],
-        'filtro_fecha_hasta'=>$filtro['filtro_fecha_hasta']
+        'filtro_fecha_hasta'=>$filtro['filtro_fecha_hasta'],
+        'paginate'=>$filtro['paginate'],
     ])->links() }}
 </x-sistema.tabla-contenedor>

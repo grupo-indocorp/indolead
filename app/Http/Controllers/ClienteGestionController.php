@@ -41,6 +41,7 @@ class ClienteGestionController extends Controller
         $filtro_sede_id = request('filtro_sede_id') * 1;
         $filtro_fecha_desde = request('filtro_fecha_desde');
         $filtro_fecha_hasta = request('filtro_fecha_hasta');
+        $paginate = request('paginate') ?? 50;
         $filtro = [
             'filtro_ruc' => $filtro_ruc,
             'filtro_etapa_id' => $filtro_etapa_id,
@@ -49,6 +50,7 @@ class ClienteGestionController extends Controller
             'filtro_sede_id' => $filtro_sede_id,
             'filtro_fecha_desde' => $filtro_fecha_desde,
             'filtro_fecha_hasta' => $filtro_fecha_hasta,
+            'paginate' => $paginate,
         ];
         // Listando data en los selects
         $sede_id = request('filtro_sede_id');
@@ -132,7 +134,7 @@ class ClienteGestionController extends Controller
             ->where($where)
             ->orWhere($orwhere)
             ->orderByDesc('fecha_gestion')
-            ->paginate(50);
+            ->paginate($paginate);
         $data_etapas = $this->clienteService->etapasConConteo()['data_etapas'];
         $count_total = $this->clienteService->etapasConConteo()['count_total'];
 
@@ -162,7 +164,8 @@ class ClienteGestionController extends Controller
             'users',
             'config',
             'countClienteNuevo',
-            'countClienteGestionado'
+            'countClienteGestionado',
+            'paginate'
         ));
     }
 
@@ -394,7 +397,7 @@ class ClienteGestionController extends Controller
             $comentario->etiqueta_id = 4; // etiqueta_id, 4=gestionado;
             $comentario->save();
 
-            $data_comentarios = $cliente->comentarios()->where('user_id', auth()->user()->id)->orderBy('comentarios.id', 'desc')->limit(5)->get();
+            $data_comentarios = $cliente->comentarios()->where('user_id', auth()->user()->id)->orderBy('comentarios.id', 'desc')->get();
             $comentarios = [];
             foreach ($data_comentarios as $value) {
                 $comentarios[] = [
