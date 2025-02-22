@@ -17,6 +17,7 @@ use App\Http\Controllers\ExportController;
 use App\Http\Controllers\FacturaController;
 use App\Http\Controllers\FileController; // Importa el FileController
 use App\Http\Controllers\FileViewController;
+use App\Http\Controllers\FolderController;
 use App\Http\Controllers\FunnelController;
 use App\Http\Controllers\GestionClienteController;
 use App\Http\Controllers\HomeController;
@@ -30,8 +31,6 @@ use App\Http\Controllers\ReporteController;
 use App\Http\Controllers\RoleController;
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
-use App\Http\Controllers\FileViewController; // Importa el FileViewController
-use App\Http\Controllers\FolderController; // Importa el FolderController
 
 // Ruta para la página de componentes
 Route::get('/components', function () {

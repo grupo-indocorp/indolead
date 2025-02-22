@@ -100,18 +100,28 @@
                 </div>
             </div>
         </div>
-        {{-- <button type="submit" class="btn bg-gradient-info m-0">Aplicar Filtros</button> --}}
-        @can('sistema.gestion_cliente.asignar')
-            <a href="javascript:;" class="btn bg-gradient-warning m-0" id="btnAssignClients" type="button">Asignar</a>
-        @endcan
-        @can('sistema.gestion_cliente.exportar')
-            @if ($config['excel']['indotech'])
-                <a href="javascript:;" class="btn bg-gradient-primary m-0" onclick="exportCliente()" type="button">Descargar</a>
-                <a href="javascript:;" class="btn bg-gradient-primary m-0" onclick="exportFunnel('indotech')" type="button">Funnel Indotech</a>
-            @endif
-            @if ($config['excel']['secodi'])
-                <a href="javascript:;" class="btn bg-gradient-primary m-0" onclick="exportFunnel('secodi')" type="button">Funnel Secodi</a>
-            @endif
-        @endcan
+        <div class="flex justify-between">
+            <div>
+                @can('sistema.gestion_cliente.asignar')
+                    <a href="javascript:;" class="btn bg-gradient-warning m-0" id="btnAssignClients" type="button">Asignar</a>
+                @endcan
+                @can('sistema.gestion_cliente.exportar')
+                    @if ($config['excel']['indotech'])
+                        <a href="javascript:;" class="btn bg-gradient-primary m-0" onclick="exportCliente()" type="button">Descargar</a>
+                        <a href="javascript:;" class="btn bg-gradient-primary m-0" onclick="exportFunnel('indotech')" type="button">Funnel Indotech</a>
+                    @endif
+                    @if ($config['excel']['secodi'])
+                        <a href="javascript:;" class="btn bg-gradient-primary m-0" onclick="exportFunnel('secodi')" type="button">Funnel Secodi</a>
+                    @endif
+                @endcan
+            </div>
+            <div class="form-group">
+                <select class="form-control" name="paginate" id="paginate" style="width: 80px;" onchange="filtroAutomatico()">
+                    <option value="50" @if (50 == request('paginate')) selected @endif>50</option>
+                    <option value="100" @if (100 == request('paginate')) selected @endif>100</option>
+                    <option value="150" @if (150 == request('paginate')) selected @endif>150</option>
+                </select>
+            </div>
+        </div>
     </form>
 </div>

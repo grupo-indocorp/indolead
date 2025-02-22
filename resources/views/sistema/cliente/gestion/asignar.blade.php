@@ -19,7 +19,7 @@
     </div>
     <div class="form-group">
         <label for="etapa_id" class="form-control-label">Etapa</label>
-        <select class="form-control" id="etapa_id" name="etapa_id" @if (count($clients) > 1) disabled @endif>
+        <select class="form-control" id="etapa_id" name="etapa_id">
             @foreach ($etapas as $value)
                 <option value="{{ $value->id }}">{{ $value->nombre }}</option>
             @endforeach
