@@ -29,30 +29,35 @@
         </div>
     @endrole
     {{ $botonFooter }}
-    <div class="flex-auto" id="comentarios">
-        @if ($comentarios)
-            @foreach ($comentarios as $comentario)
-                <div class="mb-4" id="{{ $comentario['id'] }}">
-                    <span class="text-slate-900 text-base font-semibold">{{ $comentario['comentario'] }}</span>
-                    <div class="text-end">
-                        <span class="text-slate-500 text-xs uppercase me-2">
-                            <i class="text-blue-400 fa-solid fa-user"></i> {{ $comentario['usuario'] }}
-                        </span>
-                        <span class="text-slate-500 text-sm">
-                            <i class="text-blue-400 fa-solid fa-calendar-days"></i> {{ $comentario['fecha'] }}
-                        </span>
-                        <span
-                            class="bg-slate-300 text-slate-700 text-xs font-semibold font-se mb-0 mx-1 px-3 py-1 rounded-lg">
-                            {{ $comentario['etiqueta'] }}
-                        </span>
-                        <span
-                            class="bg-slate-300 text-slate-700 text-xs font-semibold font-se mb-0 mx-1 px-3 py-1 rounded-lg">
-                            {{ $comentario['detalle'] }}
-                        </span>
+    
+    <div class="mb-3">
+        <button id="btnMostrarComentarios" type="button" class="btn bg-gradient-primary text-sm px-2 py-1" onclick="mostrarComentarios()">Desplegar comentarios</button>
+        <button id="btnOcultarComentarios" type="button" class="btn bg-gradient-secondary text-sm px-2 py-1" onclick="ocultarComentarios()" style="display:none;">Ocultar comentarios</button>
+    </div>
+    <div id="contenedorComentarios" style="display:none;">
+        <div class="flex-auto" id="comentarios">
+            @if ($comentarios)
+                @foreach ($comentarios as $comentario)
+                    <div class="mb-4" id="{{ $comentario['id'] }}">
+                        <span class="text-slate-900 text-base font-semibold">{{ $comentario['comentario'] }}</span>
+                        <div class="text-end">
+                            <span class="text-slate-500 text-xs uppercase me-2">
+                                <i class="text-blue-400 fa-solid fa-user"></i> {{ $comentario['usuario'] }}
+                            </span>
+                            <span class="text-slate-500 text-sm">
+                                <i class="text-blue-400 fa-solid fa-calendar-days"></i> {{ $comentario['fecha'] }}
+                            </span>
+                            <span class="bg-slate-300 text-slate-700 text-xs font-semibold font-se mb-0 mx-1 px-3 py-1 rounded-lg">
+                                {{ $comentario['etiqueta'] }}
+                            </span>
+                            <span class="bg-slate-300 text-slate-700 text-xs font-semibold font-se mb-0 mx-1 px-3 py-1 rounded-lg">
+                                {{ $comentario['detalle'] }}
+                            </span>
+                        </div>
                     </div>
-                </div>
-                <hr>
-            @endforeach
-        @endif
+                    <hr>
+                @endforeach
+            @endif
+        </div>
     </div>
 </x-sistema.card>

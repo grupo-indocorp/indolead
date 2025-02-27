@@ -1,23 +1,27 @@
 @props([
     'onclickCloseModal' => 'closeModal()',
 ])
-<x-sistema.modal title="Agregar Cliente" dialog_id="dialog">
-    <div class="grid grid-cols-12 P-0">
-        <div class="col-span-6">
+<x-sistema.modal title="Agregar Cliente" dialog_id="dialog" :$onclickCloseModal class="w-[95vw] max-w-5xl p-1">
+    <div class="grid grid-cols-12 gap-1">
+        <div class="col-span-12">
             <x-sistema.cliente.datos />
-            <x-sistema.cliente.contactos />
         </div>
-        <div class="col-span-6 space-y-4">
+        <div class="col-span-12">
             <x-sistema.cliente.movistars />
+        </div>
+        <div class="col-span-7">
             <x-sistema.cliente.ventas />
         </div>
-        <div class="col-span-12 mt-2">
+        <div class="col-span-5">
+            <x-sistema.cliente.contactos />
+        </div>
+        <div class="col-span-12">
             <x-sistema.cliente.comentarios>
                 <x-sistema.cliente.etapas />
             </x-sistema.cliente.comentarios>
         </div>
     </div>
-    <div class="flex justify-end mt-2 gap-2">
+    <div class="flex justify-end mt-1 gap-2">
         <x-ui.button class="bg-slate-700" type="button" onclick="{{ $onclickCloseModal }}">
             Cancelar
         </x-ui.button>
@@ -26,6 +30,8 @@
         </x-ui.button>
     </div>
 </x-sistema.modal>
+
+
 <script>
     function submitCliente(button) {
         limpiarError();

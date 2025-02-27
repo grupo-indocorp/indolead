@@ -10,10 +10,10 @@
     $ventas = $data['ventas'];
     $notificacion = $data['notificacion'];
 @endphp
-<x-sistema.modal title="Detalle Cliente" dialog_id="dialog" :$onclickCloseModal class="w-[95vw] max-w-5xl p-2"> 
+<x-sistema.modal title="Detalle Cliente" dialog_id="dialog" :$onclickCloseModal class="w-[95vw] max-w-5xl p-2">
     <input type="hidden" id="cliente_id" name="cliente_id" value="{{ $cliente->id }}">
-    <div class="grid grid-cols-12 p-0">
-        <div class="col-span-6">
+    <div class="grid grid-cols-12 gap-4">
+        <div class="col-span-12">
             <x-sistema.cliente.datos :$cliente>
                 @role('ejecutivo')
                     <x-slot:botonHeader>
@@ -28,18 +28,8 @@
                     </x-slot>
                 @endrole
             </x-sistema.cliente.datos>
-            <x-sistema.cliente.contactos :$contactos>
-                @role('ejecutivo')
-                    <x-slot:botonFooter>
-                        <button type="button" class="btn bg-gradient-secondary text-sm px-2 py-1" onclick="saveContacto()"
-                            id="btn_guardar_contacto">
-                            <i class="fas fa-save"></i>
-                        </button>
-                    </x-slot>
-                @endrole
-            </x-sistema.cliente.contactos>
         </div>
-        <div class="col-span-6 space-y-4">
+        <div class="col-span-12">
             <x-sistema.cliente.movistars :$movistar>
                 @role('ejecutivo')
                     <x-slot:botonFooter>
@@ -54,7 +44,21 @@
                     </x-slot>
                 @endrole
             </x-sistema.cliente.movistars>
+        </div>
+        <div class="col-span-7">
             <x-sistema.cliente.ventas />
+        </div>
+        <div class="col-span-5">
+            <x-sistema.cliente.contactos :$contactos>
+                @role('ejecutivo')
+                    <x-slot:botonFooter>
+                        <button type="button" class="btn bg-gradient-secondary text-sm px-2 py-1" onclick="saveContacto()"
+                            id="btn_guardar_contacto">
+                            <i class="fas fa-save"></i>
+                        </button>
+                    </x-slot>
+                @endrole
+            </x-sistema.cliente.contactos>
         </div>
         <div class="col-span-7">
             <x-sistema.cliente.comentarios :$comentarios>
@@ -85,8 +89,7 @@
             <x-sistema.notificacion.create :$notificacion>
                 @role('ejecutivo')
                     <x-slot:botonHeader>
-                        <button type="button" class="btn bg-gradient-secondary text-sm px-2 py-1"
-                            onclick="saveNotificacion()">
+                        <button type="button" class="btn bg-gradient-secondary text-sm px-2 py-1" onclick="saveNotificacion()">
                             <i class="fas fa-save"></i>
                         </button>
                     </x-slot>
@@ -98,6 +101,8 @@
         <button type="button" class="btn bg-gradient-primary" onclick="{{ $onclickCloseModal }}">Cerrar</button>
     </div>
 </x-sistema.modal>
+
+
 
 <script>
     function editCliente() {
@@ -165,7 +170,16 @@
             }
         });
     }
-
+    function mostrarContactos() {
+        $("#tablaContactos").slideDown();
+        $("#btnMostrarContactos").hide();
+        $("#btnOcultarContactos").show();
+    }
+    function ocultarContactos() {
+        $("#tablaContactos").slideUp();
+        $("#btnOcultarContactos").hide();
+        $("#btnMostrarContactos").show();
+    }
     function listContactos(contactos) {
         let html = "";
         contactos.forEach(function(contacto) {
@@ -186,7 +200,7 @@
                             <span class="text-secondary text-xs font-weight-normal">${contacto.correo}</span>
                         </td>
                     </tr>`;
-        })
+        });
         $('#contactos').html(html);
     }
 
@@ -218,7 +232,16 @@
             }
         });
     }
-
+    function mostrarComentarios() {
+        $("#contenedorComentarios").slideDown();
+        $("#btnMostrarComentarios").hide();
+        $("#btnOcultarComentarios").show();
+    }
+    function ocultarComentarios() {
+        $("#contenedorComentarios").slideUp();
+        $("#btnOcultarComentarios").hide();
+        $("#btnMostrarComentarios").show();
+    }
     function listComentario(comentarios) {
         let html = "";
         comentarios.forEach(function(comentario) {
@@ -240,7 +263,7 @@
                         </div>
                     </div>
                     <hr>`;
-        })
+        });
         $('#comentarios').html(html);
     }
 
@@ -276,7 +299,18 @@
             }
         });
     }
-
+    function mostrarNotificaciones() {
+        $("#contenedorNotificaciones").slideDown();
+        $("#btnMostrarNotificaciones").hide();
+        $("#btnOcultarNotificaciones").show();
+    }
+    function ocultarNotificaciones() {
+        $("#contenedorNotificaciones").slideUp();
+        $("#btnOcultarNotificaciones").hide();
+        $("#btnMostrarNotificaciones").show();
+    }
+    
+    // Función para listar notificaciones (sin cambios respecto a la versión original)
     function listNotificacion(notificacions) {
         let html = "";
         notificacions.forEach(function(notificacion) {
@@ -289,7 +323,7 @@
                         </div>
                     </div>
                     <hr>`;
-        })
+        });
         $('#notificacions').html(html);
     }
 
