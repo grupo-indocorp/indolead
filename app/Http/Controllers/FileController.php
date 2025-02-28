@@ -15,7 +15,10 @@ class FileController extends Controller
     public function index()
     {
         // Carga ambas relaciones: uploadedBy y folder
-        $files = File::with(['uploadedBy', 'folder'])->get();
+        $files = File::with('uploadedBy')
+                ->orderBy('folder_id', 'asc') // Ordenar por carpeta
+                ->orderBy('id', 'desc') // Luego ordenar por ID (el más reciente primero)
+                ->get();
         return view('sistema.archivos.index', compact('files'));
         
     }

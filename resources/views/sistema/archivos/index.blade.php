@@ -5,7 +5,7 @@
         <div class="p-4 pb-0">
             <div class="d-flex flex-row justify-content-between">
                 <div>
-                    <x-sistema.titulo title="Gestión de Archivos" />
+                    <x-sistema.titulo title="Gestión de Biblioteca" />
                 </div>
                 <div>
                     <x-ui.button type="button" onclick="agregarArchivo()">Subir Archivo</x-ui.button>

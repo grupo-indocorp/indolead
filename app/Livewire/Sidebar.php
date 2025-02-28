@@ -81,16 +81,16 @@ class Sidebar extends Component
                 'url' => 'configuracion',
                 'can' => 'sistema.configuracion',
             ],
-            // Agregar la opción "Gestión de Archivos"
+            // Agregar la opción "Gestión de Biblioteca"
             [
                 'icon' => 'fa-file', // Ícono de FontAwesome para archivos
-                'nombre' => 'Gestión de Archivos',
+                'nombre' => 'Gestión de Biblioteca',
                 'url' => 'files', // Ruta definida en web.php
                 'can' => 'sistema.files', // Permiso necesario (ajusta según tu sistema de permisos)
             ],
             [
                 'icon' => 'fa-file', // Ícono de FontAwesome para archivos
-                'nombre' => 'Vista de Archivos',
+                'nombre' => 'Biblioteca',
                 'url' => 'documentos', // Ruta definida en web.php
                 'can' => 'sistema.vista', // Permiso necesario (ajusta según tu sistema de permisos)
             ],

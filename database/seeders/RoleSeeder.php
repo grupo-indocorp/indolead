@@ -59,7 +59,7 @@ class RoleSeeder extends Seeder
         Permission::firstOrCreate(['name' => 'sistema.evaporacion']);
         Permission::firstOrCreate(['name' => 'sistema.evaporacion.subir']);
         Permission::firstOrCreate(['name' => 'sistema.evaporacion-gestion']);
-        Permission::firstOrCreate(['name' => 'sistema.files']); // Nuevo permiso para gestión de archivos
+        Permission::firstOrCreate(['name' => 'sistema.files']); // Nuevo permiso para gestión de biblioteca
         Permission::firstOrCreate(['name' => 'sistema.vista']); // Nuevo permiso para visualización de archivos
         // Asignar todos los permisos al rol 'sistema'
         $sistema->syncPermissions(Permission::all());
@@ -96,7 +96,7 @@ class RoleSeeder extends Seeder
             'sistema.gestion_cliente.exportar',
             'sistema.notificacion',
             'sistema.gestion_cliente.asignar',
-            'sistema.files', // Asignar permiso de gestión de archivos
+            
         ]);
         $ejecutivo->syncPermissions([
             'sistema.cliente',

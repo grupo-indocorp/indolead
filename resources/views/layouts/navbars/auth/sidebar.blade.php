@@ -92,9 +92,9 @@
                     <span class="nav-link-text ms-1">Lista de Equipos</span>
                 </a>
             </li>
-            <!-- Nueva sección: Gestión de Archivos -->
+            <!-- Nueva sección: Gestión de Biblioteca -->
             <li class="nav-item mt-3">
-                <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Gestión de Archivos</h6>
+                <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Gestión de Biblioteca</h6>
             </li>
             <li class="nav-item pb-2">
                 <a class="nav-link {{ Request::is('files') ? 'active' : '' }}" href="{{ url('files') }}">
@@ -104,12 +104,12 @@
                             class="fas fa-lg fa-file ps-2 pe-2 text-center text-dark {{ Request::is('files') ? 'text-white' : 'text-dark' }} "
                             aria-hidden="true"></i>
                     </div>
-                    <span class="nav-link-text ms-1">Gestión de Archivos</span>
+                    <span class="nav-link-text ms-1">Gestión de Biblioteca</span>
                 </a>
             </li>
 
             <li class="nav-item mt-3">
-                <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Vista de Archivos</h6>
+                <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Biblioteca</h6>
             </li>
             <li class="nav-item pb-2">
                 <a class="nav-link {{ Request::is('documentos') ? 'active' : '' }}" href="{{ url('documentos') }}">
@@ -119,7 +119,7 @@
                             class="fas fa-lg fa-file ps-2 pe-2 text-center text-dark {{ Request::is('files') ? 'text-white' : 'text-dark' }} "
                             aria-hidden="true"></i>
                     </div>
-                    <span class="nav-link-text ms-1">Vista de Archivos</span>
+                    <span class="nav-link-text ms-1">Biblioteca</span>
                 </a>
             </li>
         </ul>

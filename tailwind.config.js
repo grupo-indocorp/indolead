@@ -14,7 +14,12 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                sans: ['Figtree', ...defaultTheme.fontFamily.sans], // Fuente por defecto
+                roboto: ['Roboto', 'sans-serif'], // Fuente Roboto
+                poppins: ['Poppins', 'sans-serif'], // Fuente Poppins
+                'open-sans': ['Open Sans', 'sans-serif'], // Fuente Open Sans
+                lato: ['Lato', 'sans-serif'], // Fuente Lato
+                montserrat: ['Montserrat', 'sans-serif'], // Fuente Montserrat
             },
         },
     },
