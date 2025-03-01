@@ -1,5 +1,6 @@
 @extends('layouts.app')
 
+@can('sistema.files')
 @section('content')
     <x-sistema.card-contenedor>
         <div class="p-4 pb-0">
@@ -68,3 +69,4 @@
     <!-- Incluye el archivo JS DESPUÉS de definir variables -->
     <script src="{{ asset('js/indotech.js') }}"></script>
 @endsection
+@endcan
