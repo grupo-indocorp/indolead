@@ -42,6 +42,20 @@ class ClienteGestionController extends Controller
         $filtro_fecha_desde = request('filtro_fecha_desde');
         $filtro_fecha_hasta = request('filtro_fecha_hasta');
         $paginate = request('paginate') ?? 50;
+
+        // Obtener el conteo de clientes por etapa (pasando los filtros)
+        $data_etapas = $this->contarClientesPorEtapa(
+            $user,
+            $filtro_equipo_id,
+            $filtro_user_id,
+            $filtro_sede_id,
+            $filtro_fecha_desde,
+            $filtro_fecha_hasta
+        );
+
+        $count_total = array_sum(array_column($data_etapas, 'clientes_solo_count')); // Total general de clientes
+
+        
         $filtro = [
             'filtro_ruc' => $filtro_ruc,
             'filtro_etapa_id' => $filtro_etapa_id,
@@ -52,11 +66,13 @@ class ClienteGestionController extends Controller
             'filtro_fecha_hasta' => $filtro_fecha_hasta,
             'paginate' => $paginate,
         ];
-        // Listando data en los selects
+
+        // Resto de la lógica para obtener sedes, equipos, usuarios, etc...
         $sede_id = request('filtro_sede_id');
         $equipo_id = request('filtro_equipo_id');
         $user_id = request('filtro_user_id');
         $sedes = Sede::all();
+
         if ($sede_id) {
             $equipos = Equipo::where('sede_id', $sede_id)->get();
             if ($equipo_id) {
@@ -88,13 +104,16 @@ class ClienteGestionController extends Controller
 
         $etapas = Etapa::all();
 
+        // Resto de la lógica para filtrar clientes...
         $where = [];
-        $where[] = ['ruc', 'LIKE', $filtro_ruc.'%'];
-        $orwhere[] = ['razon_social', 'LIKE', '%'.$filtro_ruc.'%'];
+        $where[] = ['ruc', 'LIKE', $filtro_ruc . '%'];
+        $orwhere[] = ['razon_social', 'LIKE', '%' . $filtro_ruc . '%'];
+
         if ($filtro_etapa_id != 0) {
             $where[] = ['etapa_id', $filtro_etapa_id];
             $orwhere[] = ['etapa_id', $filtro_etapa_id];
         }
+
         if ($user->hasRole('ejecutivo')) {
             $where[] = ['user_id', $user->id];
             $orwhere[] = ['user_id', $user->id];
@@ -104,6 +123,7 @@ class ClienteGestionController extends Controller
                 $orwhere[] = ['user_id', $filtro_user_id];
             }
         }
+
         if ($user->hasRole('supervisor')) {
             $where[] = ['equipo_id', $user->equipo->id];
             $orwhere[] = ['equipo_id', $user->equipo->id];
@@ -113,14 +133,17 @@ class ClienteGestionController extends Controller
                 $orwhere[] = ['equipo_id', $filtro_equipo_id];
             }
         }
+
         if (isset($filtro_fecha_desde)) {
-            $where[] = ['fecha_gestion', '>=', $filtro_fecha_desde.' 00:00:00'];
-            $orwhere[] = ['fecha_gestion', '>=', $filtro_fecha_desde.' 00:00:00'];
+            $where[] = ['fecha_gestion', '>=', $filtro_fecha_desde . ' 00:00:00'];
+            $orwhere[] = ['fecha_gestion', '>=', $filtro_fecha_desde . ' 00:00:00'];
         }
+
         if (isset($filtro_fecha_hasta)) {
-            $where[] = ['fecha_gestion', '<=', $filtro_fecha_hasta.' 23:59:59'];
-            $orwhere[] = ['fecha_gestion', '<=', $filtro_fecha_hasta.' 23:59:59'];
+            $where[] = ['fecha_gestion', '<=', $filtro_fecha_hasta . ' 23:59:59'];
+            $orwhere[] = ['fecha_gestion', '<=', $filtro_fecha_hasta . ' 23:59:59'];
         }
+
         if ($user->hasRole('jefe comercial') || $user->hasRole('supervisor') || $user->hasRole('ejecutivo')) {
             $where[] = ['sede_id', $user->sede_id];
             $orwhere[] = ['sede_id', $user->sede_id];
@@ -130,18 +153,18 @@ class ClienteGestionController extends Controller
                 $orwhere[] = ['sede_id', $filtro_sede_id];
             }
         }
+
+        // Consulta de clientes
         $clientes = Cliente::with(['user', 'equipo', 'sede', 'etapa', 'comentarios', 'movistars'])
             ->where($where)
             ->orWhere($orwhere)
             ->orderByDesc('fecha_gestion')
             ->paginate($paginate);
-        $data_etapas = $this->clienteService->etapasConConteo()['data_etapas'];
-        $count_total = $this->clienteService->etapasConConteo()['count_total'];
 
-        $config = Helpers::configuracionExcelJsonGet();
-
+        // Conteo de clientes nuevos y gestionados (solo para ejecutivos)
         $countClienteNuevo = 0;
         $countClienteGestionado = 0;
+
         if ($user->hasRole('ejecutivo')) {
             // Conteo de Clientes Nuevos por Ejecutivo
             $countClienteNuevo = Cliente::where('user_id', $user->id)->whereDate('fecha_nuevo', Carbon::today())->count();
@@ -154,6 +177,10 @@ class ClienteGestionController extends Controller
             }
         }
 
+        // Configuración adicional
+        $config = Helpers::configuracionExcelJsonGet();
+
+        // Retornar la vista con los datos
         return view('sistema.cliente.gestion.index', compact(
             'clientes',
             'data_etapas',
@@ -167,6 +194,62 @@ class ClienteGestionController extends Controller
             'countClienteGestionado',
             'paginate'
         ));
+    }
+
+    /**
+     * Método para contar clientes por etapa según el rol del usuario.
+     */
+    private function contarClientesPorEtapa($user, $filtro_equipo_id = null, $filtro_user_id = null, $filtro_sede_id = null, $filtro_fecha_desde = null, $filtro_fecha_hasta = null)
+    {
+        $rol = $user->roles->first()->name; // Obtener el rol del usuario
+        $etapas = Etapa::all(); // Obtener todas las etapas
+        $conteoEtapas = [];
+
+        foreach ($etapas as $etapa) {
+            $query = Cliente::where('etapa_id', $etapa->id);
+
+            // Aplicar filtro de sede si está seleccionado
+            if ($filtro_sede_id && $filtro_sede_id != 0) {
+                $query->where('sede_id', $filtro_sede_id);
+            }
+
+            // Aplicar filtro de equipo si está seleccionado
+            if ($filtro_equipo_id && $filtro_equipo_id != 0) {
+                $query->where('equipo_id', $filtro_equipo_id);
+            }
+
+            // Aplicar filtro de ejecutivo si está seleccionado
+            if ($filtro_user_id && $filtro_user_id != 0) {
+                $query->where('user_id', $filtro_user_id);
+            }
+
+            // Aplicar filtro de fechas si están seleccionadas
+            if ($filtro_fecha_desde && $filtro_fecha_hasta) {
+                $query->whereBetween('fecha_gestion', [
+                    Carbon::parse($filtro_fecha_desde)->startOfDay(),
+                    Carbon::parse($filtro_fecha_hasta)->endOfDay()
+                ]);
+            }
+
+            // Filtrar según el rol del usuario (si no hay filtros aplicados)
+            if ($rol === 'ejecutivo' && !$filtro_user_id && !$filtro_equipo_id && !$filtro_sede_id) {
+                $query->where('user_id', $user->id);
+            } elseif ($rol === 'supervisor' && !$filtro_equipo_id && !$filtro_sede_id) {
+                $equipoIds = $user->equipo->users->pluck('id');
+                $query->whereIn('user_id', $equipoIds);
+            } elseif ($rol === 'jefe comercial' && !$filtro_sede_id) {
+                $query->where('sede_id', $user->sede_id);
+            }
+
+            // Contar clientes en la etapa actual
+            $conteoEtapas[$etapa->id] = [
+                'nombre' => $etapa->nombre,
+                'clientes_solo_count' => $query->count(),
+                'color' => $etapa->color,
+            ];
+        }
+
+        return $conteoEtapas;
     }
 
     /**
@@ -315,7 +398,7 @@ class ClienteGestionController extends Controller
         if ($view === 'update-cliente') {
             $request->validate(
                 [
-                    'ruc' => 'required|numeric|digits:11|starts_with:20,10|unique:clientes,ruc,'.$id.'|bail',
+                    'ruc' => 'required|numeric|digits:11|starts_with:20,10|unique:clientes,ruc,' . $id . '|bail',
                     'razon_social' => 'required|bail',
                     'ciudad' => 'required|bail',
                 ],
@@ -473,7 +556,7 @@ class ClienteGestionController extends Controller
             $etapa = Etapa::find(request('etapa_id'));
             $comentario = new Comentario;
             $comentario->comentario = request('comentario');
-            $comentario->detalle = 'Cambio de etapa a '.$etapa->nombre;
+            $comentario->detalle = 'Cambio de etapa a ' . $etapa->nombre;
             $comentario->user_id = auth()->user()->id;
             $comentario->cliente_id = $cliente->id;
             $comentario->save();
@@ -552,7 +635,7 @@ class ClienteGestionController extends Controller
                 $etapa = Etapa::find(request('etapa_id'));
                 $comentario = new Comentario;
                 $comentario->comentario = 'Cliente asignado.';
-                $comentario->detalle = 'Cambio de etapa a '.$etapa->nombre;
+                $comentario->detalle = 'Cambio de etapa a ' . $etapa->nombre;
                 $comentario->cliente_id = $client->id;
                 $comentario->user_id = auth()->user()->id;
                 $comentario->etiqueta_id = 2; // etiqueta_id, 2=asignado;

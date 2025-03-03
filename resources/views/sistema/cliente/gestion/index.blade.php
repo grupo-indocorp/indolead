@@ -3,7 +3,7 @@
 @can('sistema.gestion_cliente')
     @section('content')
         <x-sistema.card-contenedor>
-            <div class="p-4 pb-0">
+            <div class="p-3 pb-0">
                 <div class="d-flex flex-row justify-content-between">
                     <div>
                         <x-sistema.titulo title="Gestión de Clientes" />
@@ -16,7 +16,7 @@
                 </div>
                 @include('sistema.cliente.gestion.section-filtro')
             </div>
-            <div class="p-4" id="cont-tabla-cliente">
+            <div class="p-3" id="cont-tabla-cliente">
                 @include('sistema.cliente.gestion.filtro')
             </div>
         </x-sistema.card-contenedor>

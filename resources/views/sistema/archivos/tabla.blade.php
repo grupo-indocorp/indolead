@@ -12,8 +12,10 @@
                 <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-10">Categoría</th>
                 
                 <!-- Subido por -->
+                @role(['sistema', 'gerente general', 'gerente comercial', 'asistente comercial', 'planificacion'])
                 <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-10">Subido Por</th>
-                
+                @endrole
+
                 <!-- Nombre -->
                 <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-10">Nombre</th>
                 
@@ -50,9 +52,11 @@
                     </td>
                     
                     <!-- Subido por -->
+                    @role(['sistema', 'gerente general', 'gerente comercial', 'asistente comercial', 'planificacion'])
                     <td class="text-center text-xs font-weight-bold mb-0">
                         {{ $file->uploadedBy->name ?? 'Usuario desconocido' }}
                     </td>
+                    @endrole
                     
                     <!-- Nombre -->
                     <td class="text-center text-xs font-weight-bold mb-0">

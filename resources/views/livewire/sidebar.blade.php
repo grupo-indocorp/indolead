@@ -1,5 +1,5 @@
 <aside class="h-screen">
-    <div class="bg-gray-50 min-h-full rounded">
+    <div class="bg-white min-h-full rounded">
         <div class="w-auto px-3">
             <ul class="p-0 m-0">
                 @if (is_array($links) || is_object($links))
