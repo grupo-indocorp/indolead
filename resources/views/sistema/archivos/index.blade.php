@@ -1,11 +1,12 @@
 @extends('layouts.app')
 
+@can('sistema.files')
 @section('content')
     <x-sistema.card-contenedor>
         <div class="p-4 pb-0">
             <div class="d-flex flex-row justify-content-between">
                 <div>
-                    <x-sistema.titulo title="Gestión de Archivos" />
+                    <x-sistema.titulo title="Gestión de Biblioteca" />
                 </div>
                 <div>
                     <x-ui.button type="button" onclick="agregarArchivo()">Subir Archivo</x-ui.button>
@@ -68,3 +69,4 @@
     <!-- Incluye el archivo JS DESPUÉS de definir variables -->
     <script src="{{ asset('js/indotech.js') }}"></script>
 @endsection
+@endcan

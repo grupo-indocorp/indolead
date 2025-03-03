@@ -13,16 +13,19 @@ class FileViewController extends Controller
      */
     public function index()
     {
-        // Obtener todos los archivos con la relación 'uploadedBy'
-        $files = File::with('uploadedBy')->get();
-        // Obtener todas las carpetas (si tienes un modelo Folder)
-        $folders = Folder::with('files')->get();
-        
+        $folders = Folder::with(['files' => function ($query) {
+            $query->orderBy('created_at', 'desc');
+        }])->get();
 
-        // Retornar la vista con los archivos
-        
-        return view('sistema.archivos.view', compact('files', 'folders'));
-        
+        // Depuración: Verificar el orden de los archivos
+        foreach ($folders as $folder) {
+            \Log::info("Carpeta: {$folder->name}");
+            foreach ($folder->files as $file) {
+                \Log::info("Archivo ID: {$file->id}, Fecha: {$file->created_at}");
+            }
+        }
+
+        return view('sistema.archivos.view', compact('folders'));
     }
 
     /**

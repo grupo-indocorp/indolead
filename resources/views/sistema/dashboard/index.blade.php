@@ -6,9 +6,9 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
-        <div class="container-fluid">
+        <div class="container-fluid p-1">
             @if($fechaSeleccionada || $equipoSeleccionado || $ejecutivoSeleccionado)
-                <div class="mb-4 p-3" style="background: white; border: 1px solid #e0e0e0; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                <div class="mb-3 p-3" style="background: white; border: 1px solid #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
                     <span class="text-muted me-2" style="font-weight: 500;">Filtros aplicados:</span>
                     @if($equipoSeleccionado)
                         <span class="badge rounded-pill me-2" style="background: #6c757d; color: white; padding: 8px 12px;">

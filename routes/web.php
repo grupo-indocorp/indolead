@@ -77,8 +77,8 @@ Route::middleware([
         'configuracion-producto' => ConfiguracionProductoController::class,
         'configuracion-excel' => ConfiguracionExcelController::class,
         'configuracion-ficha-cliente' => ConfiguracionFichaClienteController::class,
-        'files' => FileController::class, // Ruta para la gestión de archivos
-        'files-view' => FileViewController::class, // Ruta para la visualización de archivos
+        'files' => FileController::class, // Ruta para la gestión de biblioteca
+        'files-view' => FileViewController::class, // Ruta para la visualización de biblioteca
     ]);
 
     // Ruta adicional para la descarga de archivos
