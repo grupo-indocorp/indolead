@@ -186,7 +186,15 @@ class ConfiguracionController extends Controller
             ],
         ];
 
-        return view('sistema.configuracion.index', compact('links'));
+        $links_evaporacion = [
+            [
+                'title' => 'Estados de Factura',
+                'icon' => '<i class="fa-solid fa-route-interstate"></i>',
+                'link' => 'configuracion-estado-factura',
+            ],
+        ];
+
+        return view('sistema.configuracion.index', compact('links', 'links_evaporacion'));
     }
 
     /**
