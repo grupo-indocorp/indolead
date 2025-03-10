@@ -20,6 +20,12 @@ class CuentafinancieraService
         if (isset($filters['periodo'])) {
             $where[] = ['periodo', 'like', '%'.$filters['periodo'].'%'];
         }
+        if (isset($filters['cuentafinanciera'])) {
+            $where[] = ['cuenta_financiera', 'like', '%'.$filters['cuentafinanciera'].'%'];
+        }
+        if (isset($filters['ruc'])) {
+            $where[] = ['text_cliente_ruc', 'like', '%'.$filters['ruc'].'%'];
+        }
 
         $cuentafinanciera = Cuentafinanciera::with([
             'cliente',

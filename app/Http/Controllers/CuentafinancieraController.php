@@ -32,6 +32,8 @@ class CuentafinancieraController extends Controller
         $equipo_id = request('filtro_equipo_id');
         $user_id = request('filtro_user_id');
         $periodo = request('filtro_periodo');
+        $cuentafinanciera = request('filtro_cuentafinanciera');
+        $ruc = request('filtro_ruc');
 
         $equipos = Equipo::all();
         if ($equipo_id) {
@@ -44,6 +46,8 @@ class CuentafinancieraController extends Controller
             'equipo_id' => $equipo_id,
             'user_id' => $user_id,
             'periodo' => $periodo,
+            'cuentafinanciera' => $cuentafinanciera,
+            'ruc' => $ruc,
         ];
 
         $cuentafinancieras = $this->cuentafinancieraService->cuentafinancieraGet($filters);
