@@ -40,6 +40,7 @@ class CuentafinancieraService
             'facturas.estadofactura',
             'facturas.facturadetalles',
             'facturas.facturadetalles.estadoproducto',
+            'categoria',
         ])
             ->where($where)
             ->orderBy('cliente_id')

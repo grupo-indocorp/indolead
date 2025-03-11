@@ -13,19 +13,24 @@ class Cuentafinanciera extends Model
         'cuenta_financiera',
         'fecha_evaluacion',
         'estado_evaluacion',
+        'periodo',
+        'ultimo_deuda_factura',
+        'ultimo_monto_factura',
         'fecha_descuento',
-        'backoffice_descuento',
-        'backoffice_descuento_vigencia',
         'descuento',
         'descuento_vigencia',
+        'backoffice_descuento',
+        'backoffice_descuento_vigencia',
         'ciclo',
         'text_cliente_ruc',
         'text_cliente_razon_social',
         'text_user_nombre',
         'text_user_equipo',
+        'ultimo_comentario',
         'user_id',
-        'equipo_id',
         'cliente_id',
+        'estadofactura_id',
+        'categoria_id',
     ];
 
     // Relación uno a muchos inversa
@@ -42,6 +47,11 @@ class Cuentafinanciera extends Model
     public function estadofactura()
     {
         return $this->belongsTo(Estadofactura::class);
+    }
+
+    public function categoria()
+    {
+        return $this->belongsTo(Categoria::class);
     }
 
     // Relación uno a muchos

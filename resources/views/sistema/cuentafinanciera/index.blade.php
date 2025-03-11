@@ -93,7 +93,7 @@
                                 $factura3 = $facturas->get(0) ?? null;
                             @endphp
                             <tr>
-                                <td></td>
+                                <td>{{ $item->categoria->nombre }}</td>
                                 <td>
                                     <b class="cursor-pointer hover:text-sky-600"
                                         data-bs-toggle="tooltip"
