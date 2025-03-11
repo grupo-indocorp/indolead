@@ -3,25 +3,11 @@
 @can('sistema.evaporacion')
     @section('content')
         <x-sistema.card-contenedor>
-            <section class="p-4 pb-0">
-                <div class="d-flex flex-row justify-content-between">
-                    <div>
-                        <x-sistema.titulo title="Cuentas Financieras" />
-                    </div>
-                </div>
+            <x-sistema.card-contenedor-header title="Cuentas Financieras">
                 @can('sistema.evaporacion.subir')
-                    <div>
-                        <form action="{{ route('import.evaporacion') }}" method="POST" enctype="multipart/form-data">
-                            @csrf
-                            <div class="mb-3">
-                                <label for="file" class="form-label">Selecciona el archivo Excel:</label>
-                                <input type="file" name="file" id="file" class="form-control" required>
-                            </div>
-                            <x-ui.button type="submit">Subir</x-ui.button>
-                        </form>
-                    </div>
+                    <x-ui.button type="button" onclick="importExcel()">{{ __('Importar') }}</x-ui.button>
                 @endcan
-            </section>
+            </x-sistema.card-contenedor-header>
             {{-- Filter --}}
             <section class="p-4 pb-0">
                 <form action="{{ route('cuentas-financieras.index') }}" method="GET" class="m-0">
@@ -190,6 +176,22 @@
     @endsection
     @section('script')
         <script>
+            function importExcel() {
+                $.ajax({
+                    url: `{{ url('cuentas-financieras/create') }}`,
+                    method: "GET",
+                    data: {
+                        view: 'import'
+                    },
+                    success: function( result ) {
+                        $('#contenedorModal').html(result);
+                        openModal();
+                    },
+                    error: function( response ) {
+                        console.log('error');
+                    }
+                });
+            }
             $('#filtro_equipo_id').select2({
                 placeholder: 'Seleccionar',
                 allowClear: true,

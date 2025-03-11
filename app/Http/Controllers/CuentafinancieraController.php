@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Categoria;
 use App\Models\Comentariocf;
 use App\Models\Cuentafinanciera;
 use App\Models\Equipo;
@@ -10,6 +11,7 @@ use App\Models\Estadoproducto;
 use App\Models\Evaporacion;
 use App\Models\Factura;
 use App\Models\Facturadetalle;
+use App\Models\Sede;
 use App\Models\User;
 use App\Services\CuentafinancieraService;
 use Illuminate\Http\Request;
@@ -64,7 +66,12 @@ class CuentafinancieraController extends Controller
      */
     public function create()
     {
-        //
+        $view = request('view');
+        if ($view === 'import') {
+            $sedes = Sede::all();
+            $categorias = Categoria::whereIn('id', [2, 3])->get();
+            return view('sistema.cuentafinanciera.import', compact('sedes', 'categorias'));
+        }
     }
 
     /**

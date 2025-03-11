@@ -102,8 +102,7 @@ Route::middleware([
     Route::get('export/indotech/funnel', [ExportController::class, 'indotechFunnel']);
 
     // Importación de datos
-    Route::post('import/evaporacion', [ImportController::class, 'evaporacion'])
-        ->name('import.evaporacion');
+    Route::post('import/evaporacion', [ImportController::class, 'evaporacion'])->name('import.evaporacion');
 
     // Archivos
     Route::resource('files', FileController::class);
@@ -116,7 +115,6 @@ Route::middleware([
     });
 });
 
-// Configuración de Livewire
 Livewire::setScriptRoute(function ($handle) {
     return Route::get('/indotech/vendor/livewire/livewire/dist/livewire.js', $handle);
 });
