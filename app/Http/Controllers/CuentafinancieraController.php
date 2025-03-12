@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Categoria;
 use App\Models\Comentariocf;
 use App\Models\Cuentafinanciera;
 use App\Models\Equipo;
@@ -10,6 +11,7 @@ use App\Models\Estadoproducto;
 use App\Models\Evaporacion;
 use App\Models\Factura;
 use App\Models\Facturadetalle;
+use App\Models\Sede;
 use App\Models\User;
 use App\Services\CuentafinancieraService;
 use Illuminate\Http\Request;
@@ -32,6 +34,8 @@ class CuentafinancieraController extends Controller
         $equipo_id = request('filtro_equipo_id');
         $user_id = request('filtro_user_id');
         $periodo = request('filtro_periodo');
+        $cuentafinanciera = request('filtro_cuentafinanciera');
+        $ruc = request('filtro_ruc');
 
         $equipos = Equipo::all();
         if ($equipo_id) {
@@ -44,6 +48,8 @@ class CuentafinancieraController extends Controller
             'equipo_id' => $equipo_id,
             'user_id' => $user_id,
             'periodo' => $periodo,
+            'cuentafinanciera' => $cuentafinanciera,
+            'ruc' => $ruc,
         ];
 
         $cuentafinancieras = $this->cuentafinancieraService->cuentafinancieraGet($filters);
@@ -60,7 +66,17 @@ class CuentafinancieraController extends Controller
      */
     public function create()
     {
-        //
+        $view = request('view');
+        if ($view === 'import') {
+            $sedes = Sede::all();
+            $categorias = Categoria::whereIn('id', [2, 3])->get();
+            $users = User::role('calidad comercial')->get();
+            return view('sistema.cuentafinanciera.import', compact(
+                'sedes',
+                'categorias',
+                'users',
+            ));
+        }
     }
 
     /**

@@ -46,7 +46,6 @@ Ejecutando tinker
     Permission::create(['name' => 'sistema.evaporacion-gestion']);
 ```
 
-
 Ejecutando luego `php artisan migrate`, agregamos datos a la tabla
 estadofacturas
 ```bash

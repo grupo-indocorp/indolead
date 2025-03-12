@@ -71,9 +71,9 @@
                         </template>
                     </div>
                 </div>
-                <div class="flex gap-2">
+                <div class="flex items-center justify-between gap-2">
                     <b>Cuenta Financiera:</b>
-                    <div class="form-group w-[60%]">
+                    <div class="w-[55%]">
                         <select class="form-control uppercase"
                             name="cuenta_financiera"
                             id="cuenta_financiera">
@@ -85,6 +85,9 @@
                             @endforeach
                         </select>
                     </div>
+                    <span class="hover:cursor-pointer hover:text-slate-500" id="copiarBtn">
+                        <i class="fa-solid fa-copy"></i>
+                    </span>
                 </div>
                 <section id="cuentafinancieraShow"></section>
             </x-sistema.card>
@@ -203,6 +206,14 @@
         });
 
         $('#cuenta_financiera').trigger('change');
+    });
+    $('#copiarBtn').on('click', function() {
+        const selectedText = $('#cuenta_financiera option:selected').text();
+        navigator.clipboard.writeText(selectedText).then(function() {
+            console.log('Texto copiado: ', selectedText);
+        }).catch(function(err) {
+            console.error('Error al copiar el texto: ', err);
+        });
     });
     function cuentafinancieraShow(cuentafinanciera_id) {
         $.ajax({

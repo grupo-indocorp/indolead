@@ -7,7 +7,6 @@ use App\Models\Cuentafinanciera;
 use App\Models\Estadofactura;
 use App\Models\Evaporacion;
 use App\Models\Factura;
-use App\Models\Facturadetalle;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -19,20 +18,17 @@ class ConfiguracionController extends Controller
         $evaporacions = Evaporacion::select('cuenta_financiera', 'ruc', 'identificacion_ejecutivo')
             ->groupBy('cuenta_financiera', 'ruc', 'identificacion_ejecutivo')
             ->get();
-        $count = 0;
         foreach ($evaporacions as $value) {
-            $count++;
-
             $cliente = Cliente::where('ruc', $value->ruc)->first();
-            $user = User::where('identity_document', $value->identificacion_ejecutivo)->first();
+            $user = User::where('identity_document', $value->identificacion_ejecutivo)
+                // ->orWhere('name', 'like', '%' . $value->ejecutivo . '%')
+                ->first();
 
             if (! is_null($cliente) && ! is_null($user)) {
                 $exists = Cuentafinanciera::where('cuenta_financiera', $value->cuenta_financiera)->exists();
 
                 if (! $exists) {
                     $ultimoEvaporacion = Evaporacion::where('cuenta_financiera', $value->cuenta_financiera)->orderByDesc('id')->first();
-
-                    // $estado3 = Estadofactura::where('name', strtolower($value->estado_facturacion3))->first();
                     Cuentafinanciera::create([
                         'cuenta_financiera' => $value->cuenta_financiera,
                         'fecha_evaluacion' => null,
@@ -49,14 +45,15 @@ class ConfiguracionController extends Controller
                         'text_cliente_ruc' => $cliente->ruc,
                         'text_cliente_razon_social' => $cliente->razon_social,
                         'text_user_nombre' => $user->name,
-                        'text_user_equipo' => $user->equipos->last()->nombre,
+                        'text_user_equipo' => $user->equipos->last()->nombre ?? 0,
+                        'ultimo_comentario' => '',
                         'user_id' => $user->id,
                         'cliente_id' => $cliente->id,
+                        'categoria_id' => $ultimoEvaporacion->categoria_id,
+                        'user_evaporacion' => $ultimoEvaporacion->user_evaporacion,
                     ]);
                 } else {
                     $ultimoEvaporacion = Evaporacion::where('cuenta_financiera', $value->cuenta_financiera)->orderByDesc('id')->first();
-
-                    // $estado3 = Estadofactura::where('name', strtolower($value->estado_facturacion3))->first();
                     Cuentafinanciera::where('cuenta_financiera', $value->cuenta_financiera)->update([
                         'cuenta_financiera' => $value->cuenta_financiera,
                         'fecha_evaluacion' => null,
@@ -74,8 +71,11 @@ class ConfiguracionController extends Controller
                         'text_cliente_razon_social' => $cliente->razon_social,
                         'text_user_nombre' => $user->name,
                         'text_user_equipo' => $user->equipos->last()->nombre,
+                        'ultimo_comentario' => '',
                         'user_id' => $user->id,
                         'cliente_id' => $cliente->id,
+                        'categoria_id' => $ultimoEvaporacion->categoria_id,
+                        'user_evaporacion' => $ultimoEvaporacion->user_evaporacion,
                     ]);
                 }
             }
@@ -88,8 +88,7 @@ class ConfiguracionController extends Controller
             ]);
         }
 
-        $this->updateFactura();
-
+        // $this->updateFactura();
         return redirect()->route('cuentas-financieras.index')->with('success', 'Archivo importado exitosamente.');
     }
 
@@ -109,7 +108,7 @@ class ConfiguracionController extends Controller
 
         foreach ($facturasEvaporacion as $key => $value) {
             $estado1 = Estadofactura::where('name', strtolower($value['first']->estado_facturacion1))->first();
-            if (! is_null($estado1) && ! is_null($value['first']->cuentafinanciera_id)) {
+            if (! is_null($value['first']->fecha_emision1) && ! is_null($estado1) && ! is_null($value['first']->cuentafinanciera_id)) {
                 $factura1 = new Factura;
                 $factura1->fecha_emision = $value['first']->fecha_emision1;
                 $factura1->fecha_vencimiento = $value['first']->fecha_vencimiento1;
@@ -121,7 +120,7 @@ class ConfiguracionController extends Controller
             }
 
             $estado2 = Estadofactura::where('name', strtolower($value['first']->estado_facturacion2))->first();
-            if (! is_null($estado2) && ! is_null($value['first']->cuentafinanciera_id)) {
+            if (! is_null($value['first']->fecha_emision2) && ! is_null($estado2) && ! is_null($value['first']->cuentafinanciera_id)) {
                 $factura2 = new Factura;
                 $factura2->fecha_emision = $value['first']->fecha_emision2;
                 $factura2->fecha_vencimiento = $value['first']->fecha_vencimiento2;
@@ -133,7 +132,7 @@ class ConfiguracionController extends Controller
             }
 
             $estado3 = Estadofactura::where('name', strtolower($value['first']->estado_facturacion3))->first();
-            if (! is_null($estado3) && ! is_null($value['first']->cuentafinanciera_id)) {
+            if (! is_null($value['first']->fecha_emision3) && ! is_null($estado3) && ! is_null($value['first']->cuentafinanciera_id)) {
                 $factura3 = new Factura;
                 $factura3->fecha_emision = $value['first']->fecha_emision3;
                 $factura3->fecha_vencimiento = $value['first']->fecha_vencimiento3;
@@ -145,7 +144,8 @@ class ConfiguracionController extends Controller
             }
         }
 
-        return true;
+        // return true;
+        return redirect()->route('cuentas-financieras.index')->with('success', 'Archivo importado exitosamente.');
     }
 
     /**
@@ -186,7 +186,15 @@ class ConfiguracionController extends Controller
             ],
         ];
 
-        return view('sistema.configuracion.index', compact('links'));
+        $links_evaporacion = [
+            [
+                'title' => 'Estados de Factura',
+                'icon' => '<i class="fa-solid fa-route-interstate"></i>',
+                'link' => 'configuracion-estado-factura',
+            ],
+        ];
+
+        return view('sistema.configuracion.index', compact('links', 'links_evaporacion'));
     }
 
     /**
