@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('cuentafinancieras', function (Blueprint $table) {
-            $table->text('ultimo_comentario')->after('text_user_equipo')->change();
+            // $table->text('ultimo_comentario')->after('text_user_equipo')->change();
 
             $table->foreignId('categoria_id')->after('estadofactura_id')->nullable()->constrained();
         });
@@ -24,7 +24,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('cuentafinancieras', function (Blueprint $table) {
-            $table->text('ultimo_comentario')->after('updated_at')->change();
+            // $table->text('ultimo_comentario')->after('updated_at')->change();
 
             $table->dropForeign(['categoria_id']);
             $table->dropColumn('categoria_id');
