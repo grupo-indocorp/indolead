@@ -70,7 +70,12 @@ class CuentafinancieraController extends Controller
         if ($view === 'import') {
             $sedes = Sede::all();
             $categorias = Categoria::whereIn('id', [2, 3])->get();
-            return view('sistema.cuentafinanciera.import', compact('sedes', 'categorias'));
+            $users = User::role('calidad comercial')->get();
+            return view('sistema.cuentafinanciera.import', compact(
+                'sedes',
+                'categorias',
+                'users',
+            ));
         }
     }
 

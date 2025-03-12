@@ -11,11 +11,13 @@ class EvaporacionImport implements ToModel, WithStartRow
 {
     protected $categoria_id;
     protected $sede_id;
+    protected $user_evaporacion;
 
-    public function __construct($categoria_id, $sede_id)
+    public function __construct($categoria_id, $sede_id, $user_evaporacion)
     {
         $this->categoria_id = $categoria_id;
         $this->sede_id = $sede_id;
+        $this->user_evaporacion = $user_evaporacion;
     }
 
     /**
@@ -112,6 +114,7 @@ class EvaporacionImport implements ToModel, WithStartRow
                     'feedback' => $feedback,
                     'categoria_id' => $this->categoria_id,
                     'sede_id' => $this->sede_id,
+                    'user_evaporacion' => $this->user_evaporacion,
                 ]);
             }
         } elseif ($this->categoria_id == 2) {  // movil
@@ -198,6 +201,7 @@ class EvaporacionImport implements ToModel, WithStartRow
                     'feedback' => null,
                     'categoria_id' => $this->categoria_id,
                     'sede_id' => $this->sede_id,
+                    'user_evaporacion' => $this->user_evaporacion,
                 ]);
             }
         }

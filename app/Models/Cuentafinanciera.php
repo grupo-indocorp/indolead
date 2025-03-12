@@ -31,6 +31,7 @@ class Cuentafinanciera extends Model
         'cliente_id',
         'estadofactura_id',
         'categoria_id',
+        'user_evaporacion',
     ];
 
     // Relación uno a muchos inversa
@@ -41,7 +42,12 @@ class Cuentafinanciera extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function userEvaporacion()
+    {
+        return $this->belongsTo(User::class, 'user_evaporacion');
     }
 
     public function estadofactura()

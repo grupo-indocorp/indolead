@@ -50,6 +50,7 @@ class ConfiguracionController extends Controller
                         'user_id' => $user->id,
                         'cliente_id' => $cliente->id,
                         'categoria_id' => $ultimoEvaporacion->categoria_id,
+                        'user_evaporacion' => $ultimoEvaporacion->user_evaporacion,
                     ]);
                 } else {
                     $ultimoEvaporacion = Evaporacion::where('cuenta_financiera', $value->cuenta_financiera)->orderByDesc('id')->first();
@@ -74,6 +75,7 @@ class ConfiguracionController extends Controller
                         'user_id' => $user->id,
                         'cliente_id' => $cliente->id,
                         'categoria_id' => $ultimoEvaporacion->categoria_id,
+                        'user_evaporacion' => $ultimoEvaporacion->user_evaporacion,
                     ]);
                 }
             }

@@ -65,6 +65,7 @@ class Evaporacion extends Model
         'categoria_id',
         'sede_id',
         'cuentafinanciera_id',
+        'user_evaporacion',
     ];
 
     // Relación uno a muchos inversa

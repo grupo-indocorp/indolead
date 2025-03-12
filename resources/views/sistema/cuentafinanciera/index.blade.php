@@ -74,6 +74,7 @@
                     <x-slot:thead>
                         <tr>
                             <th>{{ __('Tipo') }}</th>
+                            <th>{{ __('Responsable') }}</th>
                             <th>{{ __('Cuenta Financiera') }}</th>
                             <th>{{ __('Ruc') }}</th>
                             <th>{{ __('Eecc') }}</th>
@@ -94,6 +95,7 @@
                             @endphp
                             <tr>
                                 <td>{{ $item->categoria->nombre }}</td>
+                                <td>{{ $item->userEvaporacion->name }}</td>
                                 <td>
                                     <b class="cursor-pointer hover:text-sky-600"
                                         data-bs-toggle="tooltip"

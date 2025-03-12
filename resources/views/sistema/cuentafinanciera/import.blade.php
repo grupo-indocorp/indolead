@@ -19,6 +19,14 @@
                     @endforeach
                 </select>
             </div>
+            <div class="form-group">
+                <x-ui.label for="user_evaporacion">{{ __('Ejecutivo *:') }}</x-ui.label>
+                <select class="form-control uppercase" name="user_evaporacion" id="user_evaporacion" required>
+                    @foreach ($users as $value)
+                        <option value="{{ $value->id }}">{{ $value->name }}</option>
+                    @endforeach
+                </select>
+            </div>
             <div class="mb-3">
                 <label for="file" class="form-label">{{ __('Selecciona el archivo Excel *:') }}</label>
                 <input type="file" name="file" id="file" class="form-control" required>
