@@ -10,7 +10,6 @@ use App\Models\Estadofactura;
 use App\Models\Estadoproducto;
 use App\Models\Evaporacion;
 use App\Models\Factura;
-use App\Models\Facturadetalle;
 use App\Models\Sede;
 use App\Models\User;
 use App\Services\CuentafinancieraService;
@@ -113,29 +112,13 @@ class CuentafinancieraController extends Controller
                 ->where('cuentafinanciera_id', $cuentafinanciera->id)
                 ->get();
             $estadofacturas = Estadofactura::all();
+            $estadoproductos = Estadoproducto::all();
 
             return view('sistema.cuentafinanciera.facturas', compact(
                 'cuentafinanciera',
                 'facturas',
                 'estadofacturas',
-            ));
-        } elseif ($view === 'show-factura-detalles') {
-            if (! is_null(request('factura_id'))) {
-                $factura = Factura::find(request('factura_id'));
-            } else {
-                $cuentafinanciera = Cuentafinanciera::with(['facturas'])->find($id);
-                if ($cuentafinanciera && $cuentafinanciera->facturas->isNotEmpty()) {
-                    $factura = $cuentafinanciera->facturas->last();
-                }
-            }
-            $facturadetalles = Facturadetalle::with(['estadoproducto', 'factura'])
-                ->where('factura_id', $factura->id)
-                ->get();
-            $estadoproductos = Estadoproducto::all();
-
-            return view('sistema.cuentafinanciera.factura-detalles', compact(
-                'facturadetalles',
-                'estadoproductos',
+                'estadoproductos'
             ));
         } elseif ($view === 'show-select-equipo') {
             $equipo = Equipo::find($id);
@@ -235,66 +218,73 @@ class CuentafinancieraController extends Controller
             $factura->deuda = request('deuda_factura');
             $factura->estadofactura_id = $estadoFactura->id;
             $factura->cuentafinanciera_id = $cuentafinanciera->id;
-            $factura->save();
 
             // registrar los productos de la factura
             $productosEvaporacion = Evaporacion::where('cuenta_financiera', $cuentafinanciera->cuenta_financiera)->get();
+            $detalle = [];
+            $lastPeriodo = null;
             foreach ($productosEvaporacion as $key => $value) {
                 $estadoProducto = Estadoproducto::where('name', $value->estado_linea)->first();
 
-                $facturadetalle = new Facturadetalle;
-                $facturadetalle->numero_servicio = $value->numero_servicio;
-                $facturadetalle->orden_pedido = $value->orden_pedido;
-                $facturadetalle->producto = $value->producto;
-                $facturadetalle->cargo_fijo = $value->cargo_fijo;
-                $facturadetalle->monto = $value->cargo_fijo;
-                $facturadetalle->descuento = $value->descuento;
-                $facturadetalle->descuento_vigencia = $value->descuento_vigencia;
-                $facturadetalle->fecha_solicitud = $value->fecha_solicitud;
-                $facturadetalle->fecha_activacion = $value->fecha_activacion;
-                $facturadetalle->periodo_servicio = $value->periodo_servicio;
-                $facturadetalle->estadoproducto_id = $estadoProducto->id;
-                $facturadetalle->factura_id = $factura->id;
-                $facturadetalle->save();
-            }
+                $estadoProducto = Estadoproducto::where('name', strtolower($value->estado_linea))->first();
+                $detalle[] = [
+                    'numero_servicio' => $value->numero_servicio,
+                    'orden_pedido' => $value->orden_pedido,
+                    'producto' => $value->producto,
+                    'cargo_fijo' => $value->cargo_fijo,
+                    'monto' => 0,
+                    'descuento' => $value->descuento,
+                    'descuento_vigencia' => $value->descuento_vigencia,
+                    'fecha_instalacion' => $value->fecha_instalacion,
+                    'fecha_solicitud' => $value->fecha_solicitud,
+                    'fecha_activacion' => $value->fecha_activacion,
+                    'periodo_servicio' => $value->periodo_servicio,
+                    'fecha_estadoproducto' => $value->fecha_evaluacion,
+                    'estadoproducto' => $estadoProducto ? $estadoProducto->name : strtolower($value->estado_linea),
+                    'estadoproducto_id' => $estadoProducto ? $estadoProducto->id : null,
+                    'cuentafinanciera_id' => $value->cuentafinanciera_id,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
 
-            $ultimoDetalle = Facturadetalle::where('factura_id', $factura->id)->latest()->first();
+                $lastPeriodo = $value->periodo_servicio;
+            }
+            $factura->detalle = json_encode($detalle, true);
+            $factura->save();
 
             $cuentafinanciera->fecha_evaluacion = now();
             $cuentafinanciera->estadofactura_id = $estadoFactura->id;
             $cuentafinanciera->estado_evaluacion = $estadoFactura->name;
-            $cuentafinanciera->periodo = $ultimoDetalle->periodo_servicio;
+            $cuentafinanciera->periodo = $lastPeriodo;
             $cuentafinanciera->save();
 
             return response()->json([
                 'success' => true,
             ]);
         } elseif ($view === 'update-factura-detalles') {
-            $facturadetalle = Facturadetalle::find(request('facturadetalle_id'));
             $estadoProducto = Estadoproducto::find(request('estadoproducto_id'));
 
-            $facturadetalle->monto = request('monto');
-            $facturadetalle->fecha_estadoproducto = request('fecha_estadoproducto');
-            $facturadetalle->estadoproducto_id = $estadoProducto->id;
-            $facturadetalle->save();
+            $factura = Factura::find(request('factura_id'));
+            $detalle = json_decode($factura->detalle, true);
+            $detalle[request('index')]['monto'] = request('monto');
+            $detalle[request('index')]['fecha_estadoproducto'] = request('fecha_estadoproducto');
+            $detalle[request('index')]['estadoproducto'] = $estadoProducto->name ?? '';
+            $detalle[request('index')]['estadoproducto_id'] = $estadoProducto->id ?? null;
+            $factura->detalle = json_encode($detalle);
+            $factura->save();
 
-            // Actualizando monto de la factura
-            $facturadetalles = Facturadetalle::with(['estadoproducto'])
-                ->where('factura_id', $facturadetalle->factura_id)
-                ->get();
             $montoTotal = 0;
-            foreach ($facturadetalles as $value) {
+            foreach (json_decode($factura->detalle) as $value) {
                 $montoTotal = $value->monto + $montoTotal;
             }
-            $factura = Factura::find($facturadetalle->factura_id);
             $factura->monto = $montoTotal;
             $factura->save();
 
             return response()->json([
                 'success' => true,
-                'monto' => $facturadetalle->monto,
-                'fechaEstadoProducto' => $facturadetalle->fecha_estadoproducto,
-                'estadoProducto' => $facturadetalle->estadoproducto->name,
+                'monto' => $detalle[request('index')]['monto'],
+                'fechaEstadoProducto' => $detalle[request('index')]['fecha_estadoproducto'],
+                'estadoProducto' => $detalle[request('index')]['estadoproducto'],
             ]);
         }
     }
