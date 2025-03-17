@@ -113,11 +113,13 @@ class CuentafinancieraController extends Controller
                 ->where('cuentafinanciera_id', $cuentafinanciera->id)
                 ->get();
             $estadofacturas = Estadofactura::all();
+            $estadoproductos = Estadoproducto::all();
 
             return view('sistema.cuentafinanciera.facturas', compact(
                 'cuentafinanciera',
                 'facturas',
                 'estadofacturas',
+                'estadoproductos'
             ));
         } elseif ($view === 'show-factura-detalles') {
             if (! is_null(request('factura_id'))) {
@@ -128,9 +130,11 @@ class CuentafinancieraController extends Controller
                     $factura = $cuentafinanciera->facturas->last();
                 }
             }
-            $facturadetalles = Facturadetalle::with(['estadoproducto', 'factura'])
-                ->where('factura_id', $factura->id)
-                ->get();
+            // $facturadetalles = Facturadetalle::with(['estadoproducto', 'factura'])
+            //     ->where('factura_id', $factura->id)
+            //     ->get();
+            $facturadetalles = $factura->detalle();
+            dd($facturadetalles);
             $estadoproductos = Estadoproducto::all();
 
             return view('sistema.cuentafinanciera.factura-detalles', compact(

@@ -176,9 +176,9 @@
         {{-- facturas --}}
         <section id="cuentafinancieraFacturas"></section>
 
-        <x-sistema.card>
+        {{-- <x-sistema.card>
             <section id="facturaDetalles"></section>
-        </x-sistema.card>
+        </x-sistema.card> --}}
     </section>
 </x-sistema.modal>
 <script>
@@ -225,7 +225,7 @@
             success: function( result ) {
                 $('#cuentafinancieraShow').html(result);
                 cuentafinancieraFacturas(cuentafinanciera_id);
-                facturaDetalles(cuentafinanciera_id);
+                // facturaDetalles(cuentafinanciera_id);
             },
             error: function( response ) {
                 console.log('error');

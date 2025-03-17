@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Cliente;
 use App\Models\Cuentafinanciera;
 use App\Models\Estadofactura;
+use App\Models\Estadoproducto;
 use App\Models\Evaporacion;
 use App\Models\Factura;
 use App\Models\User;
@@ -17,7 +18,7 @@ class ConfiguracionController extends Controller
     {
         $evaporacions = Evaporacion::select('cuenta_financiera', 'ruc', 'identificacion_ejecutivo')
             ->groupBy('cuenta_financiera', 'ruc', 'identificacion_ejecutivo')
-            ->get();
+            ->paginate(50);
         foreach ($evaporacions as $value) {
             $cliente = Cliente::where('ruc', $value->ruc)->first();
             $user = User::where('identity_document', $value->identificacion_ejecutivo)
@@ -107,6 +108,27 @@ class ConfiguracionController extends Controller
             });
 
         foreach ($facturasEvaporacion as $key => $value) {
+            $estadoProducto = Estadoproducto::where('name', strtolower($value['first']->estado_linea))->first();
+            $detalle = [
+                'numero_servicio' => $value['first']->numero_servicio,
+                'orden_pedido' => $value['first']->orden_pedido,
+                'producto' => $value['first']->producto,
+                'cargo_fijo' => $value['first']->cargo_fijo,
+                'monto' => 0,
+                'descuento' => $value['first']->descuento,
+                'descuento_vigencia' => $value['first']->descuento_vigencia,
+                'fecha_instalacion' => $value['first']->fecha_instalacion,
+                'fecha_solicitud' => $value['first']->fecha_solicitud,
+                'fecha_activacion' => $value['first']->fecha_activacion,
+                'periodo_servicio' => $value['first']->periodo_servicio,
+                'fecha_estadoproducto' => $value['first']->fecha_evaluacion,
+                'estadoproducto' => $estadoProducto ? $estadoProducto->name : strtolower($value['first']->estado_linea),
+                'estadoproducto_id' => $estadoProducto ? $estadoProducto->id : null,
+                'cuentafinanciera_id' => $value['first']->cuentafinanciera_id,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+
             $estado1 = Estadofactura::where('name', strtolower($value['first']->estado_facturacion1))->first();
             if (! is_null($value['first']->fecha_emision1) && ! is_null($estado1) && ! is_null($value['first']->cuentafinanciera_id)) {
                 $factura1 = new Factura;
@@ -114,6 +136,7 @@ class ConfiguracionController extends Controller
                 $factura1->fecha_vencimiento = $value['first']->fecha_vencimiento1;
                 $factura1->monto = $value['total_monto_facturado1'];
                 $factura1->deuda = $value['first']->deuda1;
+                $factura1->detalle = json_encode($detalle, true);
                 $factura1->estadofactura_id = $estado1->id;
                 $factura1->cuentafinanciera_id = $value['first']->cuentafinanciera_id;
                 $factura1->save();
@@ -126,6 +149,7 @@ class ConfiguracionController extends Controller
                 $factura2->fecha_vencimiento = $value['first']->fecha_vencimiento2;
                 $factura2->monto = $value['total_monto_facturado2'];
                 $factura2->deuda = $value['first']->deuda2;
+                $factura2->detalle = json_encode($detalle, true);
                 $factura2->estadofactura_id = $estado2->id;
                 $factura2->cuentafinanciera_id = $value['first']->cuentafinanciera_id;
                 $factura2->save();
@@ -138,6 +162,7 @@ class ConfiguracionController extends Controller
                 $factura3->fecha_vencimiento = $value['first']->fecha_vencimiento3;
                 $factura3->monto = $value['total_monto_facturado3'];
                 $factura3->deuda = $value['first']->deuda3;
+                $factura3->detalle = json_encode($detalle, true);
                 $factura3->estadofactura_id = $estado3->id;
                 $factura3->cuentafinanciera_id = $value['first']->cuentafinanciera_id;
                 $factura3->save();

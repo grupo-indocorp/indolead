@@ -43,7 +43,7 @@ class CuentafinancieraService
             'categoria',
         ])
             ->where($where)
-            ->orderBy('cliente_id')
+            ->orderBy('id')
             ->paginate(50);
 
         return $cuentafinanciera;
