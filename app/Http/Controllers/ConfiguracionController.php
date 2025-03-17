@@ -18,7 +18,8 @@ class ConfiguracionController extends Controller
     {
         $evaporacions = Evaporacion::select('cuenta_financiera', 'ruc', 'identificacion_ejecutivo')
             ->groupBy('cuenta_financiera', 'ruc', 'identificacion_ejecutivo')
-            ->paginate(50);
+            // ->paginate(50);
+            ->get();
         foreach ($evaporacions as $value) {
             $cliente = Cliente::where('ruc', $value->ruc)->first();
             $user = User::where('identity_document', $value->identificacion_ejecutivo)
@@ -107,9 +108,10 @@ class ConfiguracionController extends Controller
                 ];
             });
 
+        $detalle = [];
         foreach ($facturasEvaporacion as $key => $value) {
             $estadoProducto = Estadoproducto::where('name', strtolower($value['first']->estado_linea))->first();
-            $detalle = [
+            $detalle[] = [
                 'numero_servicio' => $value['first']->numero_servicio,
                 'orden_pedido' => $value['first']->orden_pedido,
                 'producto' => $value['first']->producto,
@@ -167,6 +169,7 @@ class ConfiguracionController extends Controller
                 $factura3->cuentafinanciera_id = $value['first']->cuentafinanciera_id;
                 $factura3->save();
             }
+            $detalle = [];
         }
 
         // return true;

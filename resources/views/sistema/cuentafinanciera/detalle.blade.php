@@ -225,23 +225,6 @@
             success: function( result ) {
                 $('#cuentafinancieraShow').html(result);
                 cuentafinancieraFacturas(cuentafinanciera_id);
-                // facturaDetalles(cuentafinanciera_id);
-            },
-            error: function( response ) {
-                console.log('error');
-            }
-        });
-    }
-    function facturaDetalles(cuentafinanciera_id, factura_id=null) {
-        $.ajax({
-            url: `{{ url('cuentas-financieras/${cuentafinanciera_id}') }}`,
-            method: "GET",
-            data: {
-                view: 'show-factura-detalles',
-                factura_id: factura_id,
-            },
-            success: function( result ) {
-                $('#facturaDetalles').html(result);
             },
             error: function( response ) {
                 console.log('error');

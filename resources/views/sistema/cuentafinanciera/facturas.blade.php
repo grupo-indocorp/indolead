@@ -280,10 +280,7 @@
                     </tr>
                 </x-slot>
                 <x-slot:tbody>
-                    @php
-                        $item = json_decode($facturas->last()->detalle);
-                    @endphp
-                    {{-- @foreach (json_decode($facturas->last()->detalle) as $item) --}}
+                    @foreach (json_decode($facturas->last()->detalle) as $index => $item)
                         <tr x-data="{
                                 editMode: false,
                                 isSaving: false,
@@ -313,6 +310,8 @@
                                         data: {
                                             view: 'update-factura-detalles',
                                             facturadetalle_id: '0',
+                                            factura_id: '{{ $facturas->last()->id }}',
+                                            index: '{{ $index }}',
                                             monto: self.monto,
                                             fecha_estadoproducto: self.fechaEstadoProducto,
                                             estadoproducto_id: self.estadoProductoId,
@@ -413,7 +412,7 @@
                                 </template>
                             </td>
                         </tr>
-                    {{-- @endforeach --}}
+                    @endforeach
                 </x-slot>
                 <x-slot:tfoot></x-slot>
             </x-ui.table>
