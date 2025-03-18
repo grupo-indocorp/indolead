@@ -297,7 +297,7 @@ class ClienteService
             $contacto = new Contacto;
             $contacto->dni = request('dni');
             $contacto->nombre = request('nombre');
-            $contacto->celular = request('celular');
+            $contacto->celular = request('celular') ?? '';
             $contacto->cargo = request('cargo');
             $contacto->correo = request('correo') ?? '';
             $contacto->fecha_ultimo = now();
