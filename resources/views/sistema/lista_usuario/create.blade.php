@@ -18,7 +18,7 @@
                 <x-ui.input type="text" id="second_surname" name="second_surname" />
             </div>
             <div class="form-group">
-                <x-ui.label for="personal_phone">{{ __('Celular Personal *') }}</x-ui.label>
+                <x-ui.label for="personal_phone">{{ __('Celular Personal') }}</x-ui.label>
                 <x-ui.input type="text" id="personal_phone" name="personal_phone" />
             </div>
             <div class="form-group">
@@ -68,6 +68,7 @@
         </article>
     </section>
     <div class="flex justify-end w-full">
+        <span id="jsonerror" class="text-red-400 w-full"></span>
         <x-ui.button type="submit" onclick="submitUsuario(this)">{{ __('Agregar') }}</x-ui.button>
     </div>
 </x-sistema.modal>
@@ -75,6 +76,8 @@
     function submitUsuario(button) {
         limpiarError();
         capturarToken();
+
+        $('#jsonerror').text('');
         $.ajax({
             url: `{{ url('lista_usuario') }}`,
             method: "POST",
@@ -104,6 +107,9 @@
                 }
             },
             error: function (response) {
+                if (response.responseJSON.error) {
+                    $('#jsonerror').text(response.responseJSON.error);
+                }
                 mostrarError(response)
                 button.disabled = false;
             }

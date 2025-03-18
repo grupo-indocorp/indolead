@@ -57,19 +57,17 @@ class ListaUsuarioController extends Controller
         $view = request('view');
         if ($view === 'store') {
             $request->validate([
-                'first_name' => 'required',
-                'first_surname' => 'required',
-                'personal_phone' => 'required',
-                'personal_email' => 'required|email',
-                'tipodocumento_id' => 'required',
-                'identity_document' => 'required',
-                'sede_id' => 'required',
-                'role_id' => 'required',
-            ],
+                    'first_name' => 'required',
+                    'first_surname' => 'required',
+                    'personal_email' => 'required|email',
+                    'tipodocumento_id' => 'required',
+                    'identity_document' => 'required',
+                    'sede_id' => 'required',
+                    'role_id' => 'required',
+                ],
                 [
                     'first_name.required' => 'El "Nombre" es obligatorio.',
                     'first_surname.required' => 'El "Apellido Paterno" es obligatorio.',
-                    'personal_phone.required' => 'El "Celular" es obligatorio.',
                     'personal_email.required' => 'El "Correo Electrónico" es obligatorio.',
                     'personal_email.email' => 'El "Correo" no es válido, (email@example.com).',
                     'tipodocumento_id.required' => 'El "Tipo de Documento" es obligatorio.',
@@ -96,13 +94,18 @@ class ListaUsuarioController extends Controller
             $second_surname = strtolower(request('second_surname')) ?? '';
             $name = $first_name.' '.$second_name.' '.$first_surname.' '.$second_surname;
             $email = str_replace(' ', '', $first_name).'.'.str_replace(' ', '', $first_surname).'@indotechsac.com';
+
+            if (User::where('email', $email)->exists()) {
+                return response()->json(['error' => 'El usuario ya existe con el correo electrónico ' . $email], 422);
+            }
+
             $user = User::create([
                 'first_name' => $first_name,
                 'second_name' => $second_name,
                 'first_surname' => $first_surname,
                 'second_surname' => $second_surname,
                 'name' => strtolower($name),
-                'personal_phone' => request('personal_phone'),
+                'personal_phone' => request('personal_phone') ?? '',
                 'personal_email' => strtolower(request('personal_email')),
                 'tipodocumento_id' => request('tipodocumento_id'),
                 'identity_document' => request('identity_document'),
