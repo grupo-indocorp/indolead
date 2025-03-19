@@ -71,9 +71,9 @@
                         </template>
                     </div>
                 </div>
-                <div class="flex gap-2">
+                <div class="flex items-center justify-between gap-2">
                     <b>Cuenta Financiera:</b>
-                    <div class="form-group w-[60%]">
+                    <div class="w-[55%]">
                         <select class="form-control uppercase"
                             name="cuenta_financiera"
                             id="cuenta_financiera">
@@ -85,6 +85,9 @@
                             @endforeach
                         </select>
                     </div>
+                    <span class="hover:cursor-pointer hover:text-slate-500" id="copiarBtn">
+                        <i class="fa-solid fa-copy"></i>
+                    </span>
                 </div>
                 <section id="cuentafinancieraShow"></section>
             </x-sistema.card>
@@ -173,9 +176,9 @@
         {{-- facturas --}}
         <section id="cuentafinancieraFacturas"></section>
 
-        <x-sistema.card>
+        {{-- <x-sistema.card>
             <section id="facturaDetalles"></section>
-        </x-sistema.card>
+        </x-sistema.card> --}}
     </section>
 </x-sistema.modal>
 <script>
@@ -204,6 +207,14 @@
 
         $('#cuenta_financiera').trigger('change');
     });
+    $('#copiarBtn').on('click', function() {
+        const selectedText = $('#cuenta_financiera option:selected').text();
+        navigator.clipboard.writeText(selectedText).then(function() {
+            console.log('Texto copiado: ', selectedText);
+        }).catch(function(err) {
+            console.error('Error al copiar el texto: ', err);
+        });
+    });
     function cuentafinancieraShow(cuentafinanciera_id) {
         $.ajax({
             url: `{{ url('cuentas-financieras/${cuentafinanciera_id}') }}`,
@@ -214,23 +225,6 @@
             success: function( result ) {
                 $('#cuentafinancieraShow').html(result);
                 cuentafinancieraFacturas(cuentafinanciera_id);
-                facturaDetalles(cuentafinanciera_id);
-            },
-            error: function( response ) {
-                console.log('error');
-            }
-        });
-    }
-    function facturaDetalles(cuentafinanciera_id, factura_id=null) {
-        $.ajax({
-            url: `{{ url('cuentas-financieras/${cuentafinanciera_id}') }}`,
-            method: "GET",
-            data: {
-                view: 'show-factura-detalles',
-                factura_id: factura_id,
-            },
-            success: function( result ) {
-                $('#facturaDetalles').html(result);
             },
             error: function( response ) {
                 console.log('error');

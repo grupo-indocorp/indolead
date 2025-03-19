@@ -16,6 +16,16 @@
         $('.ui-table th').addClass('text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7');
         $('.ui-table td').addClass('align-middle text-center text-xs uppercase');
 
+        // Agregar clase hover a las filas
+        $('.ui-table tbody tr').hover(
+            function() {
+                $(this).addClass('bg-gray-100');
+            },
+            function() {
+                $(this).removeClass('bg-gray-100');
+            }
+        );
+
         // Datatable
         $('#ui-table').DataTable({
             dom: '<"flex justify-between p-4"fl>rt<"flex justify-between p-4"ip>',

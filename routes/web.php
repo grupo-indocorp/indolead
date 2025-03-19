@@ -5,6 +5,7 @@ use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ClienteGestionController;
 use App\Http\Controllers\ConfiguracionCategoriaController;
 use App\Http\Controllers\ConfiguracionController;
+use App\Http\Controllers\ConfiguracionEstadoFacturaController;
 use App\Http\Controllers\ConfiguracionEtapaController;
 use App\Http\Controllers\ConfiguracionExcelController;
 use App\Http\Controllers\ConfiguracionFichaClienteController;
@@ -15,7 +16,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EquipoController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\FacturaController;
-use App\Http\Controllers\FileController; // Importa el FileController
+use App\Http\Controllers\FileController;
 use App\Http\Controllers\FileViewController;
 use App\Http\Controllers\FolderController;
 use App\Http\Controllers\FunnelController;
@@ -77,8 +78,9 @@ Route::middleware([
         'configuracion-producto' => ConfiguracionProductoController::class,
         'configuracion-excel' => ConfiguracionExcelController::class,
         'configuracion-ficha-cliente' => ConfiguracionFichaClienteController::class,
-        'files' => FileController::class, // Ruta para la gestión de biblioteca
-        'files-view' => FileViewController::class, // Ruta para la visualización de biblioteca
+        'configuracion-estado-factura' => ConfiguracionEstadoFacturaController::class,
+        'files' => FileController::class,
+        'files-view' => FileViewController::class,
     ]);
 
     // Ruta adicional para la descarga de archivos
@@ -100,8 +102,7 @@ Route::middleware([
     Route::get('export/indotech/funnel', [ExportController::class, 'indotechFunnel']);
 
     // Importación de datos
-    Route::post('import/evaporacion', [ImportController::class, 'evaporacion'])
-        ->name('import.evaporacion');
+    Route::post('import/evaporacion', [ImportController::class, 'evaporacion'])->name('import.evaporacion');
 
     // Archivos
     Route::resource('files', FileController::class);
@@ -114,7 +115,6 @@ Route::middleware([
     });
 });
 
-// Configuración de Livewire
 Livewire::setScriptRoute(function ($handle) {
     return Route::get('/indotech/vendor/livewire/livewire/dist/livewire.js', $handle);
 });

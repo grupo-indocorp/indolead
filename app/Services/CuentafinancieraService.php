@@ -20,23 +20,28 @@ class CuentafinancieraService
         if (isset($filters['periodo'])) {
             $where[] = ['periodo', 'like', '%'.$filters['periodo'].'%'];
         }
+        if (isset($filters['cuentafinanciera'])) {
+            $where[] = ['cuenta_financiera', 'like', '%'.$filters['cuentafinanciera'].'%'];
+        }
+        if (isset($filters['ruc'])) {
+            $where[] = ['text_cliente_ruc', 'like', '%'.$filters['ruc'].'%'];
+        }
 
         $cuentafinanciera = Cuentafinanciera::with([
-            'cliente',
-            'user',
-            'user.equipos',
-            'evaporacions',
-            'estadofactura',
-            // 'facturas' => function ($query) {
-            //     $query->orderByDesc('id')->limit(3);
-            // },
-            'facturas',
-            'facturas.estadofactura',
-            'facturas.facturadetalles',
-            'facturas.facturadetalles.estadoproducto',
-        ])
+                'cliente',
+                'user',
+                'user.equipos',
+                'evaporacions',
+                'estadofactura',
+                // 'facturas' => function ($query) {
+                //     $query->orderByDesc('id')->limit(3);
+                // },
+                'facturas',
+                'facturas.estadofactura',
+                'categoria',
+            ])
             ->where($where)
-            ->orderBy('cliente_id')
+            ->orderBy('id')
             ->paginate(50);
 
         return $cuentafinanciera;

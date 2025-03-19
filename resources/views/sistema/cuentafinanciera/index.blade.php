@@ -3,25 +3,11 @@
 @can('sistema.evaporacion')
     @section('content')
         <x-sistema.card-contenedor>
-            <section class="p-4 pb-0">
-                <div class="d-flex flex-row justify-content-between">
-                    <div>
-                        <x-sistema.titulo title="Cuentas Financieras" />
-                    </div>
-                </div>
+            <x-sistema.card-contenedor-header title="Cuentas Financieras">
                 @can('sistema.evaporacion.subir')
-                    <div>
-                        <form action="{{ route('import.evaporacion') }}" method="POST" enctype="multipart/form-data">
-                            @csrf
-                            <div class="mb-3">
-                                <label for="file" class="form-label">Selecciona el archivo Excel:</label>
-                                <input type="file" name="file" id="file" class="form-control" required>
-                            </div>
-                            <x-ui.button type="submit">Subir</x-ui.button>
-                        </form>
-                    </div>
+                    <x-ui.button type="button" onclick="importExcel()">{{ __('Importar') }}</x-ui.button>
                 @endcan
-            </section>
+            </x-sistema.card-contenedor-header>
             {{-- Filter --}}
             <section class="p-4 pb-0">
                 <form action="{{ route('cuentas-financieras.index') }}" method="GET" class="m-0">
@@ -52,14 +38,32 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="form-group flex flex-col">
+                        <div class="form-group">
                             <label for="filtro_periodo" class="form-control-label">Periodo:</label>
                             <input class="form-control" 
                                 type="search"
                                 value="{{ request('filtro_periodo') }}"
                                 id="filtro_periodo"
                                 name="filtro_periodo"
-                                placeholder="Buscar por Periodo">
+                                placeholder="Periodo">
+                        </div>
+                        <div class="form-group">
+                            <label for="filtro_cuentafinanciera" class="form-control-label">Cuenta Financiera:</label>
+                            <input class="form-control"
+                                type="search"
+                                value="{{ request('filtro_cuentafinanciera') }}"
+                                id="filtro_cuentafinanciera"
+                                name="filtro_cuentafinanciera"
+                                placeholder="Cuenta Financiera">
+                        </div>
+                        <div class="form-group">
+                            <label for="filtro_ruc" class="form-control-label">RUC:</label>
+                            <input class="form-control"
+                                type="search"
+                                value="{{ request('filtro_ruc') }}"
+                                id="filtro_ruc"
+                                name="filtro_ruc"
+                                placeholder="RUC">
                         </div>
                     </div>
                 </form>
@@ -69,18 +73,14 @@
                 <x-ui.table id="cuentafinanciera">
                     <x-slot:thead>
                         <tr>
+                            <th>{{ __('Tipo') }}</th>
+                            <th>{{ __('Responsable') }}</th>
                             <th>{{ __('Cuenta Financiera') }}</th>
                             <th>{{ __('Ruc') }}</th>
                             <th>{{ __('Eecc') }}</th>
                             <th>{{ __('Ciclo Facturación') }}</th>
-                            {{-- <th>{{ __('Estado C.F') }}</th> --}}
-                            {{-- <th>{{ __('Estado Producto') }}</th> --}}
                             <th>{{ __('Periodo') }}</th>
-                            {{-- <th>{{ __('Producto (M/F)') }}</th> --}}
                             <th>{{ __('Estado Factura') }}</th>
-                            {{-- <th>{{ __('Factura Antiguo') }}</th>
-                            <th>{{ __('Factura Intermedio') }}</th>
-                            <th>{{ __('Factura Último') }}</th> --}}
                             <th>{{ __('Monto') }}</th>
                             <th>{{ __('Deuda') }}</th>
                         </tr>
@@ -94,6 +94,8 @@
                                 $factura3 = $facturas->get(0) ?? null;
                             @endphp
                             <tr>
+                                <td>{{ $item->categoria->nombre }}</td>
+                                <td>{{ $item->userEvaporacion->name }}</td>
                                 <td>
                                     <b class="cursor-pointer hover:text-sky-600"
                                         data-bs-toggle="tooltip"
@@ -115,58 +117,20 @@
                                     </div>
                                 </td>
                                 <td>{{ $item->ciclo }}</td>
-                                {{-- <td>
-                                    @if (!is_null($item->estadofactura_id))
-                                        @if ($item->estadofactura->id_name === 'pagado')
-                                            <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-green-50 text-green-500 border border-green-500">
-                                                {{ $item->estadofactura->name }}
-                                            </span>
-                                        @elseif ($item->estadofactura->id_name === 'pagado_ajuste' || $item->estadofactura->id_name === 'pagado_reclamo')
-                                            <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-yellow-50 text-yellow-500 border border-yellow-500">
-                                                {{ $item->estadofactura->name }}
-                                            </span>
-                                        @else
-                                            <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-red-50 text-red-500 border border-red-500">
-                                                {{ $item->estadofactura->name }}
-                                            </span>
-                                        @endif
-                                    @endif
-                                </td> --}}
-                                {{-- <td>
-                                    @if (!is_null($factura3))
-                                        @switch($factura3->facturadetalles->last()->estadoproducto->id_name)
-                                            @case('activo')
-                                                <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-green-50 text-green-500 border border-green-500">
-                                                    {{ $factura3->facturadetalles->last()->estadoproducto->name }}
-                                                </span>
-                                                @break
-                                            @case('corte_deuda_parcial')
-                                                <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-yellow-50 text-yellow-500 border border-yellow-500">
-                                                    {{ $factura3->facturadetalles->last()->estadoproducto->name }}
-                                                </span>
-                                                @break
-                                            @default
-                                                <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-red-50 text-red-500 border border-red-500">
-                                                    {{ $factura3->facturadetalles->last()->estadoproducto->name }}
-                                                </span>
-                                        @endswitch
-                                    @endif
-                                </td> --}}
                                 <td>{{ $item->periodo }}</td>
-                                {{-- <td></td> --}}
                                 <td class="flex flex-col">
-                                    @if (!is_null($factura1))
-                                        @if ($factura1->estadofactura->id_name === 'pagado')
+                                    @if (!is_null($factura3))
+                                        @if ($factura3->estadofactura->id_name === 'pagado')
                                             <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-green-50 text-green-500 border border-green-500">
-                                                {{ $factura1->estadofactura->name }}
+                                                {{ $factura3->estadofactura->name }}
                                             </span>
-                                        @elseif ($factura1->estadofactura->id_name === 'pagado_ajuste' || $factura1->estadofactura->id_name === 'pagado_reclamo')
+                                        @elseif ($factura3->estadofactura->id_name === 'pagado_ajuste' || $factura3->estadofactura->id_name === 'pagado_reclamo')
                                             <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-yellow-50 text-yellow-500 border border-yellow-500">
-                                                {{ $factura1->estadofactura->name }}
+                                                {{ $factura3->estadofactura->name }}
                                             </span>
                                         @else
                                             <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-red-50 text-red-500 border border-red-500">
-                                                {{ $factura1->estadofactura->name }}
+                                                {{ $factura3->estadofactura->name }}
                                             </span>
                                         @endif
                                     @endif
@@ -185,23 +149,6 @@
                                             </span>
                                         @endif
                                     @endif
-                                    @if (!is_null($factura3))
-                                        @if ($factura3->estadofactura->id_name === 'pagado')
-                                            <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-green-50 text-green-500 border border-green-500">
-                                                {{ $factura3->estadofactura->name }}
-                                            </span>
-                                        @elseif ($factura3->estadofactura->id_name === 'pagado_ajuste' || $factura3->estadofactura->id_name === 'pagado_reclamo')
-                                            <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-yellow-50 text-yellow-500 border border-yellow-500">
-                                                {{ $factura3->estadofactura->name }}
-                                            </span>
-                                        @else
-                                            <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-red-50 text-red-500 border border-red-500">
-                                                {{ $factura3->estadofactura->name }}
-                                            </span>
-                                        @endif
-                                    @endif
-                                </td>
-                                {{-- <td>
                                     @if (!is_null($factura1))
                                         @if ($factura1->estadofactura->id_name === 'pagado')
                                             <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-green-50 text-green-500 border border-green-500">
@@ -218,40 +165,6 @@
                                         @endif
                                     @endif
                                 </td>
-                                <td>
-                                    @if (!is_null($factura2))
-                                        @if ($factura2->estadofactura->id_name === 'pagado')
-                                            <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-green-50 text-green-500 border border-green-500">
-                                                {{ $factura2->estadofactura->name }}
-                                            </span>
-                                        @elseif ($factura2->estadofactura->id_name === 'pagado_ajuste' || $factura2->estadofactura->id_name === 'pagado_reclamo')
-                                            <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-yellow-50 text-yellow-500 border border-yellow-500">
-                                                {{ $factura2->estadofactura->name }}
-                                            </span>
-                                        @else
-                                            <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-red-50 text-red-500 border border-red-500">
-                                                {{ $factura2->estadofactura->name }}
-                                            </span>
-                                        @endif
-                                    @endif
-                                </td>
-                                <td>
-                                    @if (!is_null($factura3))
-                                        @if ($factura3->estadofactura->id_name === 'pagado')
-                                            <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-green-50 text-green-500 border border-green-500">
-                                                {{ $factura3->estadofactura->name }}
-                                            </span>
-                                        @elseif ($factura3->estadofactura->id_name === 'pagado_ajuste' || $factura3->estadofactura->id_name === 'pagado_reclamo')
-                                            <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-yellow-50 text-yellow-500 border border-yellow-500">
-                                                {{ $factura3->estadofactura->name }}
-                                            </span>
-                                        @else
-                                            <span class="text-xs font-weight-bold mb-0 px-3 py-1 rounded-lg bg-red-50 text-red-500 border border-red-500">
-                                                {{ $factura3->estadofactura->name }}
-                                            </span>
-                                        @endif
-                                    @endif
-                                </td> --}}
                                 <td>{{ $factura3 != null ? $factura3->monto : 0 }}</td>
                                 <td>{{ $factura3 != null ? $factura3->deuda : 0 }}</td>
                             </tr>
@@ -265,6 +178,22 @@
     @endsection
     @section('script')
         <script>
+            function importExcel() {
+                $.ajax({
+                    url: `{{ url('cuentas-financieras/create') }}`,
+                    method: "GET",
+                    data: {
+                        view: 'import'
+                    },
+                    success: function( result ) {
+                        $('#contenedorModal').html(result);
+                        openModal();
+                    },
+                    error: function( response ) {
+                        console.log('error');
+                    }
+                });
+            }
             $('#filtro_equipo_id').select2({
                 placeholder: 'Seleccionar',
                 allowClear: true,
@@ -313,8 +242,23 @@
                     });
                 }
             });
+            $('#filtro_periodo').on('keypress', function(e) {
+                if (e.which == 13) {
+                    filterCuentaFinanciera();
+                }
+            });
+            $('#filtro_cuentafinanciera').on('keypress', function(e) {
+                if (e.which == 13) {
+                    filterCuentaFinanciera();
+                }
+            });
+            $('#filtro_ruc').on('keypress', function(e) {
+                if (e.which == 13) {
+                    filterCuentaFinanciera();
+                }
+            });
             function filterCuentaFinanciera() {
-                window.location.href = `/cuentas-financieras?filtro_equipo_id=${$('#filtro_equipo_id').val()}&filtro_user_id=${$('#filtro_user_id').val()}&filtro_periodo=${$('#filtro_periodo').val()}`;
+                window.location.href = `/cuentas-financieras?filtro_equipo_id=${$('#filtro_equipo_id').val()}&filtro_user_id=${$('#filtro_user_id').val()}&filtro_periodo=${$('#filtro_periodo').val()}&filtro_cuentafinanciera=${$('#filtro_cuentafinanciera').val()}&filtro_ruc=${$('#filtro_ruc').val()}`;
             }
             function cuentafinancieraDetalle(cuentafinanciera_id) {
                 $.ajax({
