@@ -102,7 +102,8 @@ class ClienteGestionController extends Controller
             }
         }
 
-        $etapas = Etapa::all();
+        // $etapas = Etapa::all();
+        $etapas = Etapa::where('estado', true)->get();
 
         // Resto de la lógica para filtrar clientes...
         $where = [];
@@ -202,7 +203,9 @@ class ClienteGestionController extends Controller
     private function contarClientesPorEtapa($user, $filtro_equipo_id = null, $filtro_user_id = null, $filtro_sede_id = null, $filtro_fecha_desde = null, $filtro_fecha_hasta = null)
     {
         $rol = $user->roles->first()->name; // Obtener el rol del usuario
-        $etapas = Etapa::all(); // Obtener todas las etapas
+        $etapas = Etapa::where('estado', true)
+            ->orderBy('orden')
+            ->get();
         $conteoEtapas = [];
 
         foreach ($etapas as $etapa) {
