@@ -88,6 +88,7 @@ class ConfiguracionEtapaController extends Controller
                     'blindaje' => 'required|integer|min:0|bail',
                     'avance' => 'required|min:0|bail',
                     'probabilidad' => 'required|bail',
+                    'estado' => 'required',
                 ],
                 [
                     'nombre.required' => 'El "Nombre" es obligatorio.',
@@ -98,6 +99,7 @@ class ConfiguracionEtapaController extends Controller
                     'avance.required' => 'El "Avance" es obligatorio.',
                     'avance.min' => 'El "Avance" como mínimo es cero.',
                     'probabilidad.required' => 'La "Probabilidad" es obligatorio.',
+                    'estado.required' => 'El "Estado" es obligatorio.',
                 ]
             );
             $color = request('color');
@@ -108,7 +110,13 @@ class ConfiguracionEtapaController extends Controller
             $etapa->blindaje = request('blindaje');
             $etapa->avance = request('avance');
             $etapa->probabilidad = request('probabilidad');
+            $etapa->orden = request('orden');
+            $etapa->estado = request('estado');
             $etapa->save();
+
+            // Establecer el mensaje de éxito en la sesión
+            session()->flash('success', 'Etapa actualizado correctamente');
+            return response()->json(['redirect' => true]);
         }
     }
 
