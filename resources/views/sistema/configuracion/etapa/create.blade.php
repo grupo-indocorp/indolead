@@ -1,4 +1,4 @@
-<x-sistema.modal title="Registrar Etapa" dialog_id="dialog">
+<x-sistema.modal class="" style="width: 500px;" title="Registrar Etapa">
     <div class="form-group">
         <div class="row">
             <div class="col-2">
@@ -15,15 +15,9 @@
 </x-sistema.modal>
 <script>
     function submitEtapa() {
-        const dialog = document.querySelector("#dialog");
-        dialog.querySelectorAll('.is-invalid, .invalid-feedback').forEach(element => {
-            element.classList.contains('is-invalid') ? element.classList.remove('is-invalid') : element.remove();
-        });
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
+        limpiarError();
+        capturarToken();
+
         $.ajax({
             url: `{{ url('configuracion-etapa') }}`,
             method: "POST",

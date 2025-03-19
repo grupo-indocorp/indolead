@@ -49,7 +49,6 @@ class ClienteController extends Controller
                     [
                         'nombre' => 'required|bail',
                         'dni' => 'required|numeric|digits:8|bail',
-                        'celular' => 'required|bail',
                         'cargo' => 'required|bail',
                     ],
                     [
@@ -57,7 +56,6 @@ class ClienteController extends Controller
                         'dni.required' => 'El "DNI" es obligatorio.',
                         'dni.numeric' => 'El "DNI" debe ser numérico.',
                         'dni.digits' => 'El "DNI" debe tener exactamente 8 dígitos.',
-                        'celular.required' => 'El "Celular" es obligatorio.',
                         'cargo.required' => 'El "Cargo" es obligatorio.',
                     ]
                 );

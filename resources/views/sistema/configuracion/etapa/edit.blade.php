@@ -1,4 +1,4 @@
-<x-sistema.modal title="Editar Etapa" dialog_id="dialog">
+<x-sistema.modal style="width: 500px;" title="Editar Etapa" dialog_id="dialog">
     <div class="form-group">
         <label for="name" class="form-control-label">Nombre:</label>
         <input class="form-control" type="text" value="{{ $etapa->nombre }}" id="nombre" name="nombre">
@@ -19,21 +19,26 @@
         <label for="probabilidad" class="form-control-label">Probabilidad:</label>
         <input class="form-control uppercase" type="text" value="{{ $etapa->probabilidad }}" id="probabilidad" name="probabilidad">
     </div>
-    <div class="flex justify-end">
-        <button type="button" class="btn bg-gradient-primary m-0" onclick="submitEtapa({{ $etapa->id }})">Guardar</button>
+    <div class="form-group">
+        <x-ui.label for="orden">{{ __('Orden *') }}</x-ui.label>
+        <x-ui.input type="number" step="1" min="0" value="{{ $etapa->orden }}" id="orden" name="orden" />
+    </div>
+    <div class="form-group">
+        <x-ui.label for="estado">{{ __('Estado *') }}</x-ui.label>
+        <select class="form-control uppercase" name="estado" id="estado">
+            <option value="1" @if ($etapa->estado == 1) selected @endif>Activo</option>
+            <option value="0" @if ($etapa->estado == 0) selected @endif>Inactivo</option>
+        </select>
+    </div>
+    <div class="flex justify-end w-full">
+        <x-ui.button type="submit" onclick="submitEtapa(this, {{ $etapa->id }})">{{ __('Guardar') }}</x-ui.button>
     </div>
 </x-sistema.modal>
 <script>
-    function submitEtapa(etapa_id) {
-        const dialog = document.querySelector("#dialog");
-        dialog.querySelectorAll('.is-invalid, .invalid-feedback').forEach(element => {
-            element.classList.contains('is-invalid') ? element.classList.remove('is-invalid') : element.remove();
-        });
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
+    function submitEtapa(button, etapa_id) {
+        limpiarError();
+        capturarToken();
+
         $.ajax({
             url: `{{ url('configuracion-etapa/${etapa_id}') }}`,
             method: "PUT",
@@ -44,19 +49,22 @@
                 blindaje: $('#blindaje').val(),
                 avance: $('#avance').val(),
                 probabilidad: $('#probabilidad').val(),
+                orden: $('#orden').val(),
+                estado: $('#estado').val(),
             },
-            success: function( result ) {
-                location.reload();
-                closeModal();
+            beforeSend: function() {
+                button.disabled = true;
             },
-            error: function( data ) {
-                let errors = data.responseJSON;
-                if(errors) {
-                    $.each(errors.errors, function(key, value){
-                        $('#dialog #'+key).addClass('is-invalid');
-                        $('#dialog #'+key).after('<span class="invalid-feedback" role="alert"><strong>'+ value +'</strong></span>');
-                    });
+            success: function(response) {
+                if (response.redirect) {
+                    location.reload();
+                } else {
+                    alert('Posiblemente ya ha registrado el cliente, actualizar la página');
                 }
+            },
+            error: function(response) {
+                mostrarError(response)
+                button.disabled = false;
             }
         });
     }
