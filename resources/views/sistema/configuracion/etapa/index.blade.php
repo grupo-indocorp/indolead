@@ -9,13 +9,13 @@
                     <i class="fa-solid fa-arrow-left"></i> Configuración
                 </x-ui.link>
             </div>
-            <div class="w-full py-2 px-4 flex justify-between">
+            <div class="w-full px-4 flex justify-between">
                 <h3>Etapas</h3>
                 <x-ui.button onclick="agregarEtapa()">
                     Agregar <i class="fa-solid fa-eyes"></i>
                 </x-ui.button>
             </div>
-            <div class="w-1/4">
+            <div class="w-1/4 px-4 pb-4">
                 <x-sistema.card>
                     <div class="timeline timeline-one-side">
                         @foreach ($etapas as $etapa)
@@ -34,11 +34,6 @@
             </div>
         </x-sistema.card-contenedor>
     @endsection
-
-    @section('modal')
-        <div id="contModal"></div>
-    @endsection
-
     @section('script')
         <script>
             function agregarEtapa() {
@@ -49,7 +44,7 @@
                         view: 'create-etapa'
                     },
                     success: function( result ) {
-                        $('#contModal').html(result);
+                        $('#contenedorModal').html(result);
                         openModal();
                     },
                     error: function( response ) {
@@ -65,7 +60,7 @@
                         view: 'edit-etapa'
                     },
                     success: function( result ) {
-                        $('#contModal').html(result);
+                        $('#contenedorModal').html(result);
                         openModal();
                     },
                     error: function( response ) {
@@ -81,7 +76,7 @@
                         view: 'delete-etapa'
                     },
                     success: function( result ) {
-                        $('#contModal').html(result);
+                        $('#contenedorModal').html(result);
                         openModal();
                     },
                     error: function( response ) {
