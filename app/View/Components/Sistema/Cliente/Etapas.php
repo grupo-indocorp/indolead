@@ -22,7 +22,7 @@ class Etapas extends Component
      */
     public function render(): View|Closure|string
     {
-        $etapas = Etapa::all();
+        $etapas = Etapa::where('estado', 1)->get();
 
         return view('components.sistema.cliente.etapas', compact('etapas'));
     }
