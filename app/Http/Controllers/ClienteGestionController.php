@@ -418,6 +418,7 @@ class ClienteGestionController extends Controller
             $cliente->ruc = request('ruc');
             $cliente->razon_social = request('razon_social');
             $cliente->ciudad = request('ciudad');
+            $cliente->generado_bot = filter_var(request('generado_bot'), FILTER_VALIDATE_BOOLEAN);
             $cliente->save();
             $this->clienteService->exportclienteStore($cliente->id);
 
