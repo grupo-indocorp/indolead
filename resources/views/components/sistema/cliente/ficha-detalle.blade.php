@@ -21,7 +21,7 @@
                     <div class="row">
                         <div class="col-6 p-1">
                             <x-sistema.cliente.datos :$cliente>
-                                @role('ejecutivo')
+                                @role(['ejecutivo', 'sistema'])
                                     <x-slot:botonHeader>
                                         <button type="button" class="btn bg-gradient-secondary" onclick="editCliente()"
                                             id="btn_editar_cliente">Editar</button>
@@ -99,7 +99,7 @@
 </x-sistema.modal>
 <script>
     function editCliente() {
-        $('#ruc, #razon_social, #ciudad, #btn_guardar_cliente').prop('disabled', false)
+        $('#ruc, #razon_social, #ciudad, #btn_guardar_cliente, #generado_bot').prop('disabled', false)
     }
 
     function saveCliente() {
@@ -117,9 +117,10 @@
                 ruc: $('#ruc').val(),
                 razon_social: $('#razon_social').val(),
                 ciudad: $('#ciudad').val(),
+                generado_bot: $('#generado_bot').is(':checked'),
             },
             success: function(result) {
-                $('#ruc, #razon_social, #ciudad, #btn_guardar_cliente').prop('disabled', true);
+                $('#ruc, #razon_social, #ciudad, #btn_guardar_cliente, #generado_bot').prop('disabled', true);
             },
             error: function(response) {
                 mostrarError(response);
