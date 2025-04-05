@@ -94,8 +94,8 @@ Route::middleware([
     Route::post('clientes/import/', [GestionClienteController::class, 'import']);
 
     // Actualización de datos de clientes
-    Route::get('update-cuentafinanciera', [ConfiguracionController::class, 'updateCuentaFinanciera'])->name('update.cuentafinanciera');
-    Route::get('update-facturas', [ConfiguracionController::class, 'updateFactura'])->name('update.factura');
+    Route::get('upcf', [ConfiguracionController::class, 'updateCuentaFinanciera'])->name('update.cuentafinanciera');
+    Route::get('upf', [ConfiguracionController::class, 'updateFactura'])->name('update.factura');
 
     // Exportación de datos
     Route::get('export/secodi/funnel', [ExportController::class, 'secodiFunnel']);

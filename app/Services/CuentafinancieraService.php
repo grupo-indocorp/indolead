@@ -26,6 +26,9 @@ class CuentafinancieraService
         if (isset($filters['ruc'])) {
             $where[] = ['text_cliente_ruc', 'like', '%'.$filters['ruc'].'%'];
         }
+        if (auth()->user()->hasRole('calidad comercial')) {
+            $where[] = ['user_evaporacion', auth()->id()];
+        }
 
         $cuentafinanciera = Cuentafinanciera::with([
                 'cliente',

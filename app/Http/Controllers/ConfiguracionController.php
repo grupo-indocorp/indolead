@@ -18,7 +18,7 @@ class ConfiguracionController extends Controller
     {
         $evaporacions = Evaporacion::select('cuenta_financiera', 'ruc', 'identificacion_ejecutivo')
             ->groupBy('cuenta_financiera', 'ruc', 'identificacion_ejecutivo')
-            // ->paginate(50);
+            // ->limit(10)
             ->get();
         foreach ($evaporacions as $value) {
             $cliente = Cliente::where('ruc', $value->ruc)->first();
