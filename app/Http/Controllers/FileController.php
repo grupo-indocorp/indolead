@@ -38,7 +38,7 @@ class FileController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'file' => 'required|file|max:1048576', // 1GB
+            'file' => 'required|file|mimes:xls,xlsx,xlsm|max:1048576', // 1GB
             'description' => 'nullable|string|max:255',
             'category' => 'nullable|string|max:100',
             'folder_id' => 'nullable|exists:folders,id',
