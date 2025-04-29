@@ -1,11 +1,7 @@
 @props(['type' => 'middle', 'title', 'count', 'color' => '#ccc', 'active' => false])
 
-<div class="etapa-item etapa-{{ $type }} {{ $active ? 'active' : '' }}" 
-     style="--bg-color: {{ $color }}">
-    <button 
-        {{ $attributes->merge(['class' => 'etapa-btn' . ($active ? ' active' : '')]) }}
-        onclick="{{ $attributes->get('onclick') }}"
-    >
+<div class="etapa-item {{ $active ? 'active' : '' }}" style="--bg-color: {{ $color }}; --etapas-total: 12;">
+    <button {{ $attributes->merge(['class' => 'etapa-btn' . ($active ? ' active' : '')]) }}>
         <div class="etapa-content">
             <span class="etapa-title">{{ $title }}</span>
             <span class="etapa-count">{{ $count }}</span>
@@ -15,98 +11,118 @@
 
 <style>
     .etapa-grid-container {
-        width: 100%;
-        overflow-x: auto;
+        width: 97%;
         padding: 0.5rem 0;
-        display: flex;
-        justify-content: center; /* Centra el contenido horizontalmente */
     }
 
     .etapa-grid {
-        display: grid;
-        grid-auto-flow: column;
-        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-        width: 90%; /* Ocupa el 90% del ancho del contenedor */
-        gap: 0;
-        justify-content: center; /* Centra los botones horizontalmente */
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        padding: 0 2%;
     }
 
     .etapa-item {
         position: relative;
-        height: 80px; /* Aumenta la altura para acomodar más texto */
-        flex: 1 1 0;
+        height: 80px;
+        flex: 1 0 auto;
+        min-width: calc(100% / var(--etapas-total, 12) - 2%);
+        max-width: calc(100% / var(--etapas-total, 12) + 2%);
+        margin-right: -1.8%;
     }
 
     .etapa-btn {
-        width: 95%; /* Ocupa el 100% del ancho de su contenedor (.etapa-item) */
-        height: 100%;
+        width: 85%;
+        height: 85%;
         border: none;
         background: var(--bg-color);
         color: #1e293b;
         font-weight: 700;
         position: relative;
-        padding: 0 10px; /* Reduce el padding para dar más espacio al texto */
+        padding: 0 5px;
         transition: all 0.3s ease;
         cursor: pointer;
-        clip-path: polygon(95% 0, 100% 50%, 95% 100%, 0% 100%, 5% 50%, 0% 0%);
-        margin-right: -25px;
+        clip-path: polygon(93% 0, 100% 50%, 93% 100%, 0% 100%, 7% 50%, 0% 0%);
     }
 
-    .etapa-btn.active {
-        color: white !important; /* Cambia el color del texto a blanco cuando el botón está activo */
-        z-index: 2;
-        transform: scale(1.15);
-        filter: brightness(1) contrast(1);
-        box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.3); /* Agrega un contorno al botón activo */
+    /* Primer y último elemento */
+    .etapa-item:first-child .etapa-btn {
+        clip-path: polygon(93% 0, 100% 50%, 93% 100%, 0% 100%, 0% 50%, 0% 0%);
+        margin-left: 1%;
+    }
+
+    .etapa-item:last-child {
+        margin-right: 0;
     }
 
     .etapa-item:last-child .etapa-btn {
-        margin-right: 0;
-        clip-path: polygon(100% 0, 100% 50%, 100% 100%, 0% 100%, 5% 50%, 0% 0%);
+        clip-path: polygon(100% 0, 100% 50%, 100% 100%, 0% 100%, 7% 50%, 0% 0%);
     }
 
-    .etapa-item:first-child .etapa-btn {
-        clip-path: polygon(95% 0, 100% 50%, 95% 100%, 0% 100%, 0% 50%, 0% 0%);
-    }
-
-    .etapa-content {
-        position: relative;
+    /* Estados activos */
+    .etapa-btn.active {
+        color: rgb(255, 255, 255);
         z-index: 2;
+        transform: scale(1.12);
+        box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Contenido */
+    .etapa-content {
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         height: 100%;
         width: 100%;
+        overflow: hidden;
     }
 
+    
+
     .etapa-title {
-        font-size: 0.70rem;
+        font-size: clamp(0.5rem, 1.5vw, 0.7rem);
         line-height: 1.2;
-        text-align: center; /* Centra el texto */
+        text-align: center;
         overflow: hidden;
+        text-overflow: ellipsis;
         display: -webkit-box;
-        -webkit-line-clamp: 2; /* Limita el texto a 2 líneas */
+        -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
     }
 
     .etapa-count {
-        font-size: 1.1rem;
+        font-size: clamp(0.8rem, 2.5vw, 1.1rem);
         font-weight: 900;
         margin-top: 2px;
     }
 
-    @media (max-width: 600px) {
-        .etapa-grid {
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-        }
-        
+    /* Media Queries específicas */
+    @media (max-width: 768px) {
         .etapa-title {
-            font-size: 0.7rem;
+            -webkit-line-clamp: 1;
         }
-        
-        .etapa-count {
-            font-size: 1rem;
+
+        .etapa-item {
+            height: 70px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .etapa-item {
+            height: 60px;
+        }
+
+        .etapa-btn {
+            clip-path: polygon(90% 0, 100% 50%, 90% 100%, 0% 100%, 10% 50%, 0% 0%);
+        }
+
+        .etapa-item:first-child .etapa-btn {
+            clip-path: polygon(90% 0, 100% 50%, 90% 100%, 0% 100%, 0% 50%, 0% 0%);
+        }
+
+        .etapa-item:last-child .etapa-btn {
+            clip-path: polygon(100% 0, 100% 50%, 100% 100%, 0% 100%, 10% 50%, 0% 0%);
         }
     }
 </style>

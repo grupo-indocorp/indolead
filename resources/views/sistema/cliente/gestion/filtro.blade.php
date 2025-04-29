@@ -1,4 +1,5 @@
 <x-sistema.tabla-contenedor>
+    
     <table class="table align-items-center mb-0 ml-0 mr-0 p-1" id="gestion_cliente">
         <thead>
             <tr>

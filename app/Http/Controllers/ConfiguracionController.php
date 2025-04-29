@@ -23,7 +23,7 @@ class ConfiguracionController extends Controller
         foreach ($evaporacions as $value) {
             $cliente = Cliente::where('ruc', $value->ruc)->first();
             $user = User::where('identity_document', $value->identificacion_ejecutivo)
-                // ->orWhere('name', 'like', '%' . $value->ejecutivo . '%')
+                ->orWhere('name', 'like', '%' . $value->ejecutivo . '%')
                 ->first();
 
             if (! is_null($cliente) && ! is_null($user)) {
