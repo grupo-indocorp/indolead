@@ -28,7 +28,7 @@
     </div>
     <div class="form-check form-switch">
         <label class="form-check-label" for="generado_bot">Generado por Bot</label>
-        <input class="form-check-input" type="checkbox" id="generado_bot" @if($cliente->generado_bot) checked @endif @php echo ($cliente != '' ? 'disabled' : ''); @endphp>
+        <input class="form-check-input" type="checkbox" id="generado_bot" @if($cliente->generado_bot ?? false) checked @endif @php echo ($cliente != '' ? 'disabled' : ''); @endphp>
     </div>
     {{ $botonFooter }}
 </x-sistema.card>
