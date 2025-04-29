@@ -35,10 +35,41 @@ class FileViewController extends Controller
     {
         $file = File::findOrFail($id);
 
-        if (! Storage::disk('local')->exists($file->path)) {
+        if (!Storage::disk('local')->exists($file->path)) {
             abort(404, 'Archivo no encontrado');
         }
 
-        return Storage::disk('local')->download($file->path, $file->name);
+        // Obtener el path completo
+        $filePath = Storage::disk('local')->path($file->path);
+
+        // Determinar el Content-Type adecuado según la extensión
+        $contentType = $this->getMimeType($file->format);
+
+        // Headers adicionales para evitar caché y corrupción
+        $headers = [
+            'Content-Type' => $contentType,
+            'Content-Description' => 'File Transfer',
+            'Pragma' => 'public',
+            'Expires' => '0',
+            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+            'Content-Length' => Storage::disk('local')->size($file->path)
+        ];
+
+        return Storage::disk('local')->download($file->path, $file->name, $headers);
+    }
+
+    /**
+     * Obtiene el MIME type correcto según la extensión del archivo.
+     */
+    private function getMimeType($extension)
+    {
+        $mimeTypes = [
+            'xls' => 'application/vnd.ms-excel',
+            'xlsx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'xlsm' => 'application/vnd.ms-excel.sheet.macroEnabled.12',
+            // Agrega otros tipos MIME si es necesario
+        ];
+
+        return $mimeTypes[strtolower($extension)] ?? 'application/octet-stream';
     }
 }
