@@ -162,26 +162,38 @@ class ClienteGestionController extends Controller
             ->orderByDesc('fecha_gestion')
             ->paginate($paginate);
 
-        // Conteo de clientes nuevos y gestionados (solo para ejecutivos)
+        // Conteo de clientes nuevos y gestionados
         $countClienteNuevo = 0;
         $countClienteGestionado = 0;
 
-        if ($user->hasRole('ejecutivo')) {
-            // Conteo de Clientes Nuevos por Ejecutivo
-            $countClienteNuevo = Cliente::where('user_id', $user->id)->whereDate('fecha_nuevo', Carbon::today())->count();
-            // Conteo de Clientes Gestionados por Ejecutivo
-            $cltGestionados = Cliente::where('user_id', $user->id)->whereDate('fecha_gestion', Carbon::today())->get();
-            foreach ($cltGestionados as $value) {
-                if ($value->etiqueta_id != 2) { // asignado
-                    $countClienteGestionado++;
-                }
+        $userIds = match (true) {
+            $filtro_user_id != 0 => [$filtro_user_id],
+            $user->hasRole(['sistema', 'gerente comercial']) => null,
+            $user->hasRole('supervisor') => $user->equipo->users->pluck('id')->toArray(),
+            $user->hasRole('ejecutivo') => [$user->id],
+            default => [],
+        };
+
+        // Función para aplicar filtro de usuarios si corresponde
+        $filtrarPorUsuarios = function ($query) use ($userIds) {
+            if (!is_null($userIds)) {
+                $query->whereIn('user_id', $userIds);
             }
-        }
+            return $query;
+        };
+
+        $countClienteNuevo = $filtrarPorUsuarios(
+            Cliente::whereDate('fecha_nuevo', Carbon::today())
+        )->count();
+
+        $countClienteGestionado = $filtrarPorUsuarios(
+            Cliente::whereDate('fecha_gestion', Carbon::today())
+                ->where('etiqueta_id', '!=', 2)
+        )->count();
 
         // Configuración adicional
         $config = Helpers::configuracionExcelJsonGet();
 
-        // Retornar la vista con los datos
         return view('sistema.cliente.gestion.index', compact(
             'clientes',
             'data_etapas',
