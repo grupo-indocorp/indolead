@@ -108,7 +108,7 @@
                                 </div>
                             </div>
                             <div class="flex gap-2 items-center">
-                                @role(['ejecutivo'])
+                                @role(['sistema', 'administrador', 'supervisor', 'ejecutivo'])
                                     <div class="flex gap-4">
                                         <div class="flex flex-col items-center">
                                             <span class="text-blue-600 text-base font-bold">Nuevos</span>

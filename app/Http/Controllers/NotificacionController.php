@@ -15,7 +15,19 @@ class NotificacionController extends Controller
      */
     public function index()
     {
-        $notificaciones = Notificacion::where('user_id', auth()->user()->id)->orderBy('fecha')->get();
+        $user = auth()->user();
+        if ($user->hasRole(['sistema', 'gerente comercial'])) {
+            $notificaciones = Notificacion::orderBy('fecha')->paginate(25);
+        } elseif ($user->hasRole('supervisor')) {
+            $idsEjecutivos = $user->equipo->users->pluck('id');
+            $notificaciones = Notificacion::whereIn('user_id', $idsEjecutivos)
+                ->orderBy('fecha')
+                ->paginate(10);
+        } else {
+            $notificaciones = Notificacion::where('user_id', $user->id)
+                ->orderBy('fecha')
+                ->paginate(10);
+        }
 
         return view('sistema.notificacion.index', compact('notificaciones'));
     }

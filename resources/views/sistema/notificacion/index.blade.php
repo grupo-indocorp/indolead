@@ -18,6 +18,9 @@
                     <x-slot:thead>
                         <tr>
                             <th>{{ __("Tipo de Agenda") }}</th>
+                            @role(['sistema', 'gerente comercial', 'supervisor'])
+                                <th>{{ __("Ejecutivo") }}</th>
+                            @endrole
                             <th>{{ __("Asunto") }}</th>
                             <th>{{ __("Mensaje") }}</th>
                             <th>{{ __("Cliente") }}</th>
@@ -30,6 +33,9 @@
                         @foreach ($notificaciones as $value)
                             <tr>
                                 <td>{{ $value->notificaciontipo->nombre }}</td>
+                                @role(['sistema', 'gerente comercial', 'supervisor'])
+                                    <td>{{ substr($value->user->name, 0, 20) }}</td>
+                                @endrole
                                 <td>{{ $value->asunto }}</td>
                                 <td>{{ substr($value->mensaje, 0, 30) }}</td>
                                 <td>{{ $value->cliente->ruc ?? '' }}</td>
@@ -71,6 +77,9 @@
                     </x-slot>
                     <x-slot:tfoot></x-slot>
                 </x-ui.table>
+                <div class="mt-2">
+                    {{ $notificaciones->links() }}
+                </div>
             </div>
         </x-sistema.card-contenedor>
         <script>
@@ -138,17 +147,17 @@
                     }
                 });
             }
-            $('#table_notificacion').DataTable({
-                dom: '<"flex justify-between p-4"fl>rt<"flex justify-between p-4"ip>',
-                processing: true,
-                language: {
-                    search: 'Buscar:',
-                    info: 'Mostrando _START_ a _END_ de _TOTAL_ entradas',
-                    processing: 'Cargando',
-                },
-                pageLength: 50,
-                order: [],
-            });
+            // $('#table_notificacion').DataTable({
+            //     dom: '<"flex justify-between p-4"fl>rt<"flex justify-between p-4"ip>',
+            //     processing: true,
+            //     language: {
+            //         search: 'Buscar:',
+            //         info: 'Mostrando _START_ a _END_ de _TOTAL_ entradas',
+            //         processing: 'Cargando',
+            //     },
+            //     pageLength: 50,
+            //     order: [],
+            // });
         </script>
     @endsection
 @endcan
