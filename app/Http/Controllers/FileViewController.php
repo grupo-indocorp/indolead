@@ -39,35 +39,50 @@ class FileViewController extends Controller
             abort(404, 'Archivo no encontrado');
         }
 
-        // Obtener el path completo
-        $filePath = Storage::disk('local')->path($file->path);
+        // Obtener el nombre original con extensión
+        $originalName = $file->name;
+        if (!pathinfo($originalName, PATHINFO_EXTENSION)) {
+            $originalName .= '.' . $file->format;
+        }
 
-        // Determinar el Content-Type adecuado según la extensión
-        $contentType = $this->getMimeType($file->format);
-
-        // Headers adicionales para evitar caché y corrupción
+        // Headers específicos para tipos de archivo comunes
         $headers = [
-            'Content-Type' => $contentType,
-            'Content-Description' => 'File Transfer',
-            'Pragma' => 'public',
-            'Expires' => '0',
-            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
-            'Content-Length' => Storage::disk('local')->size($file->path)
+            'Content-Type' => $this->getMimeType($file->format),
+            'Content-Disposition' => 'attachment; filename="' . $originalName . '"',
+            'Pragma' => 'no-cache',
+            'Expires' => '0'
         ];
 
-        return Storage::disk('local')->download($file->path, $file->name, $headers);
+        // Obtener el path completo del archivo
+        $filePath = Storage::disk('local')->path($file->path);
+
+        // Verificar si es un archivo Excel para headers especiales
+        if (in_array(strtolower($file->format), ['xls', 'xlsx', 'xlsm'])) {
+            return response()->download($filePath, $originalName, $headers);
+        }
+
+        return Storage::disk('local')->download($file->path, $originalName, $headers);
     }
 
-    /**
-     * Obtiene el MIME type correcto según la extensión del archivo.
-     */
     private function getMimeType($extension)
     {
         $mimeTypes = [
             'xls' => 'application/vnd.ms-excel',
             'xlsx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
             'xlsm' => 'application/vnd.ms-excel.sheet.macroEnabled.12',
-            // Agrega otros tipos MIME si es necesario
+            'doc' => 'application/msword',
+            'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            'pdf' => 'application/pdf',
+            'ppt' => 'application/vnd.ms-powerpoint',
+            'pptx' => 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+            'csv' => 'text/csv',
+            'txt' => 'text/plain',
+            'zip' => 'application/zip',
+            'rar' => 'application/x-rar-compressed',
+            'png' => 'image/png',
+            'jpg' => 'image/jpeg',
+            'jpeg' => 'image/jpeg',
+            'gif' => 'image/gif',
         ];
 
         return $mimeTypes[strtolower($extension)] ?? 'application/octet-stream';
