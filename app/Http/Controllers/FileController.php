@@ -14,13 +14,11 @@ class FileController extends Controller
      */
     public function index()
     {
-        // Carga ambas relaciones: uploadedBy y folder
         $files = File::with('uploadedBy')
-                ->orderBy('folder_id', 'asc') // Ordenar por carpeta
-                ->orderBy('id', 'desc') // Luego ordenar por ID (el más reciente primero)
-                ->get();
+            ->orderBy('created_at', 'desc') // Solo por fecha, más recientes primero
+            ->get();
+
         return view('sistema.archivos.index', compact('files'));
-        
     }
 
     /**
@@ -38,8 +36,8 @@ class FileController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'file' => 'required|file|mimes:xls,xlsx,xlsm|max:1048576', // 1GB
-            'description' => 'nullable|string|max:255',
+            'file' => 'required|file|mimes:doc,docx,odt,rtf,txt,pdf,xls,xlsx,xlsm,ods,csv,ppt,pptx,odp,accdb,mdb,one,pub,vsd|max:10485760', // 10GB
+            'description' => 'nullable|string|max:355',
             'category' => 'nullable|string|max:100',
             'folder_id' => 'nullable|exists:folders,id',
         ]);
@@ -93,11 +91,11 @@ class FileController extends Controller
         $file = File::findOrFail($id);
 
         $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string|max:255',
+            'name' => 'required|string|max:355',
+            'description' => 'nullable|string|max:355',
             'category' => 'nullable|string|max:100',
             'folder_id' => 'nullable|exists:folders,id',
-            'new_file' => 'nullable|file|max:10240',
+            'new_file' => 'nullable|file|max:102400',
         ]);
 
         // Actualizar archivo físico si se proporciona uno nuevo
@@ -137,7 +135,7 @@ class FileController extends Controller
             return response()->json(['success' => true]);
         } catch (\Exception $e) {
             return response()->json([
-                'error' => 'Error al eliminar el archivo: '.$e->getMessage(),
+                'error' => 'Error al eliminar el archivo: ' . $e->getMessage(),
             ], 500);
         }
     }
