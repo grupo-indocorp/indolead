@@ -1,161 +1,9 @@
-@php
-    // Definir el array de frases motivadoras y graciosas
-    $frases = [
-        'Vender es como un chiste, si tienes que explicarlo, probablemente no lo lograste',
-        'En ventas, si no sabes a quién vendes, mejor no vendas',
-        'El único día que no vendo es el que no me levanto',
-        'Mi trabajo no es vender, es hacer que los clientes compren sin saber por qué',
-        "El éxito de un vendedor se mide por cuántas veces se le dice 'no' y sigue sonriendo",
-        'Si no estás vendiendo, al menos asegúrate de que te están pidiendo descuentos',
-        'El café se acaba, pero mis ventas nunca',
-        'La clave en ventas: si no puedes convencerlos, haz que se rían',
-        'Vender es un arte, y yo soy un Picasso',
-        'Si no estás vendiendo, al menos asegúrate de que el cliente piense que lo estás haciendo',
-        'Las ventas son como las dietas: todos sabemos cómo hacerlas, pero no siempre lo logramos',
-        'Vender es más fácil que encontrar un buen chiste en internet',
-        "Cada 'no' es solo una pausa antes del siguiente 'sí'",
-        "Mi tarea en ventas: convertir los 'no' en 'quizás' y luego en 'sí'",
-        '¿No lo compró? ¡Ni modo, yo me sigo riendo!',
-        'En ventas, cada no es solo un paso más hacia el sí, o hacia una buena anécdota',
-        'El buen vendedor tiene respuestas, el gran vendedor tiene preguntas',
-        'Si no logras la venta, al menos lograste una sonrisa',
-        "¿Un 'no'? Perfecto, ¿me das un café mientras pienso en el siguiente intento?",
-        'El cliente no siempre tiene razón, pero siempre tiene dinero',
-        'Vender no es un trabajo, es un juego y yo soy el campeón',
-        '¡Todo el mundo compra, solo hay que encontrar la excusa correcta!',
-        'Si no puedes convencerlos, confúndelos un poco',
-        'La perseverancia en ventas es como el WiFi: aunque no lo ves, está funcionando',
-        'Un vendedor sin café es como un coche sin gasolina',
-        'El vendedor exitoso no tiene secretos, solo muchos no',
-        "Un 'no' hoy, es un 'sí' mañana… si sobrevives",
-        'Lo bueno de ser vendedor es que nunca estás realmente desempleado, solo en espera de tu próxima venta',
-        'Los mejores vendedores no venden productos, venden sueños',
-        'Vende con pasión, pero nunca sin tu lista de precios',
-        'Nunca subestimes el poder de un buen chiste para cerrar una venta',
-        '¿Perdí una venta? ¡Qué divertido, siempre hay una próxima oportunidad!',
-        'El éxito en ventas no se mide por cuántos clientes, sino por cuántos chistes cuentas',
-        'Mis clientes no compran, los convenzo con risas',
-        'Si no puedes venderles, al menos hazlos reír',
-        'El vendedor exitoso no es el que más vende, es el que mejor hace reír',
-        'Cuando la vida te da limones, haz limonada… y véndela',
-        'Una buena venta es como un buen chiste, tiene que sorprender',
-        'No hay mal día de ventas, solo oportunidades para aprender algo nuevo',
-        'Cada cierre de venta es una victoria, y una excelente historia para contar',
-        'Vender es como hacer una pizza, si no lo haces con ganas, no sabe bien',
-        '¿Que no vendí hoy? Me deshago de esa excusa con una sonrisa',
-        'Si el cliente no compra, asegúrate de que al menos haya disfrutado la conversación',
-        'Vender con alegría es la verdadera estrategia',
-        'Una venta sin humor es como un pastel sin azúcar',
-        "En ventas, el no es solo un 'todavía no'",
-        "Nada dice más 'te vendo' que un buen chiste",
-        'La venta es como un juego, y yo siempre juego para ganar',
-        'Cada rechazo es solo un paso más hacia el próximo cliente feliz',
-        'Lo importante en ventas es no rendirse, y nunca perder el buen humor',
-        'Si puedes hacer reír a un cliente, ya tienes la mitad de la venta',
-        'En ventas, lo importante es la actitud, y si tienes chistes, mejor',
-        'Vende siempre con una sonrisa, porque si no vendes, al menos dejas una buena impresión',
-        '¿Cerré la venta? ¡Que alguien me pase un café para celebrarlo!',
-        'Vende con carisma, si no con argumentos',
-        "Mi trabajo es hacer que la gente diga 'sí' y reír al mismo tiempo",
-        'En ventas, cada día es una nueva oportunidad para hacer el ridículo y ganar',
-        'Si no vendes, al menos asegúrate de que el cliente recuerde tu nombre y tu chiste',
-        '¿Perdí una venta? Yo nunca pierdo, solo estoy en pausa',
-        'La perseverancia es el mejor chiste que puedes contar',
-        'Cerré una venta. ¡Es hora de contar la historia como si fuera un superhéroe!',
-        'Nada como una buena risa para asegurar una venta',
-        'En ventas, la risa es la mejor respuesta',
-        'Ser vendedor es ser optimista con un toque de humor',
-        'La venta perfecta siempre lleva un toque de comedia',
-        'Si no me compras, al menos ríete de mi chiste',
-        'Si no te convencí, por lo menos hice que te rieras',
-        'Vende con humor, pero nunca olvides tu objetivo',
-        'Ser vendedor es ser experto en dar buenas noticias con chistes',
-        'Los grandes vendedores siempre están listos para contar un buen chiste',
-        'Mi habilidad para vender es inversamente proporcional a lo que sé de mi producto',
-        'Cada cliente es una nueva oportunidad para contar un chiste',
-        '¿Perdí la venta? ¡Al menos saqué una sonrisa!',
-        'Vender es como ser cómico: necesitas tiempo, paciencia y mucha práctica',
-        'Cada cliente es una historia, y yo soy el narrador con chistes',
-        'La venta es un camino largo, pero siempre con una broma en cada esquina',
-        'Mi superpoder como vendedor: convencer y hacer reír al mismo tiempo',
-        'Cerré una venta, ¡y aún no me lo creo!',
-        'Las ventas no se hacen, se disfrutan',
-        'Si no tienes una buena broma, mejor que tengas un buen producto',
-        'Vender sin chistes es como una pizza sin queso',
-        '¿Cerré la venta? ¡Eso no es lo más importante, lo importante es que te reíste!',
-        'Las ventas son como los chistes, si no los entienden, no sirven',
-        'Vende con carisma, y si no tienes, al menos vende con humor',
-        'En ventas siempre hay un momento para reír, aunque no siempre vendas',
-        'La venta es la excusa perfecta para contar un buen chiste',
-        'El vendedor que ríe, vende mejor',
-        "No te preocupes por el 'no', al menos tienes un chiste para contar",
-        'La venta ideal tiene humor, estrategia y, sobre todo, perseverancia',
-        'Una venta es como una buena broma: tiene que ser convincente',
-        'En ventas, el éxito se mide por cuántos chistes haces',
-        'Vender es como un buen chiste, si no lo entienden, sigue intentándolo',
-        'El vendedor que ríe, vende más',
-        'Las ventas no son solo trabajo, son comedia en acción',
-        'Cada venta tiene una historia, y cada historia empieza con una buena broma',
-        '¿Me rechazas? ¡Puedo hacerte reír antes de irme!',
-        'Una venta perdida es solo una oportunidad para contar un mejor chiste',
-        'Cada vez que digo un chiste, cierro una venta',
-        'Vender es tan fácil como contar un chiste, solo tienes que acertar en el momento',
-        'Si no vendas hoy, asegúrate de que todos se diviertan mientras lo intentas',
-        'Vender es como contar chistes, necesitas a la audiencia adecuada',
-        'El buen vendedor siempre tiene una respuesta y una broma preparada',
-        'Mis mejores ventas empiezan con una sonrisa y un chiste',
-        'Si no me compras, al menos disfrutas el show',
-        'El secreto de las ventas es hacer que los clientes se sientan cómodos… y reír',
-        'El cliente compra lo que necesita, pero se ríe con lo que le dices',
-        'Cada venta es una buena excusa para contar un chiste',
-        '¿Una venta fallida? Solo es una pausa para mi próximo chiste',
-        'Un vendedor sin humor es como una tienda sin clientes',
-        'En ventas, el optimismo y el humor van de la mano',
-        'Vender es más fácil cuando te ríes de tus propios errores',
-        'Cada no es una oportunidad para mejorar tu chiste',
-        'Lo único más importante que vender es hacer reír mientras lo haces',
-        'Si no vendes, al menos asegúrate de que todos se diviertan',
-        'El buen vendedor no solo vende, hace que todos se rían',
-        'Una sonrisa y una broma son las mejores herramientas de ventas',
-        'En ventas, el humor siempre cierra más rápido',
-        'Vender es como una actuación, y mi comedia es el truco secreto',
-        'Si no te compra, te hace un favor: te da más tiempo para perfeccionar tu chiste',
-        'Cerré una venta… y también un buen chiste',
-        'Vender es tener el valor de contar un chiste, incluso cuando no funciona',
-        'Las ventas son como los chistes, a veces necesitas un par de intentos',
-        'Mi enfoque para vender: siempre primero hacer reír, luego convencer',
-        'Lo único más fácil que vender es hacer reír',
-        'Vender es más divertido cuando puedes hacer reír a los clientes',
-        'La venta no se hace, se cuenta como una buena broma',
-        "¿Un 'no'? ¡Genial, me dio tiempo para mejorar mi chiste!",
-        'Las mejores ventas empiezan con una risa',
-        'En ventas, siempre hay espacio para un chiste entre oferta y demanda',
-    ];
-
-    // Seleccionar una frase aleatoria
-    $fraseAleatoria = $frases[array_rand($frases)];
-
-    // Determinar el saludo según la hora del día
-    $hora = now()->format('H');
-    if ($hora < 12) {
-        $saludo = '¡Buenos días, ' . auth()->user()->name . '!';
-    } elseif ($hora < 18) {
-        $saludo = '¡Buenas tardes, ' . auth()->user()->name . '!';
-    } else {
-        $saludo = '¡Buenas noches, ' . auth()->user()->name . '!';
-    }
-
-    // Mensaje de bienvenida al sistema
-    $bienvenidaSistema = 'Bienvenido/a al Indolead';
-@endphp
-
 <header class="container-fluid p-0">
     <div class="mb-2 p-3 rounded-3xl  shadow-md" style="background-color: #ffffff;">
         <nav class="flex justify-between items-center">
             <!-- Mensaje de bienvenida y frase motivadora -->
             <div>
-
-                <h4 class="font-bold text-1xl text-blue-900 mb-2">{{ $saludo }} {{ $bienvenidaSistema }}</h4>
+                <h4 class="font-bold text-1xl text-blue-900 mb-2">{{ $saludo }}</h4>
                 <h4 class="text-xl text-gray-400 " id="frase-motivadora">{{ $fraseAleatoria }}</h4>
             </div>
 
@@ -165,7 +13,7 @@
                 <x-ui.button type="button"
                     class="text-xs bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition duration-300"
                     onclick="cargarNotificacion('pendiente')">
-                    {{ count(Helpers::NotificacionRecordatorio()) }} <i class="fa-solid fa-bell"></i>
+                    {{ count(Helpers::NotificacionRecordatorio($user)) }} <i class="fa-solid fa-bell"></i>
                 </x-ui.button>
 
                 <!-- Menú de perfil -->
@@ -174,7 +22,7 @@
                         <button x-on:click="open = true" type="button"
                             class="flex max-w-xs items-center rounded-full bg-blue-950 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-950"
                             id="user-menu-button" aria-expanded="false" aria-haspopup="true">
-                            <img class="h-100 w-100 rounded-full" src="{{ auth()->user()->profile_photo_url }}"
+                            <img class="h-100 w-100 rounded-full" src="{{ $user->profile_photo_url }}"
                                 alt="">
                         </button>
                     </div>
@@ -218,8 +66,6 @@
         const fraseAleatoria = frases[Math.floor(Math.random() * frases.length)];
         elementoFrase.textContent = fraseAleatoria;
     }
-
-
 
     // Función para cargar notificaciones
     function cargarNotificacion(view) {
