@@ -6,6 +6,8 @@ use App\Helpers\Helpers;
 use App\Models\Cliente;
 use App\Models\Notificacion;
 use App\Models\Notificaciontipo;
+use App\Models\User;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class NotificacionController extends Controller
@@ -16,20 +18,24 @@ class NotificacionController extends Controller
     public function index()
     {
         $user = auth()->user();
-        if ($user->hasRole(['sistema', 'gerente comercial'])) {
-            $notificaciones = Notificacion::orderBy('fecha')->paginate(25);
+        $notificaciones = $this->setNotificaciones($user);
+        return view('sistema.notificacion.index', compact('notificaciones'));
+    }
+
+    private function setNotificaciones($user)
+    {
+        $query = Notificacion::query()->orderByDesc('fecha');
+        if ($user->hasRole(['sistema', 'administrador', 'gerente comercial', 'gerente comercial'])) {
+            $notificaciones = $query->paginate(25);
         } elseif ($user->hasRole('supervisor')) {
             $idsEjecutivos = $user->equipo->users->pluck('id');
-            $notificaciones = Notificacion::whereIn('user_id', $idsEjecutivos)
-                ->orderBy('fecha')
+            $notificaciones = $query->whereIn('user_id', $idsEjecutivos)
                 ->paginate(10);
         } else {
-            $notificaciones = Notificacion::where('user_id', $user->id)
-                ->orderBy('fecha')
+            $notificaciones = $query->where('user_id', $user->id)
                 ->paginate(10);
         }
-
-        return view('sistema.notificacion.index', compact('notificaciones'));
+        return $notificaciones;
     }
 
     /**
@@ -47,7 +53,7 @@ class NotificacionController extends Controller
 
             return view('sistema.notificacion.historial', compact('notificaciones'));
         } elseif (request('view') == 'pendiente') {
-            $notificaciones = Helpers::NotificacionRecordatorio();
+            $notificaciones = Helpers::NotificacionRecordatorio(auth()->user());
 
             return view('sistema.notificacion.historial', compact('notificaciones'));
         }
@@ -179,6 +185,7 @@ class NotificacionController extends Controller
             $notificacion->fecha = request('fecha');
             $notificacion->hora = request('hora');
             $notificacion->notificacion = 0;
+            $notificacion->atendido = filter_var(request('atendido'), FILTER_VALIDATE_BOOLEAN);
             $notificacion->save();
         } elseif ($view === 'update-gestion-evaporacion') {
             $request->validate(
