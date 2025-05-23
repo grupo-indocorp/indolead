@@ -20,6 +20,7 @@
                             <th>{{ __("Tipo de Agenda") }}</th>
                             @role(['sistema', 'gerente comercial', 'supervisor'])
                                 <th>{{ __("Ejecutivo") }}</th>
+                                <th>{{ __("Equipo") }}</th>
                             @endrole
                             <th>{{ __("Asunto") }}</th>
                             <th>{{ __("Mensaje") }}</th>
@@ -34,10 +35,11 @@
                             <tr>
                                 <td>{{ $value->notificaciontipo->nombre }}</td>
                                 @role(['sistema', 'gerente comercial', 'supervisor'])
-                                    <td>{{ substr($value->user->name, 0, 20) }}</td>
+                                    <td>{{ substr($value->user->name, 0, 16) }}</td>
+                                    <td>{{ substr($value->user->equipos->last()->nombre ?? '', 0, 16) }}</td>
                                 @endrole
-                                <td>{{ $value->asunto }}</td>
-                                <td>{{ substr($value->mensaje, 0, 30) }}</td>
+                                <td>{{ substr($value->asunto, 0, 35) }}</td>
+                                <td>{{ substr($value->mensaje, 0, 20) }}</td>
                                 <td>{{ $value->cliente->ruc ?? '' }}</td>
                                 <td>
                                      @php $class = $value->fecha <= date('Y-m-d') ? 'bg-red-200' : 'bg-green-200'; @endphp

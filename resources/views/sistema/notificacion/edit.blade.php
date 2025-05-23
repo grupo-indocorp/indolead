@@ -18,11 +18,19 @@
             </div>
         </div>
     </div>
+    <div class="form-group">
+        @role(['ejecutivo'])
+            <div class="form-check form-switch">
+                <label class="form-check-label" for="atendido">Atendido</label>
+                <input class="form-check-input" type="checkbox" id="atendido" @if($notificacion->atendido ?? false) checked @endif>
+            </div>
+        @endrole
+    </div>
     <div class="flex justify-end">
         <button type="button" class="btn bg-gradient-primary m-0" onclick="updateNotificacion({{ $notificacion->id }})">Actualizar</button>
     </div>
 </x-sistema.modal>
-<script>
+<script> 
     function updateNotificacion(notificacion_id) {
         const dialog = document.querySelector("#dialog");
         dialog.querySelectorAll('.is-invalid, .invalid-feedback').forEach(element => {
@@ -42,6 +50,7 @@
                 mensaje: $('#mensaje').val(),
                 fecha: $('#fecha').val(),
                 hora: $('#hora').val(),
+                atendido: $('#atendido').is(':checked'),
             },
             success: function( result ) {
                 location.reload();

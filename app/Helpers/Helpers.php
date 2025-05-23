@@ -20,15 +20,26 @@ class Helpers
         }
     }
 
-    public static function NotificacionRecordatorio()
+    /**
+     * @return array de configuracion
+     */
+    public static function NotificacionRecordatorio($user)
     {
-        $user = auth()->user();
-        $notificaciones = Notificacion::where('user_id', $user->id)
-            ->where('fecha', '=', now()->format('Y-m-d'))
-            ->where('hora', '>', now()->format('H:i:00'))
-            ->orderBy('hora')
-            ->get();
-
+        $notificaciones = [];
+        if ($user) {
+            $query = Notificacion::query()
+                ->where('fecha', '>=', now()->format('Y-m-d'))
+                ->where('atendido', false)
+                ->orderByDesc('fecha');
+            if ($user->hasRole(['sistema', 'administrador', 'gerente comercial', 'gerente comercial'])) {
+                $notificaciones = $query->get();
+            } elseif ($user->hasRole('supervisor')) {
+                $idsEjecutivos = $user->equipo->users->pluck('id');
+                $notificaciones = $query->whereIn('user_id', $idsEjecutivos)->get();
+            } else {
+                $notificaciones = $query->where('user_id', $user->id)->get();
+            }
+        }
         return $notificaciones;
     }
 
