@@ -14,6 +14,41 @@
                 </div>
             </div>
             <div class="p-4">
+                <form action="{{ route('cliente-gestion.index') }}" method="GET" class="m-0">
+                    <div class="w-full flex justify-between">
+                        <div class="flex flex-col">
+                            <div class="flex gap-1">
+                                <div class="form-group flex flex-col">
+                                    <label for="filtro_equipo_id" class="form-control-label">Equipos:</label>
+                                    <select class="form-control" name="filtro_equipo_id" id="filtro_equipo_id"
+                                        style="width: 250px;">
+                                        <option></option>
+                                        @foreach ($equipos as $item)
+                                            <option value="{{ $item->id }}"
+                                                @if ($item->id == request('filtro_equipo_id')) selected @endif>{{ $item->nombre }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group flex flex-col">
+                                    <label for="filtro_user_id" class="form-control-label">Ejecutivo:</label>
+                                    <select class="form-control" name="filtro_user_id" id="filtro_user_id"
+                                        onchange="filtroAutomatico()" style="width: 250px;">
+                                        <option></option>
+                                        @foreach ($users as $item)
+                                            <option value="{{ $item->id }}"
+                                                @if ($item->id == request('filtro_user_id')) selected @endif>
+                                                {{ $item->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="p-4">
                 <x-ui.table id="table_notificacion">
                     <x-slot:thead>
                         <tr>
@@ -36,7 +71,7 @@
                                 <td>{{ $value->notificaciontipo->nombre }}</td>
                                 @role(['sistema', 'gerente comercial', 'supervisor'])
                                     <td>{{ substr($value->user->name, 0, 16) }}</td>
-                                    <td>{{ substr($value->user->equipos->last()->nombre ?? '', 0, 16) }}</td>
+                                    <td>{{ substr(optional($value->user->equipos->last())->nombre, 0, 16) }}</td>
                                 @endrole
                                 <td>{{ substr($value->asunto, 0, 35) }}</td>
                                 <td>{{ substr($value->mensaje, 0, 20) }}</td>
@@ -61,16 +96,18 @@
                                         @endif
                                     @else
                                         @if ($value->fecha >= date('Y-m-d'))
-                                            <span class="mx-3" data-bs-toggle="tooltip" data-bs-original-title="Editar">
-                                                <a href="javascript:;" class="cursor-pointer" onclick="editarNotificacion({{ $value->id }})">
-                                                    <i class="fa-solid fa-pen"></i>
-                                                </a>
-                                            </span>
-                                            <span class="mx-3" data-bs-toggle="tooltip" data-bs-original-title="Eliminar">
-                                                <a href="javascript:;" class="cursor-pointer" onclick="eliminarNotificacion({{ $value->id }})">
-                                                    <i class="fa-solid fa-trash"></i>
-                                                </a>
-                                            </span>
+                                            @if (auth()->user()->id === $value->user_id)
+                                                <span class="mx-3" data-bs-toggle="tooltip" data-bs-original-title="Editar">
+                                                    <a href="javascript:;" class="cursor-pointer" onclick="editarNotificacion({{ $value->id }})">
+                                                        <i class="fa-solid fa-pen"></i>
+                                                    </a>
+                                                </span>
+                                                <span class="mx-3" data-bs-toggle="tooltip" data-bs-original-title="Eliminar">
+                                                    <a href="javascript:;" class="cursor-pointer" onclick="eliminarNotificacion({{ $value->id }})">
+                                                        <i class="fa-solid fa-trash"></i>
+                                                    </a>
+                                                </span>
+                                            @endif
                                         @endif
                                     @endif
                                 </td>
@@ -149,17 +186,65 @@
                     }
                 });
             }
-            // $('#table_notificacion').DataTable({
-            //     dom: '<"flex justify-between p-4"fl>rt<"flex justify-between p-4"ip>',
-            //     processing: true,
-            //     language: {
-            //         search: 'Buscar:',
-            //         info: 'Mostrando _START_ a _END_ de _TOTAL_ entradas',
-            //         processing: 'Cargando',
-            //     },
-            //     pageLength: 50,
-            //     order: [],
-            // });
+
+            $('#filtro_equipo_id').select2({
+                placeholder: 'Seleccionar',
+                allowClear: true,
+            });
+            $('#filtro_user_id').select2({
+                placeholder: 'Seleccionar',
+                allowClear: true,
+            });
+            $('#filtro_equipo_id').on("change", function() {
+                if ($(this).val()) {
+                    $.ajax({
+                        url: `{{ url('notificacion/${$(this).val()}') }}`,
+                        method: "GET",
+                        data: {
+                            view: 'show-select-equipo',
+                            sede_id: $('#filtro_sede_id').val(),
+                        },
+                        success: function(data) {
+                            let opt_user = '<option></option>';
+                            data.users.map(function(item) {
+                                opt_user += `<option value="${item.id}">${item.name}</option>`;
+                            })
+                            $('#filtro_user_id').html(opt_user);
+                            filtroAutomatico();
+                        },
+                        error: function(response) {
+                            console.log('error');
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        url: `{{ url('notificacion/0') }}`,
+                        method: "GET",
+                        data: {
+                            view: 'show-select-user',
+                            sede_id: $('#filtro_sede_id').val(),
+                        },
+                        success: function(data) {
+                            let opt_user = '<option></option>';
+                            data.users.map(function(item) {
+                                opt_user += `<option value="${item.id}">${item.name}</option>`;
+                            })
+                            $('#filtro_user_id').html(opt_user);
+                            filtroAutomatico();
+                        },
+                        error: function(response) {
+                            console.log('error');
+                        }
+                    });
+                }
+            });
+            function filtroAutomatico() {
+                let filtro_sede_id = $('#filtro_sede_id').val();
+                let filtro_equipo_id = $('#filtro_equipo_id').val();
+                let filtro_user_id = $('#filtro_user_id').val();
+                window.location.href =
+                    `/notificacion?filtro_sede_id=${filtro_sede_id}&filtro_equipo_id=${filtro_equipo_id}&filtro_user_id=${filtro_user_id}`;
+            }
         </script>
     @endsection
 @endcan
