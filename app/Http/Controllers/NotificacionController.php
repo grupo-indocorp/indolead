@@ -49,7 +49,10 @@ class NotificacionController extends Controller
 
             return view('sistema.notificacion.create', compact('tipos', 'fecha'));
         } elseif (request('view') == 'historial') {
-            $notificaciones = Notificacion::where('user_id', auth()->user()->id)->orderBy('fecha')->get();
+            $notificaciones = Notificacion::with('user')
+                    ->where('user_id', auth()->user()->id)
+                    ->orderBy('fecha')
+                    ->get();
 
             return view('sistema.notificacion.historial', compact('notificaciones'));
         } elseif (request('view') == 'pendiente') {
