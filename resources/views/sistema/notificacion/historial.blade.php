@@ -16,7 +16,7 @@
                                 $class = 'text-red-600';
                             }
                         @endphp
-                        <h6 class="{{ $class }} text-sm font-bold m-0">{{ $notificacion->asunto }}</h6>
+                        <h6 class="{{ $class }} text-sm font-bold m-0"><b class="uppercase">{{ substr($notificacion->user->name, 0, 15) }}</b> a creado: {{ $notificacion->asunto }}</h6>
                         <span class="{{ $class }} text-xs font-medium">{{ $notificacion->fecha }}</span>
                         <span class="{{ $class }} text-xs font-medium">{{ $notificacion->hora }}</span>
                     </div>

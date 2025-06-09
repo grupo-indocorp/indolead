@@ -44,8 +44,7 @@
                                 'gerente general',
                                 'gerente comercial',
                                 'asistente comercial',
-                                'jefe
-                                comercial',
+                                'jefe comercial',
                                 'capacitador',
                                 'planificacion',
                                 ])
@@ -69,8 +68,7 @@
                                     'gerente general',
                                     'gerente comercial',
                                     'asistente comercial',
-                                    'jefe
-                                    comercial',
+                                    'jefe comercial',
                                     'supervisor',
                                     'capacitador',
                                     'planificacion',
@@ -108,7 +106,14 @@
                                 </div>
                             </div>
                             <div class="flex gap-2 items-center">
-                                @role(['sistema', 'administrador', 'supervisor', 'ejecutivo'])
+                                @role([
+                                        'sistema',
+                                        'gerente general',
+                                        'gerente comercial',
+                                        'administrador',
+                                        'supervisor',
+                                        'ejecutivo',
+                                    ])
                                     <div class="flex gap-4">
                                         <div class="flex flex-col items-center">
                                             <span class="text-blue-600 text-base font-bold">Nuevos</span>
