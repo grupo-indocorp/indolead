@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Helpers;
 use App\Models\Cliente;
+use App\Models\Equipo;
 use App\Models\Notificacion;
 use App\Models\Notificaciontipo;
+use App\Models\Sede;
 use App\Models\User;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -19,12 +21,45 @@ class NotificacionController extends Controller
     {
         $user = auth()->user();
         $notificaciones = $this->setNotificaciones($user);
-        return view('sistema.notificacion.index', compact('notificaciones'));
+
+        // filtros
+        $equipo_id = request('filtro_equipo_id');
+        $user_id = request('filtro_user_id');
+        $equipos = Equipo::all();
+        if ($equipo_id) {
+            $users = Equipo::find($equipo_id)->users;
+        } else {
+            $users = User::role('ejecutivo')->get();
+        }
+
+        return view('sistema.notificacion.index', compact(
+            'notificaciones',
+            'equipos',
+            'users',
+        ));
     }
 
     private function setNotificaciones($user)
     {
-        $query = Notificacion::query()->orderByDesc('fecha');
+        // Filtros
+        $filtro_equipo_id = request('filtro_equipo_id');
+        $filtro_user_id = request('filtro_user_id');
+
+        $query = Notificacion::query()
+            ->with(['user.equipos', 'notificaciontipo'])
+            ->orderByDesc('fecha');
+
+        // Filtro por usuario
+        if ($filtro_user_id) {
+            $query->where('user_id', $filtro_user_id);
+        }
+
+        // Filtro por equipo (a través del usuario)
+        if ($filtro_equipo_id) {
+            $query->whereHas('user.equipos', function ($q) use ($filtro_equipo_id) {
+                $q->where('equipos.id', $filtro_equipo_id);
+            });
+        }
         if ($user->hasRole(['sistema', 'administrador', 'gerente comercial', 'gerente comercial'])) {
             $notificaciones = $query->paginate(25);
         } elseif ($user->hasRole('supervisor')) {
@@ -139,7 +174,40 @@ class NotificacionController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $view = request('view');
+        if ($view === 'show-select-sede') {
+            $sede = Sede::find($id);
+            if ($sede) {
+                $equipos = Equipo::where('sede_id', $sede->id)->get();
+                $users = User::role('ejecutivo')->where('sede_id', $sede->id)->get();
+            } else {
+                $equipos = Equipo::all();
+                $users = User::role('ejecutivo')->get();
+            }
+
+            return response()->json([
+                'equipos' => $equipos,
+                'users' => $users,
+            ]);
+        } elseif ($view === 'show-select-equipo') {
+            $equipo = Equipo::find($id);
+            $users = $equipo->users;
+
+            return response()->json([
+                'users' => $users,
+            ]);
+        } elseif ($view === 'show-select-user') {
+            $sede_id = request('sede_id');
+            if ($sede_id) {
+                $users = User::role('ejecutivo')->where('sede_id', $sede_id)->get();
+            } else {
+                $users = User::role('ejecutivo')->get();
+            }
+
+            return response()->json([
+                'users' => $users,
+            ]);
+        }
     }
 
     /**

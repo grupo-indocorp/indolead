@@ -30,7 +30,7 @@ class Helpers
             $query = Notificacion::query()
                 ->where('fecha', '>=', now()->format('Y-m-d'))
                 ->where('atendido', false)
-                ->orderByDesc('fecha');
+                ->orderBy('fecha');
             if ($user->hasRole(['sistema', 'administrador', 'gerente comercial', 'gerente comercial'])) {
                 $notificaciones = $query->get();
             } elseif ($user->hasRole('supervisor')) {

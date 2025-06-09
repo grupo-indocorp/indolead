@@ -44,8 +44,7 @@
                                 'gerente general',
                                 'gerente comercial',
                                 'asistente comercial',
-                                'jefe
-                                comercial',
+                                'jefe comercial',
                                 'capacitador',
                                 'planificacion',
                                 ])
@@ -69,8 +68,7 @@
                                     'gerente general',
                                     'gerente comercial',
                                     'asistente comercial',
-                                    'jefe
-                                    comercial',
+                                    'jefe comercial',
                                     'supervisor',
                                     'capacitador',
                                     'planificacion',
