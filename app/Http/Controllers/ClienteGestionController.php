@@ -168,7 +168,7 @@ class ClienteGestionController extends Controller
 
         $userIds = match (true) {
             $filtro_user_id != 0 => [$filtro_user_id],
-            $user->hasRole(['sistema', 'gerente comercial']) => null,
+            $user->hasRole(['sistema', 'gerente general', 'gerente comercial']) => null,
             $user->hasRole('supervisor') => $user->equipo->users->pluck('id')->toArray(),
             $user->hasRole('ejecutivo') => [$user->id],
             default => [],
