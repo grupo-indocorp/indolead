@@ -61,16 +61,18 @@
                                         @endif
                                     @else
                                         @if ($value->fecha >= date('Y-m-d'))
-                                            <span class="mx-3" data-bs-toggle="tooltip" data-bs-original-title="Editar">
-                                                <a href="javascript:;" class="cursor-pointer" onclick="editarNotificacion({{ $value->id }})">
-                                                    <i class="fa-solid fa-pen"></i>
-                                                </a>
-                                            </span>
-                                            <span class="mx-3" data-bs-toggle="tooltip" data-bs-original-title="Eliminar">
-                                                <a href="javascript:;" class="cursor-pointer" onclick="eliminarNotificacion({{ $value->id }})">
-                                                    <i class="fa-solid fa-trash"></i>
-                                                </a>
-                                            </span>
+                                            @if (auth()->user()->id === $value->user_id)
+                                                <span class="mx-3" data-bs-toggle="tooltip" data-bs-original-title="Editar">
+                                                    <a href="javascript:;" class="cursor-pointer" onclick="editarNotificacion({{ $value->id }})">
+                                                        <i class="fa-solid fa-pen"></i>
+                                                    </a>
+                                                </span>
+                                                <span class="mx-3" data-bs-toggle="tooltip" data-bs-original-title="Eliminar">
+                                                    <a href="javascript:;" class="cursor-pointer" onclick="eliminarNotificacion({{ $value->id }})">
+                                                        <i class="fa-solid fa-trash"></i>
+                                                    </a>
+                                                </span>
+                                            @endif
                                         @endif
                                     @endif
                                 </td>
