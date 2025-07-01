@@ -102,17 +102,22 @@ class FileController extends Controller
         if ($request->hasFile('new_file')) {
             Storage::delete($file->path);
             $path = $request->file('new_file')->store('uploads');
+
+            // Actualizar los campos del archivo con la nueva información
             $file->path = $path;
             $file->format = $request->file('new_file')->getClientOriginalExtension();
             $file->size = $request->file('new_file')->getSize();
+            $file->name = $request->file('new_file')->getClientOriginalName(); // Tomar el nombre del nuevo archivo
+            $file->created_at = now(); // Actualizar la fecha de subida a ahora
         }
 
         // Actualizar metadatos (incluyendo folder_id)
         $file->update([
-            'name' => $request->name,
             'description' => $request->description,
             'category' => $request->category,
-            'folder_id' => $request->folder_id
+            'folder_id' => $request->folder_id,
+            // El nombre solo se actualiza aquí si no hay nuevo archivo
+            'name' => $request->hasFile('new_file') ? $file->name : $request->name,
         ]);
 
         return response()->json(['success' => 'Archivo actualizado correctamente.']);
