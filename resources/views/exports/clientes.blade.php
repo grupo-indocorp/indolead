@@ -1,11 +1,11 @@
 <table>
     <thead>
         <tr>
-            <th colspan="16"></th>
+            <th colspan="18"></th>
             <th colspan="2" style="background: #ddd01b;">MOVIL</th>
             <th colspan="2" style="background: #1bd0dd;">FIJA</th>
             <th colspan="2" style="background: #dd791b;">AVANZADA</th>
-            <th colspan="7"></th>
+            <th colspan="8"></th>
         </tr>
         <tr>
             <th style="width: 150px; background: #49b6ff;">Equipo</th>
@@ -22,6 +22,8 @@
             <th style="width: 250px; background: #6589ff;">Líneas Claro</th>
             <th style="width: 250px; background: #6589ff;">Líneas Entel</th>
             <th style="width: 250px; background: #6589ff;">Líneas Bitel</th>
+            <th style="width: 250px; background: #6589ff;">Líneas Movistar</th>
+            <th style="width: 250px; background: #6589ff;">Total Líneas</th>
             
             <th style="width: 250px; background: #49b6ff;">Etapa de Negociación</th>
 
@@ -34,6 +36,8 @@
             <th style="background: #1bd0dd;">Cargo Fijo</th>
             <th style="background: #dd791b;">Cantidad</th>
             <th style="background: #dd791b;">Cargo Fijo</th>
+
+            <th style="width: 250px; background: #6589ff;">Fecha Creación</th>
 
             <th style="width: 250px; background: #6589ff;">Ultimo Comentario</th>
             <th style="width: 250px; background: #6589ff;">4to Comentario</th>
@@ -73,6 +77,7 @@
 
                     // Comentarios
                     $comentarios = $cliente->comentarios()->where('user_id', $cliente->user_id)->latest()->take(5)->get();
+                    $fechaCreacionEjecutivo = $cliente->comentarios()->where('user_id', $cliente->user_id)->orderBy('id')->first()->created_at ?? '';
                     $comentariosArray = $comentarios->toArray();
                     $textoPredeterminado = "";
                     while (count($comentariosArray) < 5) {
@@ -88,12 +93,18 @@
                     <td>{{ $cliente->contactos->last()->nombre ?? '' }}</td>
                     <td>{{ $cliente->contactos->last()->celular ?? '' }}</td>
                     <td>{{ $cliente->contactos->last()->correo ?? '' }}</td>
-                    
+
+                    @php
+                        $totalLineas = collect(['linea_claro', 'linea_entel', 'linea_bitel', 'linea_movistar'])
+                            ->sum(fn($linea) => (int) ($cliente->movistars->last()->{$linea} ?? 0));
+                    @endphp
                     <td>{{ $cliente->movistars->last()->estadowick->nombre ?? '' }}</td>
                     <td>{{ $cliente->movistars->last()->estadodito->nombre ?? '' }}</td>
-                    <td>{{ $cliente->movistars->last()->linea_claro ?? '0' }}</td>
-                    <td>{{ $cliente->movistars->last()->linea_entel ?? '0' }}</td>
-                    <td>{{ $cliente->movistars->last()->linea_bitel ?? '0' }}</td>
+                    <td>{{ $cliente->movistars->last()->linea_claro ?? 0 }}</td>
+                    <td>{{ $cliente->movistars->last()->linea_entel ?? 0 }}</td>
+                    <td>{{ $cliente->movistars->last()->linea_bitel ?? 0 }}</td>
+                    <td>{{ $cliente->movistars->last()->linea_movistar ?? 0 }}</td>
+                    <td>{{ $totalLineas }}</td>
                     
                     <td>{{ $cliente->etapa->nombre ?? '' }}</td>
                     
@@ -106,6 +117,7 @@
                     <td>{{ $f_carf }}</td>
                     <td>{{ $a_cant }}</td>
                     <td>{{ $a_carf }}</td>
+                    <td>{{ date('d/m/Y', strtotime($fechaCreacionEjecutivo)) }}</td>
                     @foreach ($comentariosArray as $comentario)
                         <td>{{ $comentario['comentario'] }}</td>
                     @endforeach
