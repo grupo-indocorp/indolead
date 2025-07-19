@@ -34,12 +34,31 @@ class IndotechFunnelExport
     public function headings(): array
     {
         return [
-            'Equipo', 'Ejecutivo', 'Ruc', 'Razón Social', 'Dirección', 'Contacto', 'Celular','Correo','Estado Wick','Estado Dito','Movistar', 'Claro','Entel','Bitel','Etapa','Fecha Creacion','F Último Contacto', 'Movil Cant', 'Movil Cargo Fijo','Fija Cant', 'Fija Cargo Fijo', 'Avanzada Cantidad', 'Avanzada Cargo Fijo', 'Último Comentario', '4to Comentario','3er Comentario','2do Comentario', '1er Comentario', 'Tipo de Cliente','Agencia',/* ... otras columnas ... */
+            'Equipo', 'Ejecutivo', 'Ruc', 'Razón Social', 'Dirección',
+            'Contacto', 'Celular','Correo','Estado Wick','Estado Dito',
+            'Movistar',
+            'Claro',
+            'Entel',
+            'Bitel',
+            'Total Líneas',
+            'Etapa','Fecha Creacion',
+            'F Último Contacto', 'Movil Cant',
+            'Movil Cargo Fijo',
+            'Fija Cant',
+            'Fija Cargo Fijo', 'Avanzada Cantidad', 'Avanzada Cargo Fijo',
+            'Último Comentario', '4to Comentario','3er Comentario','2do Comentario',
+            '1er Comentario', 'Tipo de Cliente','Agencia',
         ];
     }
 
     public function map($cliente): array
     {
+        $totalLineas = array_sum([
+            $cliente->lineas_movistar,
+            $cliente->lineas_claro,
+            $cliente->lineas_entel,
+            $cliente->lineas_bitel,
+        ]);
         return [
             $cliente->ejecutivo_equipo,
             $cliente->ejecutivo,
@@ -55,6 +74,7 @@ class IndotechFunnelExport
             $cliente->lineas_claro,
             $cliente->lineas_entel,
             $cliente->lineas_bitel,
+            $totalLineas,
             $cliente->etapa,
             $cliente->fecha_creacion,
             $cliente->fecha_ultimo_contacto,
