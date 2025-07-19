@@ -1,11 +1,11 @@
 <table>
     <thead>
         <tr>
-            <th colspan="18"></th>
+            <th colspan="16"></th>
             <th colspan="2" style="background: #ddd01b;">MOVIL</th>
             <th colspan="2" style="background: #1bd0dd;">FIJA</th>
             <th colspan="2" style="background: #dd791b;">AVANZADA</th>
-            <th colspan="8"></th>
+            <th colspan="10"></th>
         </tr>
         <tr>
             <th style="width: 150px; background: #49b6ff;">Equipo</th>
@@ -27,16 +27,14 @@
             
             <th style="width: 250px; background: #49b6ff;">Etapa de Negociación</th>
 
-            <th style="width: 250px; background: #6589ff;">Fecha Primer Contacto</th>
-            <th style="width: 250px; background: #6589ff;">Fecha Último Contacto</th>
-            {{-- <th style="width: 250px; background: #db1d1d;">Fecha Próximo Contacto</th> --}}
             <th style="background: #ddd01b;">Cantidad</th>
             <th style="background: #ddd01b;">Cargo Fijo</th>
             <th style="background: #1bd0dd;">Cantidad</th>
             <th style="background: #1bd0dd;">Cargo Fijo</th>
             <th style="background: #dd791b;">Cantidad</th>
             <th style="background: #dd791b;">Cargo Fijo</th>
-
+            <th style="width: 250px; background: #6589ff;">Fecha Primer Contacto</th>
+            <th style="width: 250px; background: #6589ff;">Fecha Último Contacto</th>
             <th style="width: 250px; background: #6589ff;">Fecha Creación</th>
 
             <th style="width: 250px; background: #6589ff;">Ultimo Comentario</th>
@@ -108,15 +106,14 @@
                     
                     <td>{{ $cliente->etapa->nombre ?? '' }}</td>
                     
-                    <td>{{ date('d/m/Y', strtotime($cliente->fecha_nuevo)) }}</td>
-                    <td>{{ date('d/m/Y', strtotime($cliente->fecha_gestion)) }}</td>
-                    {{-- <td></td> --}}
                     <td>{{ $m_cant }}</td>
                     <td>{{ $m_carf }}</td>
                     <td>{{ $f_cant }}</td>
                     <td>{{ $f_carf }}</td>
                     <td>{{ $a_cant }}</td>
                     <td>{{ $a_carf }}</td>
+                    <td>{{ date('d/m/Y', strtotime($cliente->fecha_nuevo)) }}</td>
+                    <td>{{ date('d/m/Y', strtotime($cliente->fecha_gestion)) }}</td>
                     <td>{{ date('d/m/Y', strtotime($fechaCreacionEjecutivo)) }}</td>
                     @foreach ($comentariosArray as $comentario)
                         <td>{{ $comentario['comentario'] }}</td>
