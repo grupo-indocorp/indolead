@@ -100,6 +100,8 @@ Route::middleware([
     // Exportación de datos
     Route::get('export/secodi/funnel', [ExportController::class, 'secodiFunnel']);
     Route::get('export/indotech/funnel', [ExportController::class, 'indotechFunnel']);
+    Route::post('/export/{empresa}/funnel', [ExportController::class, 'exportFunnel']);
+
 
     // Importación de datos
     Route::post('import/evaporacion', [ImportController::class, 'evaporacion'])->name('import.evaporacion');
