@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Exports\IndotechFunnelExport;
 use App\Exports\SecodiFunnelExport;
 
@@ -16,13 +17,21 @@ class ExportController extends Controller
         return (new SecodiFunnelExport($filtro, $user))->download($nameExport);
     }
 
-    public function indotechFunnel()
+    public function exportFunnel(Request $request)
     {
-        $filtro = request('filtro');
+        $filtro = $request->input('filtro');
+
+        // Acepta tanto string JSON como array
+        if (is_string($filtro)) {
+            $filtroDecoded = json_decode($filtro, true);
+        } else {
+            $filtroDecoded = $filtro;
+        }
+
         $user = auth()->user();
 
-        $export = new IndotechFunnelExport($filtro, $user);
-
-        return $export->exportToCsv();
+        // Convierte SIEMPRE a string JSON para el exportador
+        $exporter = new IndotechFunnelExport(json_encode($filtroDecoded), $user);
+        return $exporter->exportToCsv();
     }
 }
