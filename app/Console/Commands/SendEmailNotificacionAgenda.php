@@ -6,6 +6,7 @@ use App\Mail\Recordatorio;
 use App\Models\Notificacion;
 use DateTime;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class SendEmailNotificacionAgenda extends Command
@@ -30,7 +31,9 @@ class SendEmailNotificacionAgenda extends Command
     public function handle()
     {
         $fecha = new DateTime;
-        $notificaciones = Notificacion::where('fecha', '<=', $fecha->format('Y-m-d'))->where('notificacion', false)->get();
+        $notificaciones = Notificacion::where('fecha', '<=', $fecha->format('Y-m-d'))
+            ->where('notificacion', false)
+            ->get();
         foreach ($notificaciones as $notificacion) {
             $hora_programada = new DateTime($notificacion->hora);
             if ($notificacion->notificaciontipo_id == 1) { // general
@@ -40,11 +43,22 @@ class SendEmailNotificacionAgenda extends Command
             } elseif ($notificacion->notificaciontipo_id == 3) { // llamada
                 $hora = $hora_programada->modify('-5 minutes');
             }
+
             if (date('H:i:s') >= $hora->format('H:i:s')) {
-                Mail::to($notificacion->user->email)->send(new Recordatorio($notificacion));
-                $notificacion = Notificacion::find($notificacion->id);
-                $notificacion->notificacion = true;
-                $notificacion->save();
+                $email = trim($notificacion->user->email); // Elimina espacios invisibles
+                try {
+                    // Validación simple antes de enviar
+                    if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                        Mail::to($email)->send(new Recordatorio($notificacion));
+                        $notificacion->notificacion = true;
+                        $notificacion->save();
+                    } else {
+                        Log::warning("Correo inválido detectado: {$email} para notificación ID {$notificacion->id}");
+                    }
+                } catch (\Throwable $e) {
+                    // Capturar cualquier error en el envío
+                    Log::error("Error al enviar correo a {$email}: " . $e->getMessage());
+                }
             }
         }
     }
