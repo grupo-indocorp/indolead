@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('app:send-email-notificacion-agenda')->everyMinute();
         // $schedule->command('app:enviar-evaporacion-command')->daily();
+        $schedule->command('app:transferir-clientes-inactivos')->daily();
     }
 
     /**
