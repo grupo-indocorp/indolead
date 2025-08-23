@@ -12,7 +12,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->command('app:transferir-clientes-inactivos')->daily();
+        // $schedule->command('app:transferir-clientes-inactivos')->daily();
         $schedule->command('app:send-email-notificacion-agenda')->everyMinute();
         // $schedule->command('app:enviar-evaporacion-command')->daily();
     }
