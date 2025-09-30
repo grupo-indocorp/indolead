@@ -12,8 +12,12 @@
     </div>
     @role('ejecutivo')
         <div class="form-check form-switch">
-            <label class="form-check-label" for="contactabilidad">{{ __('Contactabilidad') }}</label>
-            <input class="form-check-input" type="checkbox" id="contactabilidad" checked>
+            <label class="form-check-label" for="contactabilidad">{{ __('Contacto Exitoso') }}</label>
+            <input class="form-check-input" 
+                type="checkbox" 
+                id="contactabilidad"
+                name="contactabilidad"
+                @if($cliente->contactabilidad ?? true) checked @endif>
         </div>
         <div class="form-group mb-4">
             <textarea class="form-control"
