@@ -68,6 +68,7 @@
                 cargo: $('#cargo').val(),
                 correo: $('#correo').val(),
                 // comentario
+                contactabilidad: $('#contactabilidad').is(':checked'),
                 comentario: $('#comentario').val(),
                 // movisar
                 estadowick_id: $('#estadowick_id').val() ?? 1,

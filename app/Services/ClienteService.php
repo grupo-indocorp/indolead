@@ -289,6 +289,7 @@ class ClienteService
         $cliente->equipo_id = $user->equipos->last()->id ?? 1;
         $cliente->sede_id = $user->equipos->last()->sede->id ?? 1;
         $cliente->etapa_id = request('etapa_id');
+        $cliente->contactabilidad = filter_var(request('contactabilidad'), FILTER_VALIDATE_BOOLEAN);
         $cliente->save();
         $cliente->usersHistorial()->attach($user->id);
         $cliente->etapas()->attach(1);
