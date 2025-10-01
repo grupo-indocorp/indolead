@@ -61,13 +61,9 @@
     $(document).ready(function() {
         $('#contactabilidad').on('change', function() {
             if ($(this).is(':checked')) {
-                $('#comentario')
-                    .val('')
-                    .prop('disabled', false);
+                $('#comentario').val('');
             } else {
-                $('#comentario')
-                    .val('No Contactado')
-                    .prop('disabled', true);
+                $('#comentario').val('No Contactado');
             }
         });
     });
