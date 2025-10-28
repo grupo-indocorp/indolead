@@ -188,10 +188,10 @@ class Helpers
             }
         }
         if ($user->hasRole('supervisor')) {
-            $where[] = ['ejecutivo_equipo_id', $user->equipo->id];
+            $where[] = ['equipo_id', $user->equipo->id];
         } else {
             if ($filtro->filtro_equipo_id != 0) {
-                $where[] = ['ejecutivo_equipo_id', $filtro->filtro_equipo_id];
+                $where[] = ['equipo_id', $filtro->filtro_equipo_id];
             }
         }
         if ($user->hasRole('gerente comercial') || $user->hasRole('supervisor') || $user->hasRole('ejecutivo')) {
@@ -202,10 +202,10 @@ class Helpers
             }
         }
         if (isset($filtro->filtro_fecha_desde)) {
-            $where[] = ['fecha_ultimo_contacto', '>=', $filtro->filtro_fecha_desde.' 00:00:00'];
+            $where[] = ['fecha_gestion', '>=', $filtro->filtro_fecha_desde.' 00:00:00'];
         }
         if (isset($filtro->filtro_fecha_hasta)) {
-            $where[] = ['fecha_ultimo_contacto', '<=', $filtro->filtro_fecha_hasta.' 23:59:59'];
+            $where[] = ['fecha_gestion', '<=', $filtro->filtro_fecha_hasta.' 23:59:59'];
         }
 
         return $where;
